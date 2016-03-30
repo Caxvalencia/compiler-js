@@ -27,6 +27,9 @@ var Lex = ( function() {
 			lines = 1,
 			finder = null;
 
+		this.tokens = [];
+		this.symbolTable = [];
+
 		while( ( finder = this.regExp.exec( source ) ) !== null && finder[ 0 ] !== null ) {
 			tokenName = this.getTokenID( finder[ 0 ] );
 

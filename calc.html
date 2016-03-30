@@ -5,13 +5,14 @@
 	<meta charset="UTF-8">
 	<title>Calculator</title>
 
+	<script src="Stack.js"></script>
 	<script src="Lex.js"></script>
 	<script src="Syntax.js"></script>
 </head>
 
 <body>
 
-	<input type="text" name="sourceCode" id="sourceCode" value=" 5 + 5 " />
+	<input type="text" name="sourceCode" id="sourceCode" value="5 + 5 * (5+5)" />
 	<input type="button" value="Compile" id="compile">
 
 <script>
@@ -69,15 +70,50 @@
 	var btnCompile = document.getElementById( 'compile' ),
 		sourceCode = document.getElementById( 'sourceCode' );
 
-	btnCompile.addEventListener( 'click', function() {
-		var lexer = new Lex( lexico );
-		lexer.analyze( sourceCode.value );
-		console.table( lexer.tokens );
+	var lexer = new Lex( lexico, { addSymbolTable: [ 'NUMBER', '+', '*', '(', ')' ] });
+	var syntax = new Syntax( grammar, lexer );
 
-		var syntax = new Syntax( grammar, lexer );
+	btnCompile.addEventListener( 'click', function() {
+		lexer.analyze( sourceCode.value );
+
+		showInfo( lexer, syntax );
+		
+		syntax.setTokens( lexer.tokens );
+		syntax.setSymbolTable( lexer.symbolTable );
+		
+		if( syntax.analyze() ) {
+			console.log( "Analyzed successfuly" )
+		}
 	});
 
 	btnCompile.click();
+
+	function showInfo( lexer, syntax ) {
+		var parsingTable = {};
+		for( let state in syntax.parsingTable ) {
+			parsingTable[ state ] = {};
+			
+			for( let state2 in syntax.parsingTable[ state ] ) {
+				parsingTable[ state ][ state2 ] = syntax.parsingTable[ state ][ state2 ];
+				parsingTable[ state ][ state2 ] = parsingTable[ state ][ state2 ].join( "," );
+			}
+		}
+
+		for( let state = 0; state < syntax.states.length; state++ ) {
+			// console.log( 'state: ' + state );
+			// console.table( syntax.getState( state ).data );
+			// console.log( syntax.getState( state ) );
+		}
+
+		console.info( 'PARSING TABLE' );
+		console.table( parsingTable );
+
+		console.info( 'TOKENS' );
+		console.table( lexer.tokens );
+
+		console.info( 'SYMBOL TABLE' );
+		console.table( lexer.symbolTable );
+	}
 
 }( window );
 	</script>

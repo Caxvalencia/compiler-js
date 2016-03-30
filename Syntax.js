@@ -3,10 +3,10 @@
  *
  * { rule -> productions[][], ... }
  */
-var Syntax = ( function( SymbolTable ) {
+var Syntax = ( function( SymbolTable, Stack ) {
 	'use strict';
-	
-	const SYMBOL_EXTEND = "G'";
+
+	const SYMBOL_EXTEND = "_G'";
 	const SYMBOL_LOCKED = "$";
 	
 	/**
@@ -20,17 +20,37 @@ var Syntax = ( function( SymbolTable ) {
 
 		this.configureGrammar();
 		this.setLex( lex );
-		this.generateParsingTable();
+		this.configParsingTable();
 	}
 
 	/**
 	 * Public methods
 	 */
-	Syntax.prototype.analyze = function( source ) {
-		// var token = nextToken();
+	Syntax.prototype.analyze = function() {
+		this.Stack = new Stack();
+		this.Stack.setParsingTable( this.parsingTable );
 
-		// while( ( finder = this.regExp.exec( source ) ) !== null && finder[ 0 ] !== null ) {
-		// }
+		var token = '', i,
+			isValid = false,
+			errorMessage = '';
+
+		for( i = 0; i < this.tokens.length; i++ ) {
+			// [ TOKEN_ID, VALUE ]
+			token = this.tokens[ i ];
+			
+			try {
+				this.Stack.push( token[ 0 ] );
+				isValid = this.Stack.push( SYMBOL_LOCKED );
+			} catch( ex ) {
+				let data = this.symbolTable[ token[ 1 ] ];
+				errorMessage += ex + ' at line(' + data.line + '), column(' + data.column + ')\n';
+				console.log( errorMessage )
+				break;
+			}
+		}
+
+		if( !isValid ) console.warn( errorMessage );
+		return isValid;
 	};
 
 	/**
@@ -39,36 +59,36 @@ var Syntax = ( function( SymbolTable ) {
 	Syntax.prototype.configureGrammar = function( source ) {
 		var grammarExtended = {};
 
+		// Extend grammar and convert strings to arrays
 		for( let prod in this.grammar ) {
-			if( grammarExtended[ SYMBOL_EXTEND ] === undefined )
-				grammarExtended[ SYMBOL_EXTEND ] = [ [ prod, '$' ] ];
-
 			if( !this.grammar.hasOwnProperty( prod ) ) continue;
+
+			if( grammarExtended[ SYMBOL_EXTEND ] === undefined ) {
+				grammarExtended[ SYMBOL_EXTEND ] = [ [ prod, SYMBOL_LOCKED ] ];
+				grammarExtended[ SYMBOL_EXTEND ][ 0 ].nonTerminalParent = SYMBOL_EXTEND;
+			}
+
 			grammarExtended[ prod ] = this.grammar[ prod ];
 
 			for( let i = 0; i < this.grammar[ prod ].length; i++ ) {
 				grammarExtended[ prod ][ i ] = this.grammar[ prod ][ i ].split( /\s+/ );
+				grammarExtended[ prod ][ i ].nonTerminalParent = prod;
 			}
 		}
 
 		this.grammar = grammarExtended;
 	}
 
-	Syntax.prototype.generateParsingTable = function() {
-		this.parsingTable = [];
-		this.createStateInitial( this.grammar[ SYMBOL_EXTEND ] );
+	Syntax.prototype.configParsingTable = function() {
+		this.createStateInitial();
 		this.createStates();
-
-		for( let state = 0; state < this.states.length; state++ ) {
-			console.log( 'state: ' + state );
-			// console.table( this.getState( state ).data );
-			console.log( this.getState( state ) );
-		}
+		this.createParsingTable();
 	};
 
-	Syntax.prototype.createStateInitial = function( initProd ) {
+	Syntax.prototype.createStateInitial = function() {
 		this.states = [];
-		var lock = 0;
+		var lock = 0,
+			initProd = this.grammar[ SYMBOL_EXTEND ];
 
 		for( let prod = 0; prod < initProd.length; prod++ ) {
 			let production = initProd[ prod ];
@@ -101,7 +121,7 @@ var Syntax = ( function( SymbolTable ) {
 			ruleData = null,
 			currentState = null,
 			stateAux = null,
-			hasState = null,
+			existState = null,
 			findNextState = null;
 
 		// Calculate total states for prevent loops
@@ -115,15 +135,15 @@ var Syntax = ( function( SymbolTable ) {
 				ruleData = currentState.data[ rule ];
 
 				// Validate if state is closed
-				if( ruleData.current === undefined || ruleData.current === '$' )
+				if( ruleData.current === SYMBOL_LOCKED || ruleData.current === undefined )
 					continue;
 
-				hasState = currentState[ ruleData.current ];
+				existState = currentState[ ruleData.current ];
 
-				// Validate if exist the transition/through state A to state B
-				if( hasState ) {
-					if( !this.existsInState( hasState, ruleData ) ) {
-						this.addProductionToState( hasState, ruleData.production, ruleData.lock + 1 );
+				// Validate if exist the transition/through from a state 'A' to state 'B'
+				if( existState ) {
+					if( !this.existsInState( existState, ruleData ) ) {
+						this.addProductionToState( existState, ruleData.production, ruleData.lock + 1 );
 					}
 
 				} else {
@@ -145,11 +165,43 @@ var Syntax = ( function( SymbolTable ) {
 		}
 	};
 
+	Syntax.prototype.createParsingTable = function() {
+		this.parsingTable = {};
+		
+		var state = null,
+			prop = null,
+			symbolReduced = '';
+		
+		for( let stateIdx = 0; stateIdx < this.states.length; stateIdx++ ) {
+			this.parsingTable[ stateIdx ] = {};
+			state = this.getState( stateIdx );
+			symbolReduced = state.data[ 0 ].production.nonTerminalParent;
+
+			if( state.data[ 0 ].current === SYMBOL_LOCKED && symbolReduced === SYMBOL_EXTEND )
+				this.parsingTable[ stateIdx ][ SYMBOL_LOCKED ] = [ 'A' ]; // Accept
+
+			else if( state.data[ 0 ].current === SYMBOL_LOCKED )
+				this.parsingTable[ stateIdx ][ SYMBOL_LOCKED ] = [ 'R', state.data[ 0 ].production.length, symbolReduced ];
+
+			for( prop in state ) {
+				// Ignore those properties
+				if( [ 'data', 'index' ].indexOf( prop ) !== -1 ) continue;
+				
+				if( !this.isTerminal( prop ) ) {
+					this.parsingTable[ stateIdx ][ prop ] = [ 'G', state[ prop ].index ];
+					continue;
+				}
+				
+				this.parsingTable[ stateIdx ][ prop ] = [ state[ prop ].index ];
+			}
+		}
+	};
+
 	Syntax.prototype.searchNextStateByRule = function( rule ) {
 		var mainRule = null,
 			len = this.states.length;
 
-		// Analyze all states except zero state
+		// Analyze all states except the zero state
 		for( let state = 1; state < len; state++ ) {
 			mainRule = this.getState( state ).data[ 0 ];
 			
@@ -165,15 +217,16 @@ var Syntax = ( function( SymbolTable ) {
 
 	Syntax.prototype.existsInState = function( state, rule ) {
 		var mainRule = null,
+			nextLock = rule.lock + 1,
 			len = state.data.length;
 
-		// Analyze all rules of the state
+		// Analyze all rules of the state except the first rule (main)
 		for( let ruleIdx = 1; ruleIdx < len; ruleIdx++ ) {
 			mainRule = state.data[ ruleIdx ];
 			
 			if( mainRule.productionStr !== rule.productionStr ) continue;
 			if( mainRule.current !== rule.next ) continue;
-			if( mainRule.lock !== ( rule.lock + 1 ) ) continue;
+			if( mainRule.lock !== nextLock ) continue;
 
 			return true;
 		}
@@ -236,8 +289,8 @@ var Syntax = ( function( SymbolTable ) {
 	};
 
 	Syntax.prototype.setLex = function( lex ) {
-		this.terminals = [ '$' ];
-		this.terminalActives = [ '$' ];
+		this.terminals = [ SYMBOL_LOCKED ];
+		this.terminalActives = [ SYMBOL_LOCKED ];
 
 		this.setTokens( lex.tokens );
 		this.setSymbolTable( lex.symbolTable );
@@ -272,4 +325,4 @@ var Syntax = ( function( SymbolTable ) {
 	};
 
 	return Syntax;
-})( {} );
+})( {}, Stack );
