@@ -84,12 +84,16 @@
 		if( syntax.analyze() ) {
 			console.log( "Analyzed successfuly" )
 		}
+
+		console.info( 'STACK' );
+		console.table( syntax.Stack._stack );
 	});
 
 	btnCompile.click();
 
 	function showInfo( lexer, syntax ) {
 		var parsingTable = {};
+
 		for( let state in syntax.parsingTable ) {
 			parsingTable[ state ] = {};
 			
@@ -108,11 +112,11 @@
 		console.info( 'PARSING TABLE' );
 		console.table( parsingTable );
 
-		console.info( 'TOKENS' );
-		console.table( lexer.tokens );
+		// console.info( 'TOKENS' );
+		// console.table( lexer.tokens );
 
-		console.info( 'SYMBOL TABLE' );
-		console.table( lexer.symbolTable );
+		// console.info( 'SYMBOL TABLE' );
+		// console.table( lexer.symbolTable );
 	}
 
 }( window );

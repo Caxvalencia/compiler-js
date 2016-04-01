@@ -13,7 +13,6 @@ var Stack = ( function() {
 
 		this._stack = [ stateInit ];
 		this.top = stateInit;
-		this.parsingTable = {};
 	}
 
 	/**
@@ -27,53 +26,21 @@ var Stack = ( function() {
 	/**
 	 * Public methods
 	 */
-	Stack.prototype.goto = function( stateTarget ) {
+	Stack.prototype.push = function( stateTarget ) {
 		this._stack.push( stateTarget );
 		this.setTop();
-
-		return this.push( '$' );
 	};
 
-	Stack.prototype.reduce = function( cant, ruleReduced, funcBack ) {
+	Stack.prototype.goto = function( stateTarget ) {
+		this.push( stateTarget );
+	};
+
+	Stack.prototype.reduce = function( cant, funcBack ) {
 		for( let idx = 0; idx < cant; idx++ ) {
 			this._stack.pop();
 		}
 
 		this.setTop();
-		return this.push( ruleReduced );
-	};
-
-	Stack.prototype.push = function( token ) {
-		var nextState = this.parsingTable[ this.top ][ token ];
-
-		if( nextState === undefined ) {
-			if( token === '$' ) return false;
-			else throw( "SyntaxError: Unexpected token: " + token );
-		}
-
-		switch( nextState[ 0 ] ) {
-			// Is accept
-			case 'A': return true;
-
-			// Is reduce
-			case 'R':
-				return this.reduce( nextState[ 1 ], nextState[ 2 ] );
-
-			// Is goto
-			case 'G':
-				return this.goto( parseInt( nextState[ 1 ] ) );
-
-			// Is push
-			default:
-				this._stack.push( nextState[ 0 ] );
-				this.setTop();
-		}
-
-		return false;
-	};
-
-	Stack.prototype.setParsingTable = function( parsingTable ) {
-		this.parsingTable = parsingTable;
 	};
 
 	return Stack;

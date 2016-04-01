@@ -28,7 +28,6 @@ var Syntax = ( function( SymbolTable, Stack ) {
 	 */
 	Syntax.prototype.analyze = function() {
 		this.Stack = new Stack();
-		this.Stack.setParsingTable( this.parsingTable );
 
 		var token = '', i,
 			isValid = false,
@@ -37,20 +36,54 @@ var Syntax = ( function( SymbolTable, Stack ) {
 		for( i = 0; i < this.tokens.length; i++ ) {
 			// [ TOKEN_ID, VALUE ]
 			token = this.tokens[ i ];
+			isValid = false;
 			
 			try {
-				this.Stack.push( token[ 0 ] );
-				isValid = this.Stack.push( SYMBOL_LOCKED );
+				this.eval( token[ 0 ] );
+				isValid = this.eval( SYMBOL_LOCKED );
+
 			} catch( ex ) {
 				let data = this.symbolTable[ token[ 1 ] ];
 				errorMessage += ex + ' at line(' + data.line + '), column(' + data.column + ')\n';
-				console.log( errorMessage )
 				break;
 			}
 		}
 
 		if( !isValid ) console.warn( errorMessage );
 		return isValid;
+	};
+
+	Syntax.prototype.eval = function( token ) {
+		var nextState = this.parsingTable[ this.Stack.top ][ token ];
+
+		// LOG OF EVAL
+		console.log( token + '=>', this.Stack._stack, nextState );
+
+		if( nextState === undefined ) {
+			if( token === SYMBOL_LOCKED ) return false;
+			else throw( "SyntaxError: Unexpected token: " + token );
+		}
+
+		switch( nextState[ 0 ] ) {
+			// Is accept
+			case 'A':
+				return true;
+
+			// Is reduce
+			case 'R':
+				this.Stack.reduce( nextState[ 1 ] );
+				return this.eval( nextState[ 2 ] );
+
+			// Is goto
+			case 'G':
+				this.Stack.goto( parseInt( nextState[ 1 ] ) );
+				return this.eval( SYMBOL_LOCKED );
+
+			// Is push
+			default:
+				this.Stack.push( nextState[ 0 ] );
+				return false;
+		}
 	};
 
 	/**
