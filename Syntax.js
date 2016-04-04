@@ -29,18 +29,21 @@ var Syntax = ( function( SymbolTable, Stack ) {
 	Syntax.prototype.analyze = function() {
 		this.Stack = new Stack();
 
-		var token = '', i,
-			isValid = false,
+		var token = '',
+			nextToken = '',
+			i,
+			isAccept = false,
 			errorMessage = '';
 
 		for( i = 0; i < this.tokens.length; i++ ) {
 			// [ TOKEN_ID, VALUE ]
 			token = this.tokens[ i ];
-			isValid = false;
+			nextToken = this.tokens[ i+1 ] || [];
+			isAccept = false;
 			
 			try {
-				this.eval( token[ 0 ] );
-				isValid = this.eval( SYMBOL_LOCKED );
+				this.eval( token[ 0 ], nextToken[ 0 ] );
+				isAccept = this.eval( SYMBOL_LOCKED, nextToken[ 0 ] );
 
 			} catch( ex ) {
 				let data = this.symbolTable[ token[ 1 ] ];
@@ -49,15 +52,15 @@ var Syntax = ( function( SymbolTable, Stack ) {
 			}
 		}
 
-		if( !isValid ) console.warn( errorMessage );
-		return isValid;
+		if( !isAccept ) console.warn( errorMessage );
+		return isAccept;
 	};
 
-	Syntax.prototype.eval = function( token ) {
+	Syntax.prototype.eval = function( token, nextToken ) {
 		var nextState = this.parsingTable[ this.Stack.top ][ token ];
 
 		// LOG OF EVAL
-		console.log( token + '=>', this.Stack._stack, nextState );
+		console.log( token + '=>', this.Stack._stack, nextState, 'next: ' + nextToken );
 
 		if( nextState === undefined ) {
 			if( token === SYMBOL_LOCKED ) return false;
@@ -72,12 +75,16 @@ var Syntax = ( function( SymbolTable, Stack ) {
 			// Is reduce
 			case 'R':
 				this.Stack.reduce( nextState[ 1 ] );
-				return this.eval( nextState[ 2 ] );
+				return this.eval( nextState[ 2 ], nextToken );
 
 			// Is goto
 			case 'G':
 				this.Stack.goto( parseInt( nextState[ 1 ] ) );
-				return this.eval( SYMBOL_LOCKED );
+
+				if( this.parsingTable[ this.Stack.top ][ nextToken ] !== undefined )
+					return false;
+
+				return this.eval( SYMBOL_LOCKED, nextToken );
 
 			// Is push
 			default:

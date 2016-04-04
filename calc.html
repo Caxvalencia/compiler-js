@@ -52,17 +52,19 @@
 	var grammar = {
 		'E': [
 			'E + T',
+			'E - T',
 			'T'
 		],
 
 		'T': [
 			'T * F',
+			'T / F',
 			'F'
 		],
 
 		'F': [
-			'( E )',
-			'NUMBER'
+			'NUMBER',
+			'( E )'
 		]
 	};
 
@@ -70,7 +72,7 @@
 	var btnCompile = document.getElementById( 'compile' ),
 		sourceCode = document.getElementById( 'sourceCode' );
 
-	var lexer = new Lex( lexico, { addSymbolTable: [ 'NUMBER', '+', '*', '(', ')' ] });
+	var lexer = new Lex( lexico, { addSymbolTable: [ 'NUMBER', '+', '*', '(', ')', '-' ] });
 	var syntax = new Syntax( grammar, lexer );
 
 	btnCompile.addEventListener( 'click', function() {
