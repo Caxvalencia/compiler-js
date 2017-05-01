@@ -2,18 +2,18 @@
 
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Calculator</title>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
 
-	<script src="Stack.js"></script>
-	<script src="Lex.js"></script>
-	<script src="Syntax.js"></script>
+    <script src="Stack.js"></script>
+    <script src="Lex.js"></script>
+    <script src="Syntax.js"></script>
 </head>
 
 <body>
 
-	<input type="text" name="sourceCode" id="sourceCode" value="5 + 5 * (5+5)" />
-	<input type="button" value="Compile" id="compile">
+    <input type="text" name="sourceCode" id="sourceCode" value="5 + 5 * (5+5)" />
+    <input type="button" value="Compile" id="compile">
 
 <script>
 // csLexer.AddTokenRule( @"\s+", "ESPACIO", true );           
@@ -28,100 +28,101 @@
 // csLexer.AddTokenRule( @">|<|==|>=|<=|!", "COMPARADOR" );
 
 !function( window, undefined ) {
-	/**
-	 * Analizador Lexico
-	 */
-	var lexico = {
-		// DELIMITERS
-		'(': /\(/,
-		')': /\)/,
-		'{': /\{/,
-		'}': /\}/,
-		'[': /\[/,
-		']': /\]/,
+    /**
+     * Analizador Lexico
+     */
+    var lexico = {
+        // DELIMITERS
+        '(': /\(/,
+        ')': /\)/,
+        '{': /\{/,
+        '}': /\}/,
+        '[': /\[/,
+        ']': /\]/,
 
-		// OPERATORS
-		'+': /\+/,
-		'-': /\-/,
-		'*': /\*/,
-		'/': /\//,
+        // OPERATORS
+        '+': /\+/,
+        '-': /\-/,
+        '*': /\*/,
+        '/': /\//,
 
-		'NUMBER': /\-?[0-9]*\.?[0-9]+/
-	};
+        'NUMBER': /\-?[0-9]*\.?[0-9]+/
+    };
 
-	var grammar = {
-		'E': [
-			'E + T',
-			'E - T',
-			'T'
-		],
+    var grammar = {
+        'E': [
+            'E + T',
+            'E - T',
+            'T'
+        ],
 
-		'T': [
-			'T * F',
-			'T / F',
-			'F'
-		],
+        'T': [
+            'T * F',
+            'T / F',
+            'F'
+        ],
 
-		'F': [
-			'NUMBER',
-			'( E )'
-		]
-	};
+        'F': [
+            'NUMBER',
+            '( E )',
+            '{ E }'
+        ]
+    };
 
 
-	var btnCompile = document.getElementById( 'compile' ),
-		sourceCode = document.getElementById( 'sourceCode' );
+    var btnCompile = document.getElementById( 'compile' ),
+        sourceCode = document.getElementById( 'sourceCode' );
 
-	var lexer = new Lex( lexico, { addSymbolTable: [ 'NUMBER', '+', '*', '(', ')', '-' ] });
-	var syntax = new Syntax( grammar, lexer );
+    var lexer = new Lex( lexico, { addSymbolTable: [ 'NUMBER', '+', '*', '(', ')', '-' ] });
+    var syntax = new Syntax( grammar, lexer );
 
-	btnCompile.addEventListener( 'click', function() {
-		lexer.analyze( sourceCode.value );
+    btnCompile.addEventListener( 'click', function() {
+        lexer.analyze( sourceCode.value );
 
-		showInfo( lexer, syntax );
-		
-		syntax.setTokens( lexer.tokens );
-		syntax.setSymbolTable( lexer.symbolTable );
-		
-		if( syntax.analyze() ) {
-			console.log( "Analyzed successfuly" )
-		}
+        showInfo( lexer, syntax );
+        
+        syntax.setTokens( lexer.tokens );
+        syntax.setSymbolTable( lexer.symbolTable );
+        
+        if( syntax.analyze() ) {
+            console.log( "Analyzed successfuly" )
+        }
 
-		console.info( 'STACK' );
-		console.table( syntax.Stack._stack );
-	});
+        console.info( 'STACK' );
+        console.table( syntax.Stack._stack );
+    });
 
-	btnCompile.click();
+    btnCompile.click();
 
-	function showInfo( lexer, syntax ) {
-		var parsingTable = {};
+    function showInfo( lexer, syntax ) {
+        var parsingTable = {};
 
-		for( let state in syntax.parsingTable ) {
-			parsingTable[ state ] = {};
-			
-			for( let state2 in syntax.parsingTable[ state ] ) {
-				parsingTable[ state ][ state2 ] = syntax.parsingTable[ state ][ state2 ];
-				parsingTable[ state ][ state2 ] = parsingTable[ state ][ state2 ].join( "," );
-			}
-		}
+        for( let state in syntax.parsingTable ) {
+            parsingTable[ state ] = {};
+            
+            for( let state2 in syntax.parsingTable[ state ] ) {
+                parsingTable[ state ][ state2 ] = syntax.parsingTable[ state ][ state2 ];
+                parsingTable[ state ][ state2 ] = parsingTable[ state ][ state2 ].join( "," );
+            }
+        }
 
-		for( let state = 0; state < syntax.states.length; state++ ) {
-			// console.log( 'state: ' + state );
-			// console.table( syntax.getState( state ).data );
-			// console.log( syntax.getState( state ) );
-		}
+        for( let state = 0; state < syntax.states.length; state++ ) {
+            // console.log( 'state: ' + state );
+            // console.table( syntax.getState( state ).data );
+            // console.log( syntax.getState( state ) );
+        }
 
-		console.info( 'PARSING TABLE' );
-		console.table( parsingTable );
+        console.info( 'PARSING TABLE' );
+        console.table( parsingTable );
 
-		// console.info( 'TOKENS' );
-		// console.table( lexer.tokens );
+        // console.info( 'TOKENS' );
+        // console.table( lexer.tokens );
 
-		// console.info( 'SYMBOL TABLE' );
-		// console.table( lexer.symbolTable );
-	}
+        // console.info( 'SYMBOL TABLE' );
+        // console.table( lexer.symbolTable );
+    }
 
 }( window );
-	</script>
+    </script>
 </body>
 </html>
