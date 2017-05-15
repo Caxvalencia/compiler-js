@@ -38,12 +38,17 @@ var Lex = ( function() {
                 continue;
             }
 
+            if( tokenName === false ) {
+                console.log( finder, tokenName );
+                break;
+            }
+
             if( this.canAddSymbolTable( tokenName ) ) {
                 let idxSymbol = this.symbolTable.push({
                     'lex': finder[ 0 ],
                     'scope': 'global',
                     'line': lines,
-                    'type': '',
+                    'type': tokenName,
                     'column': finder.index,
                     'length': this.regExp.lastIndex,
                 }) - 1;
@@ -66,7 +71,7 @@ var Lex = ( function() {
             expr.push( this.lexico[ tokenName ].source );
         }
 
-        this.regExp = new RegExp( '(' + expr.join( ')|(' ) + ')', 'g' );
+        this.regExp = new RegExp( '(' + expr.join( ')|(' ) + ')|([^' + expr.join( ']|[^' ) + '])', 'g' );
     };
 
     Lex.prototype.getTokenId = function( codeSource ) {

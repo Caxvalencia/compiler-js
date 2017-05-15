@@ -13,7 +13,7 @@
 <body>
 
     <input type="text" name="sourceCode" id="sourceCode" value="5 + 5 * (5+5)" />
-    <input type="button" value="Compile" id="compile">
+    <input type="button" value="Compile" id="compile" />
 
 <script>
 // csLexer.AddTokenRule( @"\s+", "ESPACIO", true );           
@@ -115,11 +115,11 @@
         console.info( 'PARSING TABLE' );
         console.table( parsingTable );
 
-        // console.info( 'TOKENS' );
-        // console.table( lexer.tokens );
+        console.info( 'TOKENS' );
+        console.table( lexer.tokens );
 
-        // console.info( 'SYMBOL TABLE' );
-        // console.table( lexer.symbolTable );
+        console.info( 'SYMBOL TABLE' );
+        console.table( lexer.symbolTable );
     }
 
 }( window );
