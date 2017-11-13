@@ -1,10 +1,19 @@
-'use strict';
+declare var console;
 
-var Lex = ( function() {
+export class Lex {
+    
+    lexico: any;
+    symbolTable: any[];
+    tokens: any[];
+    inSymbolTable: any[];
+    counterLines: any[];
+    
+    regExp: RegExp;
+    
     /**
      * Constructor
      */
-    function Lex( lexico, config ) {
+    public constructor( lexico, config ) {
         this.lexico = lexico;
         this.symbolTable = [];
         this.tokens = [];
@@ -22,10 +31,10 @@ var Lex = ( function() {
     /**
      * Public methods
      */
-    Lex.prototype.analyze = function( source ) {
-        var tokenName = null,
-            lines = 1,
-            finder = null;
+    public analyze( source ) {
+        let lines = 1;
+        let tokenName = null;
+        let finder = null;
 
         this.tokens = [];
         this.symbolTable = [];
@@ -59,22 +68,22 @@ var Lex = ( function() {
         
             this.tokens.push([ tokenName, finder[ 0 ] ]);
         }
-    };
+    }
 
     /**
      * Private methods
      */
-    Lex.prototype.concatLexico = function() {
-        var expr = [];
+    private concatLexico() {
+        let expr = [];
 
         for( let tokenName in this.lexico ) {
             expr.push( this.lexico[ tokenName ].source );
         }
 
         this.regExp = new RegExp( '(' + expr.join( ')|(' ) + ')|([^' + expr.join( ']|[^' ) + '])', 'g' );
-    };
+    }
 
-    Lex.prototype.getTokenId = function( codeSource ) {
+    private getTokenId( codeSource ) {
         for( let tokenName in this.lexico ) {
             if( !this.lexico[ tokenName ].test( codeSource ) ) continue;
             return tokenName;
@@ -83,9 +92,8 @@ var Lex = ( function() {
         return false;
     }
 
-    Lex.prototype.canAddSymbolTable = function( tokenName ) {
-         return this.inSymbolTable.indexOf( tokenName ) !== -1;
-    };
+    private canAddSymbolTable( tokenName ) {
+        return this.inSymbolTable.indexOf( tokenName ) !== -1;
+    }
 
-    return Lex;
-})();
+}

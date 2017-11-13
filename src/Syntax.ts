@@ -1,18 +1,25 @@
-/**
- * Class Syntax
- *
- * { rule -> productions[][], ... }
- */
-var Syntax = ( function( SymbolTable, Stack ) {
-    'use strict';
+import { Stack } from "./Stack";
 
-    const SYMBOL_EXTEND = "_G'";
-    const SYMBOL_LOCKED = "$";
+const SYMBOL_EXTEND = "_G'";
+const SYMBOL_LOCKED = "$";
+
+declare var console;
+
+export class Syntax {
+    terminalActives: any;
+    states: any;
+    parsingTable: any;
     
+    stack: Stack;
+    
+    tokens: any[];
+    symbolTable: any[];
+    grammar: any;
+
     /**
      * Constructor
      */
-    function Syntax( grammar, lex ) {
+    public constructor( grammar, lex ) {
         this.grammar = grammar;
 
         this.symbolTable = [];
@@ -26,8 +33,8 @@ var Syntax = ( function( SymbolTable, Stack ) {
     /**
      * Public methods
      */
-    Syntax.prototype.analyze = function() {
-        this.Stack = new Stack();
+    public analyze() {
+        this.stack = new Stack();
 
         var token = '',
             nextToken = '',
@@ -52,15 +59,18 @@ var Syntax = ( function( SymbolTable, Stack ) {
             }
         }
 
-        if( !isAccept ) console.warn( errorMessage );
-        return isAccept;
-    };
+        if( !isAccept ) {
+            console.warn( errorMessage );
+        }
 
-    Syntax.prototype.eval = function( token, nextToken ) {
-        var nextState = this.parsingTable[ this.Stack.top ][ token ];
+        return isAccept;
+    }
+
+    public eval( token, nextToken ) {
+        let nextState = this.parsingTable[ this.stack.top ][ token ];
 
         // LOG OF EVAL
-        console.log( token + '=>', this.Stack._stack, nextState, 'next: ' + nextToken );
+        console.log( token + '=>', this.stack.getStack(), nextState, 'next: ' + nextToken );
 
         if( nextState === undefined ) {
             if( token === SYMBOL_LOCKED ) return false;
@@ -74,30 +84,30 @@ var Syntax = ( function( SymbolTable, Stack ) {
 
             // Is reduce
             case 'R':
-                this.Stack.reduce( nextState[ 1 ] );
+                this.stack.reduce( nextState[ 1 ] );
                 return this.eval( nextState[ 2 ], nextToken );
 
             // Is goto
             case 'G':
-                this.Stack.goto( parseInt( nextState[ 1 ] ) );
+                this.stack.goto( parseInt( nextState[ 1 ] ) );
 
-                if( this.parsingTable[ this.Stack.top ][ nextToken ] !== undefined )
+                if( this.parsingTable[ this.stack.top ][ nextToken ] !== undefined )
                     return false;
 
                 return this.eval( SYMBOL_LOCKED, nextToken );
 
             // Is push
             default:
-                this.Stack.push( nextState[ 0 ] );
+                this.stack.push( nextState[ 0 ] );
                 return false;
         }
-    };
+    }
 
     /**
      * Private methods
      */
-    Syntax.prototype.configureGrammar = function( source ) {
-        var grammarExtended = {};
+    private configureGrammar() {
+        let grammarExtended = {};
 
         // Extend grammar and convert strings to arrays
         for( let prod in this.grammar ) {
@@ -119,14 +129,15 @@ var Syntax = ( function( SymbolTable, Stack ) {
         this.grammar = grammarExtended;
     }
 
-    Syntax.prototype.configParsingTable = function() {
+    private configParsingTable() {
         this.createStateInitial();
         this.createStates();
         this.createParsingTable();
     };
 
-    Syntax.prototype.createStateInitial = function() {
+    private createStateInitial() {
         this.states = [];
+
         var lock = 0,
             initProd = this.grammar[ SYMBOL_EXTEND ];
 
@@ -141,7 +152,7 @@ var Syntax = ( function( SymbolTable, Stack ) {
         }
     };
 
-    Syntax.prototype.searchProductions = function( nonTerminal, state ) {
+    private searchProductions( nonTerminal, state ) {
         var productions = this.grammar[ nonTerminal ];
 
         for( let prod = 0; prod < productions.length; prod++ ) {
@@ -155,7 +166,7 @@ var Syntax = ( function( SymbolTable, Stack ) {
         }
     };
 
-    Syntax.prototype.createStates = function() {
+    private createStates() {
         // From state zero, generate all states
         var rule = null,
             ruleData = null,
@@ -205,7 +216,7 @@ var Syntax = ( function( SymbolTable, Stack ) {
         }
     };
 
-    Syntax.prototype.createParsingTable = function() {
+    private createParsingTable() {
         this.parsingTable = {};
         
         var state = null,
@@ -235,9 +246,9 @@ var Syntax = ( function( SymbolTable, Stack ) {
                 this.parsingTable[ stateIdx ][ prop ] = [ state[ prop ].index ];
             }
         }
-    };
+    }
 
-    Syntax.prototype.searchNextStateByRule = function( rule ) {
+    public searchNextStateByRule( rule ) {
         var mainRule = null,
             len = this.states.length;
 
@@ -253,9 +264,9 @@ var Syntax = ( function( SymbolTable, Stack ) {
         }
         
         return -1;
-    };
+    }
 
-    Syntax.prototype.existsInState = function( state, rule ) {
+    private existsInState( state, rule ) {
         var mainRule = null,
             nextLock = rule.lock + 1,
             len = state.data.length;
@@ -272,12 +283,12 @@ var Syntax = ( function( SymbolTable, Stack ) {
         }
         
         return false;
-    };
+    }
 
     /**
      * Insertions methods for property state
      */
-    Syntax.prototype.createState = function( production, lock ) {
+    public createState = function( production, lock ) {
         var state = { 'index': null, 'data': [] };
 
         if( production )
@@ -287,16 +298,17 @@ var Syntax = ( function( SymbolTable, Stack ) {
         state.index = index;
         
         return index;
-    };
+    }
 
-    Syntax.prototype.addProductionToState = function( state, production, lock ) {
-        if( typeof state === 'number' )
+    public addProductionToState( state, production, lock = 0 ) {
+        if( typeof state === 'number' ) {
             state = this.getState( state );
-        
-        return state.data.push( this.createStateData( production, ( lock || 0 ) ) ) - 1;
-    };
+        }
 
-    Syntax.prototype.createStateData = function( production, lock ) {
+        return state.data.push( this.createStateData( production, lock ) ) - 1;
+    }
+
+    public createStateData = function( production, lock ) {
         var current = production[ lock ] === undefined
             ? SYMBOL_LOCKED
             : production[ lock ];
@@ -312,23 +324,22 @@ var Syntax = ( function( SymbolTable, Stack ) {
             'current': current,
             'next': next
         };
-    };
-
+    }
 
     /**
      * Setters and getters methods
      */
-    Syntax.prototype.setTokens = function( tokens ) {
+    public setTokens( tokens ) {
         this.tokens = tokens;
         return this;
-    };
+    }
 
-    Syntax.prototype.setSymbolTable = function( symbolTable ) {
+    public setSymbolTable = function( symbolTable ) {
         this.symbolTable = symbolTable;
         return this;
-    };
+    }
 
-    Syntax.prototype.setLex = function( lex ) {
+    public setLex = function( lex ) {
         this.terminals = [ SYMBOL_LOCKED ];
         this.terminalActives = [ SYMBOL_LOCKED ];
 
@@ -353,16 +364,15 @@ var Syntax = ( function( SymbolTable, Stack ) {
         }
 
         return this;
-    };
+    }
 
-    Syntax.prototype.isTerminal = function( item ) {
+    public isTerminal = function( item ) {
         if( item === undefined ) return true;
         return this.terminals.indexOf( item ) !== -1;
-    };
+    }
 
-    Syntax.prototype.getState = function( state ) {
+    public getState = function( state ) {
         return this.states[ state ];
-    };
+    }
 
-    return Syntax;
-})( {}, Stack );
+}

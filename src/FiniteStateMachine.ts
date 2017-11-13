@@ -1,14 +1,19 @@
 
 
-class FiniteStateMachine {
+export class FiniteStateMachine {
+   
+    str: string;
+    currentState: number;
+    states: any;
+    accepts: Array<number>;
+    isAccepted: boolean;
     
-    constructor( string, currentState, states, accepts ) {
-        this.string = string;
+    constructor( str: string, currentState: number, states, accepts: Array<number> ) {
+        this.str = str;
         this.currentState = currentState;
         this.states = states;
         this.accepts = accepts;
-
-        this.isAccepted = this.run( this.string );
+        this.isAccepted = this.run( this.str );
     }
 
     run( string ) {
@@ -32,15 +37,3 @@ class FiniteStateMachine {
 
     }
 }
-
-module.exports = FiniteStateMachine;
-
-var states = {
-    '1 a': 2,
-    '2 a': 2,
-    '2 b': 3
-};
-
-let fsm = new FiniteStateMachine( 'aaaaaaab', 1, states, [ 3 ]);
-
-console.log( fsm );
