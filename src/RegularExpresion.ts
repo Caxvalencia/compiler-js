@@ -97,8 +97,8 @@ class UnionFsm {
 declare let console;
 
 export class RegularExpresion {
+    public source: string;
     protected separator: string = '-';
-    protected source: string;
 
     constructor(regExp: string) {
         this.source = regExp;
@@ -116,11 +116,12 @@ export class RegularExpresion {
      * @return {IFsm}
      */
     public toNFAe() {
+        let initialFsm: SimpleFsm;
         let fsm: SimpleFsm;
         let beforeFsm: SimpleFsm = null;
         let beforeChar = null;
 
-        this.source.split('').forEach(character => {
+        this.source.split('').forEach((character, idx) => {
             if (character === Operators.ZERO_OR_MANY) {
                 fsm = KleeneFsm.apply(fsm);
                 beforeFsm = fsm;
@@ -136,7 +137,7 @@ export class RegularExpresion {
 
             //Stack?
             if (beforeChar === Operators.OR) {
-                beforeFsm = UnionFsm.apply(fsm, new SimpleFsm(character));
+                initialFsm = UnionFsm.apply(fsm, new SimpleFsm(character));
                 fsm = UnionFsm.fsmSecond;
                 beforeChar = character;
 
@@ -151,9 +152,13 @@ export class RegularExpresion {
 
             beforeFsm = fsm;
             beforeChar = character;
+
+            if (idx === 0) {
+                initialFsm = fsm;
+            }
         });
 
-        return fsm;
+        return initialFsm;
     }
 
     resolve(stack, input): any {
