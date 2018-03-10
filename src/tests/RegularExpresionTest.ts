@@ -1,6 +1,7 @@
 import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
-import { Operators, RegularExpresion } from '../RegularExpresion';
+import { RegularExpresion } from '../RegularExpresion';
+import { Operators } from '../finite-state-machine/constants/operators';
 
 declare var console;
 
@@ -125,7 +126,18 @@ export class RegularExpresionTest {
                 .process(Operators.EPSILON)[0]
                 .process('B')[0]
                 .process(Operators.EPSILON)[0].isAccepted,
-            "A* - Many 'A' ocurrences founded"
+            regExp.source
+        );
+    }
+
+    @test
+    public testKleeneDFA() {
+        let regExp = new RegularExpresion('A*');
+        let dfa = regExp.toDFA();
+
+        assert.isTrue(
+            dfa.process('A')[0].isAccepted,
+            regExp.source + ': 0 or n-ocurrences founded'
         );
     }
 }

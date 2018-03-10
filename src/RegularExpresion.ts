@@ -1,121 +1,26 @@
-export const Operators = {
-    EPSILON: '#',
-    ZERO_OR_MANY: '*',
-    OR: '|'
-};
-
-class State {
-    nextStates: Array<State>;
-    transition: string;
-    isAccepted: boolean;
-
-    constructor(
-        transition?: any,
-        nextStates?: Array<State>,
-        isAccepted = false
-    ) {
-        this.transition = transition;
-        this.nextStates = nextStates || [];
-        this.isAccepted = isAccepted;
-    }
-
-    process(input?: string): Array<State> {
-        return input === this.transition ? this.nextStates : null;
-    }
-}
-
-interface IFsm {
-    init: State;
-    end: State;
-}
-
-class SimpleFsm implements IFsm {
-    init: State;
-    end: State;
-
-    constructor(transition?) {
-        this.end = new State(null, null, true);
-        this.init = new State(transition, [this.end]);
-    }
-}
-
-class KleeneFsm {
-    /**
-     * @param fsm
-     */
-    static apply(fsm: IFsm): IFsm {
-        let kleene = new SimpleFsm();
-        kleene.end = new State(Operators.EPSILON, [fsm.end], false);
-        kleene.init = new State(fsm.init.transition, [kleene.end]);
-
-        fsm.init.transition = Operators.EPSILON;
-        fsm.init.nextStates.unshift(kleene.init);
-
-        fsm.end.transition = Operators.EPSILON;
-        fsm.end.nextStates = [kleene.init];
-
-        return fsm;
-    }
-}
-
-class ConcatFsm {
-    /**
-     * @param {IFsm} fsmFirst
-     * @param {IFsm} fsmSecond
-     */
-    static apply(fsmFirst: IFsm, fsmSecond: IFsm) {
-        fsmFirst.end.transition = Operators.EPSILON;
-        fsmFirst.end.isAccepted = false;
-        fsmFirst.end.nextStates = [fsmSecond.init];
-
-        return fsmSecond;
-    }
-}
-
-class UnionFsm {
-    static fsmFirst: IFsm;
-    static fsmSecond: IFsm;
-    /**
-     * @param fsmFirst
-     * @param fsmSecond
-     */
-    static apply(fsmFirst: IFsm, fsmSecond?: IFsm) {
-        this.fsmFirst = fsmFirst;
-        this.fsmSecond = fsmSecond;
-
-        let union = new SimpleFsm();
-        union.end = new State(null, null, false);
-        union.init = new State(Operators.EPSILON, [
-            fsmFirst.init,
-            fsmSecond.init
-        ]);
-
-        return union;
-    }
-}
+import { Operators } from './finite-state-machine/constants/operators';
+import { NFAeToDFA } from './finite-state-machine/nfae-to-dfa';
+import { ConcatFsm } from './finite-state-machine/transformers/concat-fsm';
+import { KleeneFsm } from './finite-state-machine/transformers/kleene-fsm';
+import { SimpleFsm } from './finite-state-machine/transformers/simple-fsm';
+import { UnionFsm } from './finite-state-machine/transformers/union-fsm';
 
 declare let console;
 
 export class RegularExpresion {
     public source: string;
+    public alphabet: Object;
     protected separator: string = '-';
 
     constructor(regExp: string) {
         this.source = regExp;
+        this.alphabet = {};
     }
 
     /**
-     * Convert to Deterministic Finite Automata
-     * @return {Object}
+     * @return {SimpleFsm}
      */
-    public toDFA() {
-        return this.toNFAe();
-    }
-
-    /**
-     * @return {IFsm}
-     */
-    public toNFAe() {
+    public toNFAe(): SimpleFsm {
         let initialFsm: SimpleFsm;
         let fsm: SimpleFsm;
         let beforeFsm: SimpleFsm = null;
@@ -153,12 +58,22 @@ export class RegularExpresion {
             beforeFsm = fsm;
             beforeChar = character;
 
+            this.alphabet[character] = character;
+
             if (idx === 0) {
                 initialFsm = fsm;
             }
         });
 
         return initialFsm;
+    }
+
+    /**
+     * Convert to Deterministic Finite Automata (DFA)
+     * @return {Object}
+     */
+    public toDFA() {
+        return new NFAeToDFA(this.toNFAe(), this.alphabet).convert();
     }
 
     resolve(stack, input): any {
