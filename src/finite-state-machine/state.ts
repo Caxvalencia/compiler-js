@@ -15,10 +15,24 @@ export class State {
         this.nextStates = nextStates || [];
         this.isAccepted = isAccepted;
 
-        this.transitions = { [transition]: this.nextStates };
+        this.transitions = {};
+    }
+
+    addTransition(transition, nextStates: State[]) {
+        this.transitions[transition] = nextStates;
+
+        return this;
+    }
+
+    processTransition(input?: string): Array<State> {
+        return this.transitions[input] || [];
     }
 
     process(input?: string): Array<State> {
         return input === this.transition ? this.nextStates : [];
+    }
+
+    hasTransition(symbol: string): boolean {
+        return this.transitions[symbol] !== undefined;
     }
 }
