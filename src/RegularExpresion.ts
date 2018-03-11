@@ -75,8 +75,4 @@ export class RegularExpresion {
     public toDFA() {
         return new NFAeToDFA(this.toNFAe(), this.alphabet).convert();
     }
-
-    resolve(stack, input): any {
-        return true;
-    }
 }
