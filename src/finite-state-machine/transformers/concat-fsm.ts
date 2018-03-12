@@ -9,7 +9,7 @@ export class ConcatFsm {
     static apply(fsmFirst: IFsm, fsmSecond: IFsm) {
         fsmFirst.end.transition = Operators.EPSILON;
         fsmFirst.end.isAccepted = false;
-        fsmFirst.end.nextStates = [fsmSecond.init];
+        fsmFirst.end.nextStates.push(fsmSecond.init);
 
         return fsmSecond;
     }
