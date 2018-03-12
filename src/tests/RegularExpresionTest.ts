@@ -122,7 +122,7 @@ export class RegularExpresionTest {
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
-                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[1]
                 .process(Operators.EPSILON)[0]
                 .process('B')[0]
                 .process(Operators.EPSILON)[0].isAccepted,
@@ -135,9 +135,37 @@ export class RegularExpresionTest {
         let regExp = new RegularExpresion('A*');
         let dfa = regExp.toDFA();
 
+        assert.isTrue(dfa.isAccepted, regExp.source + ': 0 ocurrences founded');
+
         assert.isTrue(
-            dfa.process('A')[0].isAccepted,
-            regExp.source + ': 0 or n-ocurrences founded'
+            dfa
+                .processTransition('A')[0]
+                .processTransition('A')[0]
+                .processTransition('A')[0].isAccepted,
+            regExp.source + ': n-ocurrences founded'
+        );
+
+        assert.isUndefined(
+            dfa.processTransition('B')[0],
+            regExp.source + ': not ocurrences founded'
+        );
+    }
+
+    @test
+    public testConcatKleeneDFA() {
+        let regExp = new RegularExpresion('A*B*');
+        let dfa = regExp.toDFA();
+
+        assert.isTrue(dfa.isAccepted, regExp.source + ': 0 ocurrences founded');
+
+        assert.isTrue(
+            dfa
+                .processTransition('A')[0]
+                .processTransition('A')[0]
+                .processTransition('B')[0]
+                .processTransition('B')[0]
+                .processTransition('B')[0].isAccepted,
+            regExp.source + ': n-ocurrences founded'
         );
     }
 }
