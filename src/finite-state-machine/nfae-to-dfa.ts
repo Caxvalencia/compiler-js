@@ -76,11 +76,8 @@ export class NFAeToDFA {
             }
             
             let nextStates: State[] = [];
-            let newStateId: any = [];
 
             states.forEach((state: State) => {
-                newStateId.push(state.id);
-
                 state.process(symbol).forEach(nextState => {
                     let closureNextState = this.closureEpsilon(nextState);
 
