@@ -41,14 +41,7 @@ export class NFAeToDFA {
         }
 
         if (!hasNextStates) {
-            for (const symbol in this.alphabet) {
-                let newState = this.findNext(
-                    this.closureEpsilon(stateInitial),
-                    symbol
-                );
-
-                fsm = newState;
-            }
+            fsm = this.findNext(this.closureEpsilon(stateInitial));
         }
 
         return fsm;
@@ -58,39 +51,53 @@ export class NFAeToDFA {
      * Find next states, if finded then it get closures this self
      * @param symbol
      */
-    private findNext(states: State[], symbol: string): State {
-        let nextStates: State[] = [];
-        let newStateId: any = [];
+    private findNext(states: State[]): State {
+        if (states.length === 0) {
+            return null;
+        }
 
-        states.forEach((state: State) => {
-            newStateId.push(state.id);
-
-            state.process(symbol).forEach(nextState => {
-                let closureNextState = this.closureEpsilon(nextState);
-
-                nextStates = nextStates.concat(
-                    closureNextState.filter(
-                        state => nextStates.indexOf(state) === -1
-                    )
-                );
-            });
-        });
-
-        nextStates.sort((current, next) => <any>current.id - <any>next.id);
-        newStateId = newStateId.sort().join(',');
+        let newStateId = states
+            .map(state => state.id)
+            .sort()
+            .join(',');
 
         if (this.stack[newStateId] !== undefined) {
             return this.stack[newStateId];
         }
 
-        this.stack[newStateId] = new State(symbol);
-        this.stack[newStateId].id = newStateId;
-        this.stack[newStateId].isAccepted = nextStates.some(
-            state => state.isAccepted
-        );
-        this.stack[newStateId].nextStates = [this.findNext(nextStates, symbol)];
+        let newState = new State();
+        newState.id = newStateId;
 
-        return this.stack[newStateId];
+        this.stack[newStateId] = newState;
+
+        for (const symbol in this.alphabet) {
+            if (newState.hasTransition(symbol)) {
+                continue;
+            }
+            
+            let nextStates: State[] = [];
+            let newStateId: any = [];
+
+            states.forEach((state: State) => {
+                newStateId.push(state.id);
+
+                state.process(symbol).forEach(nextState => {
+                    let closureNextState = this.closureEpsilon(nextState);
+
+                    nextStates = nextStates.concat(
+                        closureNextState.filter(
+                            state => nextStates.indexOf(state) === -1
+                        )
+                    );
+                });
+            });
+
+            nextStates.sort((current, next) => <any>current.id - <any>next.id);
+            newState.addTransition(symbol, [this.findNext(nextStates)]);
+            newState.isAccepted = states.some(state => state.isAccepted);
+        }
+
+        return newState;
     }
 
     /**
