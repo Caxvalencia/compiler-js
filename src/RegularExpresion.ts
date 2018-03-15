@@ -4,6 +4,7 @@ import { ConcatFsm } from './finite-state-machine/transformers/concat-fsm';
 import { KleeneFsm } from './finite-state-machine/transformers/kleene-fsm';
 import { SimpleFsm } from './finite-state-machine/transformers/simple-fsm';
 import { UnionFsm } from './finite-state-machine/transformers/union-fsm';
+import { State } from './finite-state-machine/state';
 
 declare let console;
 
@@ -18,9 +19,9 @@ export class RegularExpresion {
     }
 
     /**
-     * @return {SimpleFsm}
+     * @return {State}
      */
-    public toNFAe(): SimpleFsm {
+    public toNFAe(): State {
         let initialFsm: SimpleFsm;
         let fsm: SimpleFsm;
         let beforeFsm: SimpleFsm = null;
@@ -65,7 +66,7 @@ export class RegularExpresion {
             }
         });
 
-        return initialFsm;
+        return initialFsm.init;
     }
 
     /**

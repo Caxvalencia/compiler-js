@@ -4,17 +4,17 @@ import { Operators } from './constants/operators';
 
 export class NFAeToDFA {
     private alphabet: string[];
-    private nfae: IFsm;
+    private nfae: State;
     private stack: Object;
 
-    constructor(nfae: IFsm, alphabet) {
+    constructor(nfae: State, alphabet) {
         this.stack = {};
         this.nfae = nfae;
         this.alphabet = alphabet;
     }
 
     convert() {
-        let stateInitial = this.nfae.init;
+        let stateInitial = this.nfae;
         let fsm: State;
 
         let indexer = (index = 0) => {

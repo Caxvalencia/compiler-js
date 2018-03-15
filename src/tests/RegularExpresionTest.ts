@@ -12,7 +12,7 @@ export class RegularExpresionTest {
         let regExp = new RegularExpresion('A');
         let nfae = regExp.toNFAe();
 
-        assert.isTrue(nfae.init.process('A')[0].isAccepted, 'A founded');
+        assert.isTrue(nfae.process('A')[0].isAccepted, 'A founded');
     }
 
     @test
@@ -21,7 +21,7 @@ export class RegularExpresionTest {
         let nfae = regExp.toNFAe();
 
         assert.isTrue(
-            nfae.init
+            nfae
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
                 .process('B')[0].isAccepted,
@@ -34,16 +34,13 @@ export class RegularExpresionTest {
         let regExp = new RegularExpresion('A*');
         let nfae = regExp.toNFAe();
 
-        assert.equal(nfae.init.transition, Operators.EPSILON, 'A*');
-        assert.equal(nfae.init.nextStates.length, 2, 'A*');
-
         assert.isTrue(
-            nfae.init.process(Operators.EPSILON)[1].isAccepted,
+            nfae.process(Operators.EPSILON)[1].isAccepted,
             'A* - O ocurrences founded'
         );
 
         assert.isTrue(
-            nfae.init
+            nfae
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0].isAccepted,
@@ -51,7 +48,7 @@ export class RegularExpresionTest {
         );
 
         assert.isTrue(
-            nfae.init
+            nfae
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
@@ -68,12 +65,12 @@ export class RegularExpresionTest {
         let nfae = regExp.toNFAe();
 
         assert.isTrue(
-            nfae.init.process(Operators.EPSILON)[0].process('A')[0].isAccepted,
+            nfae.process(Operators.EPSILON)[0].process('A')[0].isAccepted,
             regExp.source + ' - A ocurrence founded'
         );
 
         assert.isTrue(
-            nfae.init.process(Operators.EPSILON)[1].process('B')[0].isAccepted,
+            nfae.process(Operators.EPSILON)[1].process('B')[0].isAccepted,
             regExp.source + ' - B ocurrence founded'
         );
 
@@ -118,7 +115,7 @@ export class RegularExpresionTest {
         let nfae = regExp.toNFAe();
 
         assert.isTrue(
-            nfae.init
+            nfae
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
@@ -139,14 +136,14 @@ export class RegularExpresionTest {
 
         assert.isTrue(
             dfa
-                .processTransition('A')[0]
-                .processTransition('A')[0]
-                .processTransition('A')[0].isAccepted,
+                .process('A')[0]
+                .process('A')[0]
+                .process('A')[0].isAccepted,
             regExp.source + ': n-ocurrences founded'
         );
 
         assert.isUndefined(
-            dfa.processTransition('B')[0],
+            dfa.process('B')[0],
             regExp.source + ': not ocurrences founded'
         );
     }
@@ -160,11 +157,11 @@ export class RegularExpresionTest {
 
         assert.isTrue(
             dfa
-                .processTransition('A')[0]
-                .processTransition('A')[0]
-                .processTransition('B')[0]
-                .processTransition('B')[0]
-                .processTransition('B')[0].isAccepted,
+                .process('A')[0]
+                .process('A')[0]
+                .process('B')[0]
+                .process('B')[0]
+                .process('B')[0].isAccepted,
             regExp.source + ': n-ocurrences founded'
         );
     }
