@@ -1,21 +1,28 @@
 export class State {
     id: number | string;
-    nextStates: Array<State>;
-    transition: string;
     isAccepted: boolean;
 
     private transitions: Object;
 
     constructor(
-        transition?: any,
-        nextStates?: Array<State>,
+        transition: any = null,
+        nextStates: Array<State> = [],
         isAccepted = false
     ) {
-        this.transition = transition;
-        this.nextStates = nextStates || [];
         this.isAccepted = isAccepted;
-
         this.transitions = {};
+
+        if (transition !== null) {
+            this.addTransition(transition, nextStates);
+        }
+    }
+
+    process(input?: string): Array<State> {
+        return this.transitions[input] || [];
+    }
+
+    hasTransition(symbol: string): boolean {
+        return this.transitions[symbol] !== undefined;
     }
 
     addTransition(transition, nextStates: State[]) {
@@ -24,15 +31,17 @@ export class State {
         return this;
     }
 
-    processTransition(input?: string): Array<State> {
-        return this.transitions[input] || [];
+    getTransition(transitionId) {
+        return this.transitions[transitionId] || [];
     }
 
-    process(input?: string): Array<State> {
-        return input === this.transition ? this.nextStates : [];
+    setTransitions(transitions: any): any {
+        this.transitions = transitions;
+
+        return this;
     }
 
-    hasTransition(symbol: string): boolean {
-        return this.transitions[symbol] !== undefined;
+    getTransitions(): Object {
+        return this.transitions;
     }
 }

@@ -9,14 +9,22 @@ export class KleeneFsm {
      */
     static apply(fsm: IFsm): IFsm {
         let kleene = new SimpleFsm();
+        kleene.init = new State();
         kleene.end = new State(Operators.EPSILON, [fsm.end], false);
-        kleene.init = new State(fsm.init.transition, [kleene.end]);
 
-        fsm.init.transition = Operators.EPSILON;
-        fsm.init.nextStates.unshift(kleene.init);
+        const fsmInitTransitions = fsm.init.getTransitions();
 
-        fsm.end.transition = Operators.EPSILON;
-        fsm.end.nextStates = [kleene.init];
+        for (let key in fsmInitTransitions) {
+            kleene.init.addTransition(key, [kleene.end]);
+
+            let nextStates = fsm.init.getTransition(key).unshift(kleene.init);
+
+            fsm.init.setTransitions({
+                [Operators.EPSILON]: fsm.init.getTransition(key)
+            });
+        }
+
+        fsm.end.setTransitions({ [Operators.EPSILON]: [kleene.init] });
 
         return fsm;
     }

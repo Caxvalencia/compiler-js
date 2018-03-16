@@ -7,9 +7,12 @@ export class ConcatFsm {
      * @param {IFsm} fsmSecond
      */
     static apply(fsmFirst: IFsm, fsmSecond: IFsm) {
-        fsmFirst.end.transition = Operators.EPSILON;
         fsmFirst.end.isAccepted = false;
-        fsmFirst.end.nextStates.push(fsmSecond.init);
+        
+        const endTransition = fsmFirst.end.getTransition(Operators.EPSILON);
+        endTransition.push(fsmSecond.init);
+
+        fsmFirst.end.addTransition(Operators.EPSILON, endTransition)
 
         return fsmSecond;
     }

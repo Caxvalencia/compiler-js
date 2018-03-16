@@ -23,8 +23,12 @@ export class NFAeToDFA {
                     return;
                 }
 
+                const transitions = state.getTransitions();
                 state.id = index;
-                state.nextStates.forEach(indexer(index + 1));
+
+                for (let transition in transitions) {
+                    transitions[transition].forEach(indexer(index + 1));
+                }
             };
         };
 
@@ -74,7 +78,7 @@ export class NFAeToDFA {
             if (newState.hasTransition(symbol)) {
                 continue;
             }
-            
+
             let nextStates: State[] = [];
 
             states.forEach((state: State) => {
