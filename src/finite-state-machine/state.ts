@@ -1,8 +1,10 @@
+export type Transition = { [key: string]: Array<State> };
+
 export class State {
     id: number | string;
     isAccepted: boolean;
 
-    private transitions: Object;
+    private transitions: Transition;
 
     constructor(
         transition: any = null,
@@ -41,7 +43,7 @@ export class State {
         return this;
     }
 
-    getTransitions(): Object {
+    getTransitions(): Transition {
         return this.transitions;
     }
 }
