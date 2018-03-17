@@ -12,15 +12,20 @@ export class KleeneFsm {
         kleene.init = new State();
         kleene.end = new State(Operators.EPSILON, [fsm.end], false);
 
-        const fsmInitTransitions = fsm.init.getTransitions();
-
-        for (let key in fsmInitTransitions) {
+        for (let key in fsm.init.getTransitions()) {
             kleene.init.addTransition(key, [kleene.end]);
 
-            let nextStates = fsm.init.getTransition(key).unshift(kleene.init);
+            fsm.init.getTransition(key).unshift(kleene.init);
+
+            let nextStates = fsm.init.getTransition(key);
+            let epsilonStates = fsm.init.getTransition(Operators.EPSILON);
+
+            nextStates = nextStates.filter(
+                state => epsilonStates.indexOf(state) === -1
+            );
 
             fsm.init.setTransitions({
-                [Operators.EPSILON]: fsm.init.getTransition(key)
+                [Operators.EPSILON]: epsilonStates.concat(nextStates)
             });
         }
 
