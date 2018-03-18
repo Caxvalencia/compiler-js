@@ -9,7 +9,6 @@ import { State } from './finite-state-machine/state';
 export class RegularExpresion {
     public source: string;
     public alphabet: string[];
-    protected separator: string = '-';
 
     /**
      * Creates an instance of RegularExpresion.
