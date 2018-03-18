@@ -18,14 +18,13 @@ export class DFA {
     }
 
     convert() {
-        let stateInitial = this.nfae;
+        this.indexer()(this.nfae);
+
         let fsm: State;
         let hasNextStates = false;
 
-        this.indexer()(stateInitial);
-
         for (const symbol of this.alphabet) {
-            let nextStates = stateInitial.process(symbol);
+            let nextStates = this.nfae.process(symbol);
 
             if (nextStates.length > 0) {
                 hasNextStates = true;
@@ -33,7 +32,7 @@ export class DFA {
         }
 
         if (!hasNextStates) {
-            fsm = this.findNext(this.closureEpsilon(stateInitial));
+            fsm = this.findNext(this.closureEpsilon(this.nfae));
         }
 
         return fsm;
