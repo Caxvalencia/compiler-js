@@ -1,22 +1,40 @@
 import { Operators } from './constants/operators';
 import { State } from './state';
 
+/**
+ * @export
+ * @class DFA
+ */
 export class DFA {
     private alphabet: string[];
     private nfae: State;
     private stack: Object;
 
+    /**
+     * Creates an instance of DFA.
+     * @param  {State} nfae
+     * @param  {string[]} alphabet
+     */
     constructor(nfae: State, alphabet: string[]) {
         this.stack = {};
         this.nfae = nfae;
         this.alphabet = alphabet;
     }
 
-    static convert(nfae: State, alphabet: string[]) {
+    /**
+     * @static
+     * @param  {State} nfae
+     * @param  {string[]} alphabet
+     * @return State
+     */
+    static convert(nfae: State, alphabet: string[]): State {
         return new DFA(nfae, alphabet).convert();
     }
 
-    convert() {
+    /**
+     * @return State
+     */
+    convert(): State {
         this.indexer()(this.nfae);
 
         let fsm: State;
@@ -40,7 +58,9 @@ export class DFA {
     }
 
     /**
-     * @param index
+     * @private
+     * @param  {number} [index=0]
+     * @return
      */
     private indexer(index = 0) {
         return (state: State) => {
@@ -62,7 +82,9 @@ export class DFA {
 
     /**
      * Find next states, if finded then it get closures this self
-     * @param symbol
+     * @private
+     * @param  {State[]} states
+     * @return State
      */
     private findNext(states: State[]): State {
         if (states.length === 0) {
@@ -111,9 +133,11 @@ export class DFA {
     }
 
     /**
-     * @param state
+     * @private
+     * @param  {State} state
+     * @return Array<State>
      */
-    private closureEpsilon(state): Array<State> {
+    private closureEpsilon(state: State): Array<State> {
         let closures = [state];
 
         const closureEpsilon = (nextState: State) => {
