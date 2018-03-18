@@ -20,25 +20,9 @@ export class DFA {
     convert() {
         let stateInitial = this.nfae;
         let fsm: State;
-
-        let indexer = (index = 0) => {
-            return (state: State) => {
-                if (state.id !== undefined) {
-                    return;
-                }
-
-                const transitions = state.getTransitions();
-                state.id = index;
-
-                for (let transition in transitions) {
-                    transitions[transition].forEach(indexer(index + 1));
-                }
-            };
-        };
-
-        indexer()(stateInitial);
-
         let hasNextStates = false;
+
+        this.indexer()(stateInitial);
 
         for (const symbol of this.alphabet) {
             let nextStates = stateInitial.process(symbol);
@@ -53,6 +37,24 @@ export class DFA {
         }
 
         return fsm;
+    }
+
+    /**
+     * @param index
+     */
+    private indexer(index = 0) {
+        return (state: State) => {
+            if (state.id !== undefined) {
+                return;
+            }
+
+            const transitions = state.getTransitions();
+            state.id = index;
+
+            for (let transition in transitions) {
+                transitions[transition].forEach(this.indexer(index + 1));
+            }
+        };
     }
 
     /**
