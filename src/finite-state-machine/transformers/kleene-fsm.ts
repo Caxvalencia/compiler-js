@@ -5,7 +5,9 @@ import { SimpleFsm } from './simple-fsm';
 
 export class KleeneFsm {
     /**
-     * @param fsm
+     * @static
+     * @param {IFsm} fsm
+     * @returns {IFsm}
      */
     static apply(fsm: IFsm): IFsm {
         let kleene = new SimpleFsm();
