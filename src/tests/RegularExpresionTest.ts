@@ -2,6 +2,7 @@ import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 import { RegularExpresion } from '../RegularExpresion';
 import { Operators } from '../finite-state-machine/constants/operators';
+import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
 
 declare var console;
 
@@ -130,5 +131,48 @@ export class RegularExpresionTest {
                 .process('B')[0].isAccepted,
             regExp.source + ': n-ocurrences founded'
         );
+    }
+
+    @test
+    public testDFAtoMapping() {
+        let regExp = new RegularExpresion('A*');
+        let dfaMapped = MapDFA.apply(regExp.toDFA());
+
+        assert.equal(
+            JSON.stringify(dfaMapped.states),
+            JSON.stringify({ '0-A': 1, '1-A': 1 }),
+            regExp.source
+        );
+
+        assert.deepEqual(dfaMapped.accepts, [0, 1], regExp.source);
+
+        // ========================================
+
+        // regExp = new RegularExpresion('c|ax*');
+        // dfa = regExp.toDFA();
+        // assert.equal(
+        //     JSON.stringify(dfa.states),
+        //     JSON.stringify({ '0-c': 1, '0-a': 2, '2-x': 2 }),
+        //     'c|ax*'
+        // );
+        // assert.sameMembers(dfa.accepts, [1, 2], 'c|ax*');
+        // regExp = new RegularExpresion('ca|ax*');
+        // dfa = regExp.toDFA();
+        // assert.equal(
+        //     JSON.stringify(dfa.states),
+        //     JSON.stringify({ '0-c': 1, '1-a': 2, '0-a': 3, '3-x': 3 }),
+        //     'ca|ax*'
+        // );
+        // assert.sameMembers(dfa.accepts, [2, 3], 'ca|ax*');
+        // let source = 'cc*|b*b|ax*';
+        // regExp = new RegularExpresion(source);
+        // dfa = regExp.toDFA();
+        // assert.equal(
+        //     JSON.stringify(dfa.states),
+        //     JSON.stringify({ '0-c': 1, '0-a': 2, '2-x': 2 }),
+        //     source
+        // );
+        // assert.sameMembers(dfa.accepts, [1, 2], source);
+        // let regExp = new RegularExpresion('(a|b)*');
     }
 }
