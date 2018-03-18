@@ -10,12 +10,11 @@ declare let console;
 
 export class RegularExpresion {
     public source: string;
-    public alphabet: Object;
+    public alphabet: string[];
     protected separator: string = '-';
 
     constructor(regExp: string) {
         this.source = regExp;
-        this.alphabet = {};
     }
 
     /**
@@ -26,6 +25,7 @@ export class RegularExpresion {
         let fsm: SimpleFsm;
         let beforeFsm: SimpleFsm = null;
         let beforeChar = null;
+        let alphabet = {};
 
         this.source.split('').forEach((character, idx) => {
             if (character === Operators.ZERO_OR_MANY) {
@@ -59,12 +59,14 @@ export class RegularExpresion {
             beforeFsm = fsm;
             beforeChar = character;
 
-            this.alphabet[character] = character;
+            alphabet[character] = character;
 
             if (idx === 0) {
                 initialFsm = fsm;
             }
         });
+
+        this.alphabet = Object.getOwnPropertyNames(alphabet);
 
         return initialFsm.init;
     }
