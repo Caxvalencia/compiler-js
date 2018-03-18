@@ -40,7 +40,7 @@ export class DFA {
 
         let hasNextStates = false;
 
-        for (const symbol in this.alphabet) {
+        for (const symbol of this.alphabet) {
             let nextStates = stateInitial.process(symbol);
 
             if (nextStates.length > 0) {
@@ -78,7 +78,7 @@ export class DFA {
 
         this.stack[newStateId] = newState;
 
-        for (const symbol in this.alphabet) {
+        for (const symbol of this.alphabet) {
             if (newState.hasTransition(symbol)) {
                 continue;
             }
