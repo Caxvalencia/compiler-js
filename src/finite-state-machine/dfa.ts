@@ -89,7 +89,7 @@ export class DFA {
      */
     private findNext(states: State[]): State {
         if (states.length === 0) {
-            return null;
+            return;
         }
 
         let newStateId = states
@@ -125,8 +125,11 @@ export class DFA {
                 });
             });
 
-            nextStates.sort((current, next) => <any>current.id - <any>next.id);
-            newState.addTransition(symbol, [this.findNext(nextStates)]);
+            if(nextStates.length > 0) {
+                nextStates.sort((current, next) => <any>current.id - <any>next.id);
+                newState.addTransition(symbol, [this.findNext(nextStates)]);
+            }
+           
             newState.isAccepted = states.some(state => state.isAccepted);
         }
 
