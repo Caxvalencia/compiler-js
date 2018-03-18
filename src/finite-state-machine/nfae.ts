@@ -59,8 +59,10 @@ export class NFAe {
             if (beforeChar === Operators.OR) {
                 initialFsm = UnionFsm.apply(fsm, new SimpleFsm(character));
                 fsm = UnionFsm.fsmSecond;
+                
                 beforeChar = character;
-
+                alphabet[character] = character;
+                
                 return;
             }
 
