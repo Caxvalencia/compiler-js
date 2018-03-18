@@ -1,7 +1,7 @@
-import { IFsm } from '../interfaces/fsm';
-import { SimpleFsm } from './simple-fsm';
-import { State } from '../state';
 import { Operators } from '../constants/operators';
+import { IFsm } from '../interfaces/fsm';
+import { State } from '../state';
+import { SimpleFsm } from './simple-fsm';
 
 export class KleeneFsm {
     /**

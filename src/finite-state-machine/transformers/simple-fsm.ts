@@ -1,5 +1,5 @@
-import { IFsm } from "../interfaces/fsm";
-import { State } from "../state";
+import { IFsm } from '../interfaces/fsm';
+import { State } from '../state';
 
 export class SimpleFsm implements IFsm {
     init: State;

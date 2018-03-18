@@ -1,5 +1,5 @@
-import { IFsm } from '../interfaces/fsm';
 import { Operators } from '../constants/operators';
+import { IFsm } from '../interfaces/fsm';
 
 export class ConcatFsm {
     /**

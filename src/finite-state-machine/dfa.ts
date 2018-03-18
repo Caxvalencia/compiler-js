@@ -1,6 +1,5 @@
-import { IFsm } from './interfaces/fsm';
-import { State } from './state';
 import { Operators } from './constants/operators';
+import { State } from './state';
 
 export class DFA {
     private alphabet: string[];
