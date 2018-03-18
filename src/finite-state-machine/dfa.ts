@@ -63,7 +63,8 @@ export class DFA {
      * @return
      */
     private indexer(index = 0) {
-        return (state: State) => {
+
+        return function indexer(state: State) {
             if (
                 state === null ||
                 (state.id !== undefined && typeof state.id === 'number')
@@ -72,10 +73,10 @@ export class DFA {
             }
 
             const transitions = state.getTransitions();
-            state.id = index;
+            state.id = index++;
 
             for (let transition in transitions) {
-                transitions[transition].forEach(this.indexer(index + 1));
+                transitions[transition].forEach(indexer);
             }
         };
     }
