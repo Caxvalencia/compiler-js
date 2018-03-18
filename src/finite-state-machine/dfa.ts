@@ -35,6 +35,8 @@ export class DFA {
             fsm = this.findNext(this.closureEpsilon(this.nfae));
         }
 
+        this.indexer()(fsm);
+
         return fsm;
     }
 
@@ -43,7 +45,10 @@ export class DFA {
      */
     private indexer(index = 0) {
         return (state: State) => {
-            if (state.id !== undefined) {
+            if (
+                state === null ||
+                (state.id !== undefined && typeof state.id === 'number')
+            ) {
                 return;
             }
 
