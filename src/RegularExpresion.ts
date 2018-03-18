@@ -1,10 +1,6 @@
-import { Operators } from './finite-state-machine/constants/operators';
 import { DFA } from './finite-state-machine/dfa';
+import { NFAe } from './finite-state-machine/nfae';
 import { State } from './finite-state-machine/state';
-import { ConcatFsm } from './finite-state-machine/transformers/concat-fsm';
-import { KleeneFsm } from './finite-state-machine/transformers/kleene-fsm';
-import { SimpleFsm } from './finite-state-machine/transformers/simple-fsm';
-import { UnionFsm } from './finite-state-machine/transformers/union-fsm';
 
 /**
  * @export
@@ -24,57 +20,13 @@ export class RegularExpresion {
     }
 
     /**
-     * @return State 
+     * @return State
      */
     public toNFAe(): State {
-        let initialFsm: SimpleFsm;
-        let fsm: SimpleFsm;
-        let beforeFsm: SimpleFsm = null;
-        let beforeChar = null;
-        let alphabet = {};
+        let nfae = NFAe.convert(this.source.split(''));
+        this.alphabet = nfae.getAlphabet();
 
-        this.source.split('').forEach((character, idx) => {
-            if (character === Operators.ZERO_OR_MANY) {
-                fsm = KleeneFsm.apply(fsm);
-                beforeFsm = fsm;
-
-                return;
-            }
-
-            if (character === Operators.OR) {
-                beforeChar = character;
-
-                return;
-            }
-
-            //Stack?
-            if (beforeChar === Operators.OR) {
-                initialFsm = UnionFsm.apply(fsm, new SimpleFsm(character));
-                fsm = UnionFsm.fsmSecond;
-                beforeChar = character;
-
-                return;
-            }
-
-            fsm = new SimpleFsm(character);
-
-            if (beforeFsm !== null) {
-                ConcatFsm.apply(beforeFsm, fsm);
-            }
-
-            beforeFsm = fsm;
-            beforeChar = character;
-
-            alphabet[character] = character;
-
-            if (idx === 0) {
-                initialFsm = fsm;
-            }
-        });
-
-        this.alphabet = Object.getOwnPropertyNames(alphabet);
-
-        return initialFsm.init;
+        return nfae.getFsm();
     }
 
     /**
