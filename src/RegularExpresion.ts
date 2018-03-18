@@ -1,5 +1,5 @@
 import { Operators } from './finite-state-machine/constants/operators';
-import { NFAeToDFA } from './finite-state-machine/nfae-to-dfa';
+import { DFA } from './finite-state-machine/dfa';
 import { ConcatFsm } from './finite-state-machine/transformers/concat-fsm';
 import { KleeneFsm } from './finite-state-machine/transformers/kleene-fsm';
 import { SimpleFsm } from './finite-state-machine/transformers/simple-fsm';
@@ -73,9 +73,9 @@ export class RegularExpresion {
 
     /**
      * Convert to Deterministic Finite Automata (DFA)
-     * @return {Object}
+     * @return {State}
      */
     public toDFA() {
-        return new NFAeToDFA(this.toNFAe(), this.alphabet).convert();
+        return DFA.convert(this.toNFAe(), this.alphabet);
     }
 }

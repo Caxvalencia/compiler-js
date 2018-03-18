@@ -2,15 +2,19 @@ import { IFsm } from './interfaces/fsm';
 import { State } from './state';
 import { Operators } from './constants/operators';
 
-export class NFAeToDFA {
+export class DFA {
     private alphabet: string[];
     private nfae: State;
     private stack: Object;
 
-    constructor(nfae: State, alphabet) {
+    constructor(nfae: State, alphabet: string[]) {
         this.stack = {};
         this.nfae = nfae;
         this.alphabet = alphabet;
+    }
+
+    static convert(nfae: State, alphabet: string[]) {
+        return new DFA(nfae, alphabet).convert();
     }
 
     convert() {
