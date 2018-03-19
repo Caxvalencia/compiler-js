@@ -1,32 +1,27 @@
 import { SEPARATOR } from './finite-state-machine/transformers/map-dfa';
 
 export class FiniteStateMachine {
-    str: string;
-    currentState: number;
     states: any;
     accepts: Array<number>;
     isAccepted: boolean;
 
-    constructor(states, accepts: Array<number>, currentState: number = 0) {
+    constructor(states, accepts: Array<number>) {
         this.states = states;
         this.accepts = accepts;
-        this.currentState = currentState;
     }
 
-    run(string) {
+    run(string, currentState: number = 0) {
         if (string === '') {
-            return this.accepts.indexOf(this.currentState) !== -1;
+            return this.accepts.indexOf(currentState) !== -1;
         }
 
         let character = string[0];
-        let state = this.states[this.currentState + SEPARATOR + character];
+        let state = this.states[currentState + SEPARATOR + character];
 
         if (state === undefined) {
             return false;
         }
 
-        this.currentState = state;
-
-        return this.run(string.substr(1));
+        return this.run(string.substr(1), state);
     }
 }

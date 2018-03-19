@@ -17,7 +17,7 @@ export class FiniteStateMachineTest {
             '2-b': 3
         };
 
-        let fsm = new FiniteStateMachine(states, [3], 1);
+        let fsm = new FiniteStateMachine(states, [3]);
 
         expect(fsm.run('aaaaaaab'), 'Accepted');
     }
