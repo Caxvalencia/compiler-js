@@ -7,17 +7,10 @@ export class FiniteStateMachine {
     accepts: Array<number>;
     isAccepted: boolean;
 
-    constructor(
-        str: string,
-        currentState: number,
-        states,
-        accepts: Array<number>
-    ) {
-        this.str = str;
-        this.currentState = currentState;
+    constructor(states, accepts: Array<number>, currentState: number = 0) {
         this.states = states;
         this.accepts = accepts;
-        this.isAccepted = this.run(this.str);
+        this.currentState = currentState;
     }
 
     run(string) {
