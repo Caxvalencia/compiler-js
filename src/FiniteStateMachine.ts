@@ -1,3 +1,5 @@
+import { SEPARATOR } from './finite-state-machine/transformers/map-dfa';
+
 export class FiniteStateMachine {
     str: string;
     currentState: number;
@@ -24,7 +26,7 @@ export class FiniteStateMachine {
         }
 
         let character = string[0];
-        let state = this.states[this.currentState + ' ' + character];
+        let state = this.states[this.currentState + SEPARATOR + character];
 
         if (state === undefined) {
             return false;
@@ -34,6 +36,4 @@ export class FiniteStateMachine {
 
         return this.run(string.substr(1));
     }
-
-    fromRegularExpression(regularExpression) {}
 }
