@@ -1,4 +1,4 @@
-import { SEPARATOR } from './finite-state-machine/transformers/map-dfa';
+import { SEPARATOR } from './transformers/map-dfa';
 
 export class FiniteStateMachine {
     states: any;
@@ -10,7 +10,12 @@ export class FiniteStateMachine {
         this.accepts = accepts;
     }
 
-    run(string, currentState: number = 0) {
+    /**
+     * @param {string} string 
+     * @param {number} [currentState=0] 
+     * @returns {boolean}
+     */
+    run(string: string, currentState: number = 0) {
         if (string === '') {
             return this.accepts.indexOf(currentState) !== -1;
         }
