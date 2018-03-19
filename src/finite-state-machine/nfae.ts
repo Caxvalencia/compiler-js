@@ -57,7 +57,7 @@ export class NFAe {
 
             //Stack?
             if (beforeChar === Operators.OR) {
-                initialFsm = UnionFsm.apply(fsm, new SimpleFsm(character));
+                initialFsm = UnionFsm.apply(initialFsm, new SimpleFsm(character));
                 fsm = UnionFsm.fsmSecond;
                 
                 beforeChar = character;
