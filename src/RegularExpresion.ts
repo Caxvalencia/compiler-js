@@ -33,6 +33,6 @@ export class RegularExpresion {
      * @return {State}
      */
     public toDFA() {
-        return DFA.convert(this.toNFAe(), this.alphabet);
+        return DFA.convert(this.source);
     }
 }

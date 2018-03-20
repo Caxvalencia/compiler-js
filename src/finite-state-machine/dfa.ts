@@ -1,4 +1,5 @@
 import { Operators } from './constants/operators';
+import { NFAe } from './nfae';
 import { State } from './state';
 
 /**
@@ -25,10 +26,21 @@ export class DFA {
      * @static
      * @param  {State} nfae
      * @param  {string[]} alphabet
-     * @return State
+     * @return {State}
      */
-    static convert(nfae: State, alphabet: string[]): State {
-        return new DFA(nfae, alphabet).convert();
+    static convert(expresion: string): State {
+        let nfae = NFAe.convert(expresion.split(''));
+
+        return DFA.convertFromNFAe(nfae);
+    }
+
+    /**
+     * @static
+     * @param {NFAe} nfae
+     * @returns {State}
+     */
+    static convertFromNFAe(nfae: NFAe): State {
+        return new DFA(nfae.getFsm(), nfae.getAlphabet()).convert();
     }
 
     /**
@@ -63,7 +75,6 @@ export class DFA {
      * @return
      */
     private indexer(index = 0) {
-
         return function indexer(state: State) {
             if (
                 state === null ||
@@ -125,11 +136,13 @@ export class DFA {
                 });
             });
 
-            if(nextStates.length > 0) {
-                nextStates.sort((current, next) => <any>current.id - <any>next.id);
+            if (nextStates.length > 0) {
+                nextStates.sort(
+                    (current, next) => <any>current.id - <any>next.id
+                );
                 newState.addTransition(symbol, [this.findNext(nextStates)]);
             }
-           
+
             newState.isAccepted = states.some(state => state.isAccepted);
         }
 
