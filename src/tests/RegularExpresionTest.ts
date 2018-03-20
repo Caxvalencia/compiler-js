@@ -77,7 +77,7 @@ export class RegularExpresionTest {
     }
 
     @test
-    public testUnionKleeneNFAe() {
+    public testConcatKleeneNFAe() {
         let regExp = new RegularExpresion('A*B*');
         let nfae = regExp.toNFAe();
 

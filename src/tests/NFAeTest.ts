@@ -4,7 +4,7 @@ import { Operators } from '../finite-state-machine/constants/operators';
 import { RegularExpresion } from '../RegularExpresion';
 import { NFAe } from '../finite-state-machine/nfae';
 
-@suite('NFAeTest')
+@suite()
 export class NFAeTest {
     @test
     public testGetAlphabet() {
@@ -96,7 +96,7 @@ export class NFAeTest {
     }
 
     @test
-    public testUnionKleeneNFAe() {
+    public testConcatKleeneNFAe() {
         let source = 'A*B*';
         let nfae = NFAe.convert(source.split(''));
 
