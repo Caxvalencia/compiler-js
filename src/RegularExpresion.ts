@@ -22,7 +22,7 @@ export class RegularExpresion {
      * @return State
      */
     public toNFAe(): State {
-        let nfae = NFAe.convert(this.source.split(''));
+        let nfae = NFAe.convert(this.source);
         this.alphabet = nfae.getAlphabet();
 
         return nfae.getFsm();
@@ -33,6 +33,9 @@ export class RegularExpresion {
      * @return {State}
      */
     public toDFA() {
-        return DFA.convert(this.source);
+        let dfa = DFA.convert(this.source);
+        this.alphabet = dfa.getAlphabet();
+
+        return dfa.getFsm();
     }
 }
