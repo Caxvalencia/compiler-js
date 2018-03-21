@@ -16,18 +16,18 @@ export class NFAe {
 
     /**
      * Creates an instance of NFAe.
-     * @param  {string[]} source
+     * @param  {string} source
      */
-    constructor(source: string[]) {
-        this.source = source;
+    constructor(source: string) {
+        this.source = source.split('');
     }
 
     /**
      * @static
-     * @param  {string[]} source
-     * @return NFAe
+     * @param {string} source 
+     * @returns {NFAe} 
      */
-    static convert(source: string[]): NFAe {
+    static convert(source: string): NFAe {
         return new NFAe(source).convert();
     }
 
@@ -57,12 +57,15 @@ export class NFAe {
 
             //Stack?
             if (beforeChar === Operators.OR) {
-                initialFsm = UnionFsm.apply(initialFsm, new SimpleFsm(character));
+                initialFsm = UnionFsm.apply(
+                    initialFsm,
+                    new SimpleFsm(character)
+                );
                 fsm = UnionFsm.fsmSecond;
-                
+
                 beforeChar = character;
                 alphabet[character] = character;
-                
+
                 return;
             }
 
