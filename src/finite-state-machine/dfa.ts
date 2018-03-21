@@ -39,22 +39,7 @@ export class DFA {
      */
     convert(): DFA {
         this.indexer()(this.nfae);
-
-        let hasNextStates = false;
-
-        for (const symbol of this.alphabet) {
-            let nextStates = this.nfae.process(symbol);
-
-            if (nextStates.length > 0) {
-                hasNextStates = true;
-                break;
-            }
-        }
-
-        if (!hasNextStates) {
-            this.fsm = this.findNext(this.closureEpsilon(this.nfae));
-        }
-
+        this.fsm = this.findNext(this.closureEpsilon(this.nfae));
         this.indexer()(this.fsm);
 
         return this;
