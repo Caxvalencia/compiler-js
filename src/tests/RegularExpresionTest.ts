@@ -4,9 +4,7 @@ import { RegularExpresion } from '../RegularExpresion';
 import { Operators } from '../finite-state-machine/constants/operators';
 import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
 
-declare var console;
-
-@suite('RegularExpresionTest')
+@suite()
 export class RegularExpresionTest {
     @test
     public testSimpleNFAe() {

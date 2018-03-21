@@ -8,11 +8,11 @@ import { NFAe } from '../finite-state-machine/nfae';
 export class NFAeTest {
     @test
     public testGetAlphabet() {
-        let nfaeSimple = NFAe.convert('A'.split(''));
-        let nfaeConcat = NFAe.convert('AB'.split(''));
-        let nfaeKleene = NFAe.convert('A*'.split(''));
-        let nfaeUnion = NFAe.convert('A|B'.split(''));
-        let nfaeConcatKleene = NFAe.convert('A*B*'.split(''));
+        let nfaeSimple = NFAe.convert('A');
+        let nfaeConcat = NFAe.convert('AB');
+        let nfaeKleene = NFAe.convert('A*');
+        let nfaeUnion = NFAe.convert('A|B');
+        let nfaeConcatKleene = NFAe.convert('A*B*');
 
         assert.deepEqual(nfaeSimple.getAlphabet(), ['A']);
         assert.deepEqual(nfaeConcat.getAlphabet(), ['A', 'B']);
@@ -23,14 +23,14 @@ export class NFAeTest {
 
     @test
     public testSimpleNFAe() {
-        let nfae = NFAe.convert('A'.split(''));
+        let nfae = NFAe.convert('A');
 
         assert.isTrue(nfae.getFsm().process('A')[0].isAccepted, 'A founded');
     }
 
     @test
     public testConcatNFAe() {
-        let nfae = NFAe.convert('AB'.split(''));
+        let nfae = NFAe.convert('AB');
 
         assert.isTrue(
             nfae
@@ -44,7 +44,7 @@ export class NFAeTest {
 
     @test
     public testKleeneNFAe() {
-        let nfae = NFAe.convert('A*'.split(''));
+        let nfae = NFAe.convert('A*');
 
         assert.isTrue(
             nfae.getFsm().process(Operators.EPSILON)[1].isAccepted,
@@ -76,7 +76,7 @@ export class NFAeTest {
     @test
     public testUnionNFAe() {
         let source = 'A|B';
-        let nfae = NFAe.convert(source.split(''));
+        let nfae = NFAe.convert(source);
 
         assert.isTrue(
             nfae
@@ -98,7 +98,7 @@ export class NFAeTest {
     @test
     public testConcatKleeneNFAe() {
         let source = 'A*B*';
-        let nfae = NFAe.convert(source.split(''));
+        let nfae = NFAe.convert(source);
 
         assert.isTrue(
             nfae
