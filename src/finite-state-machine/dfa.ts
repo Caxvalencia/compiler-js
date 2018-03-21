@@ -9,6 +9,7 @@ import { State } from './state';
 export class DFA {
     private alphabet: string[];
     private nfae: State;
+    private fsm: State;
     private stack: Object;
 
     /**
@@ -16,40 +17,29 @@ export class DFA {
      * @param  {State} nfae
      * @param  {string[]} alphabet
      */
-    constructor(nfae: State, alphabet: string[]) {
+    constructor(nfae: NFAe) {
         this.stack = {};
-        this.nfae = nfae;
-        this.alphabet = alphabet;
+        this.nfae = nfae.getFsm();
+        this.alphabet = nfae.getAlphabet();
     }
 
     /**
      * @static
-     * @param  {State} nfae
-     * @param  {string[]} alphabet
-     * @return {State}
+     * @param {string} expresion
+     * @returns {DFA}
      */
-    static convert(expresion: string): State {
-        let nfae = NFAe.convert(expresion.split(''));
+    static convert(expresion: string): DFA {
+        let nfae = NFAe.convert(expresion);
 
-        return DFA.convertFromNFAe(nfae);
+        return new DFA(nfae).convert();
     }
 
     /**
-     * @static
-     * @param {NFAe} nfae
-     * @returns {State}
+     * @returns {DFA}
      */
-    static convertFromNFAe(nfae: NFAe): State {
-        return new DFA(nfae.getFsm(), nfae.getAlphabet()).convert();
-    }
-
-    /**
-     * @return State
-     */
-    convert(): State {
+    convert(): DFA {
         this.indexer()(this.nfae);
 
-        let fsm: State;
         let hasNextStates = false;
 
         for (const symbol of this.alphabet) {
@@ -57,16 +47,25 @@ export class DFA {
 
             if (nextStates.length > 0) {
                 hasNextStates = true;
+                break;
             }
         }
 
         if (!hasNextStates) {
-            fsm = this.findNext(this.closureEpsilon(this.nfae));
+            this.fsm = this.findNext(this.closureEpsilon(this.nfae));
         }
 
-        this.indexer()(fsm);
+        this.indexer()(this.fsm);
 
-        return fsm;
+        return this;
+    }
+
+    getAlphabet(): string[] {
+        return this.alphabet;
+    }
+
+    getFsm(): State {
+        return this.fsm;
     }
 
     /**
