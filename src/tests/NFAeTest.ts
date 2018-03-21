@@ -1,7 +1,7 @@
 import { assert } from 'chai';
-import { test, suite } from 'mocha-typescript';
+import { suite, test } from 'mocha-typescript';
+
 import { Operators } from '../finite-state-machine/constants/operators';
-import { RegularExpresion } from '../RegularExpresion';
 import { NFAe } from '../finite-state-machine/nfae';
 
 @suite()

@@ -1,8 +1,7 @@
-import { expect, assert } from 'chai';
+import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
-import { Lex } from '../Lex';
 
-declare var console;
+import { Lex } from '../Lex';
 
 @suite
 export class LexTest {
