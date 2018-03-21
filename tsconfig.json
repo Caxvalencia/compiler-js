@@ -3,13 +3,15 @@
         "module": "commonjs",
         "target": "es6",
         "noImplicitAny": false,
+        "noImplicitThis": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
         "sourceMap": true,
         "outDir": "build",
         "rootDir": "src",
-        "lib": [ "es6" ],
+        "lib": ["es6"],
+        "emitDecoratorMetadata": true,
         "experimentalDecorators": true
     },
-    "exclude": [
-        "node_modules"
-    ]
+    "exclude": ["node_modules"]
 }
