@@ -1,4 +1,5 @@
 import { Operators } from './constants/operators';
+import { IFiniteStateMachine } from './interfaces/finite-state-machine';
 import { State } from './state';
 import { ConcatFsm } from './transformers/concat-fsm';
 import { KleeneFsm } from './transformers/kleene-fsm';
@@ -9,7 +10,7 @@ import { UnionFsm } from './transformers/union-fsm';
  * @export
  * @class NFAe
  */
-export class NFAe {
+export class NFAe implements IFiniteStateMachine {
     private alphabet: string[];
     private source: string[];
     private fsm: State;
