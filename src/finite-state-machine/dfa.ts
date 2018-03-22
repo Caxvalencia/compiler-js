@@ -1,12 +1,13 @@
 import { Operators } from './constants/operators';
 import { NFAe } from './nfae';
 import { State } from './state';
+import { IFiniteStateMachine } from './interfaces/finite-state-machine';
 
 /**
  * @export
  * @class DFA
  */
-export class DFA {
+export class DFA implements IFiniteStateMachine {
     private alphabet: string[];
     private nfae: State;
     private fsm: State;
