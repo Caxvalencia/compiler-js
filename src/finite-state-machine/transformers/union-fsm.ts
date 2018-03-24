@@ -16,7 +16,7 @@ export class UnionFsm {
         this.fsmSecond = fsmSecond;
 
         let union = new SimpleFsm();
-        union.end = new State(null, null, false);
+        union.end = null;
         union.init = new State(Operators.EPSILON, [
             fsmFirst.init,
             fsmSecond.init
