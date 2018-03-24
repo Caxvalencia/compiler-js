@@ -12,7 +12,7 @@ export class DFATest {
     }
 
     @test
-    public testConcatNFAe() {
+    public testConcatDFA() {
         let dfa = DFA.convert('AB');
 
         assert.isTrue(
@@ -25,7 +25,7 @@ export class DFATest {
     }
 
     @test
-    public testKleeneNFAe() {
+    public testKleeneDFA() {
         let dfa = DFA.convert('A*');
 
         assert.isTrue(dfa.getFsm().isAccepted, 'A* - O ocurrences founded');
@@ -46,7 +46,7 @@ export class DFATest {
     }
 
     @test
-    public testUnionNFAe() {
+    public testUnionDFA() {
         let source = 'A|B';
         let dfa = DFA.convert(source);
 
@@ -62,7 +62,7 @@ export class DFATest {
     }
 
     @test
-    public testConcatKleeneNFAe() {
+    public testConcatKleeneDFA() {
         let source = 'A*B*';
         let dfa = DFA.convert(source);
 

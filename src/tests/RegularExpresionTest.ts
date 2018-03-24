@@ -1,8 +1,9 @@
 import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
-import { RegularExpresion } from '../RegularExpresion';
+
 import { Operators } from '../finite-state-machine/constants/operators';
 import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
+import { RegularExpresion } from '../RegularExpresion';
 
 @suite()
 export class RegularExpresionTest {
@@ -172,7 +173,6 @@ export class RegularExpresionTest {
 
         // =============================================================
 
-        // regExp = new RegularExpresion('cc*|b*b|ax*');
         regExp = new RegularExpresion('A|B|C');
         dfaMapped = MapDFA.apply(regExp.toDFA());
 
