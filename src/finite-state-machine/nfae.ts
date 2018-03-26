@@ -5,6 +5,7 @@ import { ConcatFsm } from './transformers/concat-fsm';
 import { KleeneFsm } from './transformers/kleene-fsm';
 import { SimpleFsm } from './transformers/simple-fsm';
 import { UnionFsm } from './transformers/union-fsm';
+import { PlusFsm } from './transformers/plus-fsm';
 
 /**
  * @export
@@ -49,14 +50,20 @@ export class NFAe implements IFiniteStateMachine {
 
                 return;
             }
+            
+            if (character === Operators.ONE_OR_MANY) {
+                fsm = PlusFsm.apply(fsm);
+                beforeFsm = fsm;
+
+                return;
+            }
 
             if (character === Operators.OR) {
                 beforeChar = character;
 
                 return;
             }
-
-            //Stack?
+            
             if (beforeChar === Operators.OR) {
                 initialFsm = UnionFsm.apply(
                     initialFsm,
