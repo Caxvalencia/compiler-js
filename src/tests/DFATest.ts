@@ -46,6 +46,31 @@ export class DFATest {
     }
 
     @test
+    public testPlusDFA() {
+        let source = 'A+';
+        let dfa = DFA.convert(source);
+        let fsm = dfa.getFsm();
+
+        assert.isFalse(
+            fsm.isAccepted,
+            'Validate initial state like not accepted'
+        );
+
+        assert.isTrue(
+            fsm.process('A')[0].isAccepted,
+            source + ' - 1 ocurrences founded'
+        );
+
+        assert.isTrue(
+            fsm
+                .process('A')[0]
+                .process('A')[0]
+                .process('A')[0].isAccepted,
+            source + ' - Many ocurrences founded'
+        );
+    }
+
+    @test
     public testUnionDFA() {
         let source = 'A|B';
         let dfa = DFA.convert(source);
