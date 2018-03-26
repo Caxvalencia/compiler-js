@@ -74,6 +74,48 @@ export class NFAeTest {
     }
 
     @test
+    public testPlusNFAe() {
+        let source = 'A+';
+        let nfae = NFAe.convert(source);
+        let fsm = nfae.getFsm();
+
+        assert.isFalse(
+            fsm.isAccepted,
+            'Validate initial state like not accepted'
+        );
+        
+        assert.equal(
+            1,
+            fsm.process(Operators.EPSILON).length,
+            'Only one next transition for Epsilon input'
+        );
+
+        assert.isFalse(
+            fsm.process(Operators.EPSILON)[0].isAccepted,
+            source + ' - O ocurrences founded'
+        );
+
+        assert.isTrue(
+            fsm
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0].isAccepted,
+            source + ' - 1 ocurrences founded'
+        );
+
+        assert.isTrue(
+            fsm
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0].isAccepted,
+            source + ' - Many ocurrences founded'
+        );
+    }
+
+    @test
     public testUnionNFAe() {
         let source = 'A|B';
         let nfae = NFAe.convert(source);
@@ -96,7 +138,7 @@ export class NFAeTest {
     }
 
     @test
-    public testConcatKleeneNFAe() {
+    public testCPlusNFAe() {
         let source = 'A*B*';
         let nfae = NFAe.convert(source);
 
