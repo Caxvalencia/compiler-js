@@ -1,7 +1,7 @@
 import { IFsm } from '../interfaces/fsm';
 import { State } from '../state';
 
-export class SimpleFsm implements IFsm {
+export class SimpleFNAe implements IFsm {
     init: State;
     end: State;
 

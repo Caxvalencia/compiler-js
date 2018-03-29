@@ -1,16 +1,16 @@
 import { Operators } from '../constants/operators';
 import { IFsm } from '../interfaces/fsm';
 import { State } from '../state';
-import { SimpleFsm } from './simple-fsm';
+import { SimpleFNAe } from './simple-fnae';
 
-export class KleeneFsm {
+export class KleeneFNAe {
     /**
      * @static
      * @param {IFsm} fsm
      * @returns {IFsm}
      */
     static apply(fsm: IFsm): IFsm {
-        let kleene = new SimpleFsm();
+        let kleene = new SimpleFNAe();
         kleene.init = new State();
         kleene.end = new State(Operators.EPSILON, [fsm.end], false);
 

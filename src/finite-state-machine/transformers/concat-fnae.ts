@@ -1,7 +1,7 @@
 import { Operators } from '../constants/operators';
 import { IFsm } from '../interfaces/fsm';
 
-export class ConcatFsm {
+export class ConcatFNAe {
     /**
      * @param {IFsm} fsmFirst
      * @param {IFsm} fsmSecond

@@ -1,11 +1,11 @@
 import { Operators } from './constants/operators';
 import { IFiniteStateMachine } from './interfaces/finite-state-machine';
 import { State } from './state';
-import { ConcatFsm } from './transformers/concat-fsm';
-import { KleeneFsm } from './transformers/kleene-fsm';
-import { SimpleFsm } from './transformers/simple-fsm';
-import { UnionFsm } from './transformers/union-fsm';
-import { PlusFsm } from './transformers/plus-fsm';
+import { ConcatFNAe } from './transformers/concat-fnae';
+import { KleeneFNAe } from './transformers/kleene-fnae';
+import { SimpleFNAe } from './transformers/simple-fnae';
+import { UnionFNAe } from './transformers/union-fnae';
+import { PlusFNAe } from './transformers/plus-fnae';
 
 /**
  * @export
@@ -26,8 +26,8 @@ export class NFAe implements IFiniteStateMachine {
 
     /**
      * @static
-     * @param {string} source 
-     * @returns {NFAe} 
+     * @param {string} source
+     * @returns {NFAe}
      */
     static convert(source: string): NFAe {
         return new NFAe(source).convert();
@@ -37,22 +37,22 @@ export class NFAe implements IFiniteStateMachine {
      * @return this
      */
     convert(): this {
-        let initialFsm: SimpleFsm;
-        let fsm: SimpleFsm;
-        let beforeFsm: SimpleFsm = null;
+        let initialFsm: SimpleFNAe;
+        let fsm: SimpleFNAe;
+        let beforeFsm: SimpleFNAe = null;
         let beforeChar = null;
         let alphabet = {};
 
         this.source.forEach((character, idx) => {
             if (character === Operators.ZERO_OR_MANY) {
-                fsm = KleeneFsm.apply(fsm);
+                fsm = KleeneFNAe.apply(fsm);
                 beforeFsm = fsm;
 
                 return;
             }
-            
+
             if (character === Operators.ONE_OR_MANY) {
-                fsm = PlusFsm.apply(fsm);
+                fsm = PlusFNAe.apply(fsm);
                 beforeFsm = fsm;
 
                 return;
@@ -63,13 +63,13 @@ export class NFAe implements IFiniteStateMachine {
 
                 return;
             }
-            
+
             if (beforeChar === Operators.OR) {
-                initialFsm = UnionFsm.apply(
+                initialFsm = UnionFNAe.apply(
                     initialFsm,
-                    new SimpleFsm(character)
+                    new SimpleFNAe(character)
                 );
-                fsm = UnionFsm.fsmSecond;
+                fsm = UnionFNAe.fsmSecond;
 
                 beforeChar = character;
                 alphabet[character] = character;
@@ -77,10 +77,10 @@ export class NFAe implements IFiniteStateMachine {
                 return;
             }
 
-            fsm = new SimpleFsm(character);
+            fsm = new SimpleFNAe(character);
 
             if (beforeFsm !== null) {
-                ConcatFsm.apply(beforeFsm, fsm);
+                ConcatFNAe.apply(beforeFsm, fsm);
             }
 
             beforeFsm = fsm;

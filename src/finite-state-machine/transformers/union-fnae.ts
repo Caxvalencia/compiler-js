@@ -1,9 +1,9 @@
 import { Operators } from '../constants/operators';
 import { IFsm } from '../interfaces/fsm';
 import { State } from '../state';
-import { SimpleFsm } from './simple-fsm';
+import { SimpleFNAe } from './simple-fnae';
 
-export class UnionFsm {
+export class UnionFNAe {
     static fsmFirst: IFsm;
     static fsmSecond: IFsm;
     
@@ -12,10 +12,10 @@ export class UnionFsm {
      * @param fsmSecond
      */
     static apply(fsmFirst: IFsm, fsmSecond?: IFsm) {
-        this.fsmFirst = fsmFirst;
-        this.fsmSecond = fsmSecond;
+        UnionFNAe.fsmFirst = fsmFirst;
+        UnionFNAe.fsmSecond = fsmSecond;
 
-        let union = new SimpleFsm();
+        let union = new SimpleFNAe();
         union.end = null;
         union.init = new State(Operators.EPSILON, [
             fsmFirst.init,
