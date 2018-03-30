@@ -26,6 +26,10 @@ export class NFAeTest {
         let nfae = NFAe.convert('A');
 
         assert.isTrue(nfae.getFsm().process('A')[0].isAccepted, 'A founded');
+        assert.isFalse(
+            nfae.getFsm().process('B').length > 0,
+            'Nothing founded'
+        );
     }
 
     @test
@@ -38,6 +42,15 @@ export class NFAeTest {
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
                 .process('B')[0].isAccepted,
+            'AB founded'
+        );
+
+        assert.isFalse(
+            nfae
+                .getFsm()
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process('A').length > 0,
             'AB founded'
         );
     }
@@ -71,6 +84,41 @@ export class NFAeTest {
                 .process(Operators.EPSILON)[0].isAccepted,
             "A* - Many 'A' ocurrences founded"
         );
+
+        assert.isFalse(
+            nfae.getFsm().process('B').length > 0,
+            'A* - O ocurrences founded'
+        );
+    }
+
+    @test
+    public testUnionNFAe() {
+        let source = 'A|B';
+        let nfae = NFAe.convert(source);
+
+        assert.isTrue(
+            nfae
+                .getFsm()
+                .process(Operators.EPSILON)[0]
+                .process('A')[0].isAccepted,
+            source + ' - A ocurrence founded'
+        );
+
+        assert.isTrue(
+            nfae
+                .getFsm()
+                .process(Operators.EPSILON)[1]
+                .process('B')[0].isAccepted,
+            source + ' - B ocurrence founded'
+        );
+
+        assert.isFalse(
+            nfae
+                .getFsm()
+                .process(Operators.EPSILON)[1]
+                .process('C').length > 0,
+            source + ' - Nothing ocurrence founded'
+        );
     }
 
     @test
@@ -83,7 +131,7 @@ export class NFAeTest {
             fsm.isAccepted,
             'Validate initial state like not accepted'
         );
-        
+
         assert.equal(
             1,
             fsm.process(Operators.EPSILON).length,
@@ -116,30 +164,8 @@ export class NFAeTest {
     }
 
     @test
-    public testUnionNFAe() {
-        let source = 'A|B';
-        let nfae = NFAe.convert(source);
-
-        assert.isTrue(
-            nfae
-                .getFsm()
-                .process(Operators.EPSILON)[0]
-                .process('A')[0].isAccepted,
-            source + ' - A ocurrence founded'
-        );
-
-        assert.isTrue(
-            nfae
-                .getFsm()
-                .process(Operators.EPSILON)[1]
-                .process('B')[0].isAccepted,
-            source + ' - B ocurrence founded'
-        );
-    }
-
-    @test
-    public testCPlusNFAe() {
-        let source = 'A*B*';
+    public testConcatPlusNFAe() {
+        let source = 'A+B+';
         let nfae = NFAe.convert(source);
 
         assert.isTrue(

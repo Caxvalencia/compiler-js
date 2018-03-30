@@ -8,7 +8,9 @@ export class DFATest {
     @test
     public testSimpleDFA() {
         let dfa = DFA.convert('A');
+
         assert.isTrue(dfa.getFsm().process('A')[0].isAccepted, 'A founded');
+        assert.isFalse(dfa.getFsm().process('B').length > 0, 'Nothing founded');
     }
 
     @test
@@ -20,6 +22,14 @@ export class DFATest {
                 .getFsm()
                 .process('A')[0]
                 .process('B')[0].isAccepted,
+            'AB founded'
+        );
+
+        assert.isFalse(
+            dfa
+                .getFsm()
+                .process('A')[0]
+                .process('A').length > 0,
             'AB founded'
         );
     }
@@ -42,6 +52,32 @@ export class DFATest {
                 .process('A')[0]
                 .process('A')[0].isAccepted,
             "A* - Many 'A' ocurrences founded"
+        );
+
+        assert.isFalse(
+            dfa.getFsm().process('B').length > 0,
+            'A* - O ocurrences founded'
+        );
+    }
+
+    @test
+    public testUnionDFA() {
+        let source = 'A|B';
+        let dfa = DFA.convert(source);
+
+        assert.isTrue(
+            dfa.getFsm().process('A')[0].isAccepted,
+            source + ' - A ocurrence founded'
+        );
+
+        assert.isTrue(
+            dfa.getFsm().process('B')[0].isAccepted,
+            source + ' - B ocurrence founded'
+        );
+
+        assert.isFalse(
+            dfa.getFsm().process('C').length > 0,
+            source + ' - Nothing ocurrence founded'
         );
     }
 
@@ -67,22 +103,6 @@ export class DFATest {
                 .process('A')[0]
                 .process('A')[0].isAccepted,
             source + ' - Many ocurrences founded'
-        );
-    }
-
-    @test
-    public testUnionDFA() {
-        let source = 'A|B';
-        let dfa = DFA.convert(source);
-
-        assert.isTrue(
-            dfa.getFsm().process('A')[0].isAccepted,
-            source + ' - A ocurrence founded'
-        );
-
-        assert.isTrue(
-            dfa.getFsm().process('B')[0].isAccepted,
-            source + ' - B ocurrence founded'
         );
     }
 
