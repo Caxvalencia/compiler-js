@@ -92,6 +92,25 @@ export class NFAeTest {
     }
 
     @test
+    public testConcatKleeneNFAe() {
+        let source = 'A*B*';
+        let nfae = NFAe.convert(source);
+
+        assert.isTrue(
+            nfae
+                .getFsm()
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[1]
+                .process(Operators.EPSILON)[0]
+                .process('B')[0]
+                .process(Operators.EPSILON)[0].isAccepted,
+            source
+        );
+    }
+
+    @test
     public testUnionNFAe() {
         let source = 'A|B';
         let nfae = NFAe.convert(source);
@@ -174,10 +193,31 @@ export class NFAeTest {
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
                 .process(Operators.EPSILON)[1]
                 .process(Operators.EPSILON)[0]
                 .process('B')[0]
+                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[0]
+                .process('B')[0]
                 .process(Operators.EPSILON)[0].isAccepted,
+            source
+        );
+
+        assert.isFalse(
+            nfae
+                .getFsm()
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[1]
+                .process(Operators.EPSILON)[0]
+                .process('A').length > 0,
             source
         );
     }

@@ -61,6 +61,22 @@ export class DFATest {
     }
 
     @test
+    public testConcatKleeneDFA() {
+        let source = 'A*B*';
+        let dfa = DFA.convert(source);
+
+        assert.isTrue(
+            dfa
+                .getFsm()
+                .process('A')[0]
+                .process('A')[0]
+                .process('B')[0]
+                .process('B')[0].isAccepted,
+            source
+        );
+    }
+
+    @test
     public testUnionDFA() {
         let source = 'A|B';
         let dfa = DFA.convert(source);
@@ -107,8 +123,8 @@ export class DFATest {
     }
 
     @test
-    public testConcatKleeneDFA() {
-        let source = 'A*B*';
+    public testConcatPlusDFA() {
+        let source = 'A+B+';
         let dfa = DFA.convert(source);
 
         assert.isTrue(
@@ -118,6 +134,15 @@ export class DFATest {
                 .process('A')[0]
                 .process('B')[0]
                 .process('B')[0].isAccepted,
+            source
+        );
+
+        assert.isFalse(
+            dfa
+                .getFsm()
+                .process('A')[0]
+                .process('A')[0]
+                .process('A')[0].isAccepted,
             source
         );
     }

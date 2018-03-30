@@ -3,9 +3,9 @@ import { IFiniteStateMachine } from './interfaces/finite-state-machine';
 import { State } from './state';
 import { ConcatFNAe } from './transformers/concat-fnae';
 import { KleeneFNAe } from './transformers/kleene-fnae';
+import { PlusFNAe } from './transformers/plus-fnae';
 import { SimpleFNAe } from './transformers/simple-fnae';
 import { UnionFNAe } from './transformers/union-fnae';
-import { PlusFNAe } from './transformers/plus-fnae';
 
 /**
  * @export
