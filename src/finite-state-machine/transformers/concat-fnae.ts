@@ -1,12 +1,12 @@
 import { Operators } from '../constants/operators';
-import { IFsm } from '../interfaces/fsm';
+import { ISimpleFSM } from '../interfaces/simple-fsm';
 
 export class ConcatFNAe {
     /**
-     * @param {IFsm} fsmFirst
-     * @param {IFsm} fsmSecond
+     * @param {ISimpleFSM} fsmFirst
+     * @param {ISimpleFSM} fsmSecond
      */
-    static apply(fsmFirst: IFsm, fsmSecond: IFsm) {
+    static apply(fsmFirst: ISimpleFSM, fsmSecond: ISimpleFSM) {
         fsmFirst.end.isAccepted = false;
         
         const endTransition = fsmFirst.end.getTransition(Operators.EPSILON);

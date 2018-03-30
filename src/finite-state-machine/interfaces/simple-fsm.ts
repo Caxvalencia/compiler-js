@@ -1,6 +1,6 @@
 import { State } from '../state';
 
-export interface IFsm {
+export interface ISimpleFSM {
     init: State;
     end: State;
 }

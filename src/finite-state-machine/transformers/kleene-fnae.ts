@@ -1,15 +1,15 @@
 import { Operators } from '../constants/operators';
-import { IFsm } from '../interfaces/fsm';
+import { ISimpleFSM } from '../interfaces/simple-fsm';
 import { State } from '../state';
 import { SimpleFNAe } from './simple-fnae';
 
 export class KleeneFNAe {
     /**
      * @static
-     * @param {IFsm} fsm
-     * @returns {IFsm}
+     * @param {ISimpleFSM} fsm
+     * @returns {ISimpleFSM}
      */
-    static apply(fsm: IFsm): IFsm {
+    static apply(fsm: ISimpleFSM): ISimpleFSM {
         let kleene = new SimpleFNAe();
         kleene.init = new State();
         kleene.end = new State(Operators.EPSILON, [fsm.end], false);

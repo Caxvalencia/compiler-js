@@ -1,17 +1,17 @@
 import { Operators } from '../constants/operators';
-import { IFsm } from '../interfaces/fsm';
+import { ISimpleFSM } from '../interfaces/simple-fsm';
 import { State } from '../state';
 import { SimpleFNAe } from './simple-fnae';
 
 export class UnionFNAe {
-    static fsmFirst: IFsm;
-    static fsmSecond: IFsm;
+    static fsmFirst: ISimpleFSM;
+    static fsmSecond: ISimpleFSM;
     
     /**
      * @param fsmFirst
      * @param fsmSecond
      */
-    static apply(fsmFirst: IFsm, fsmSecond?: IFsm) {
+    static apply(fsmFirst: ISimpleFSM, fsmSecond?: ISimpleFSM) {
         UnionFNAe.fsmFirst = fsmFirst;
         UnionFNAe.fsmSecond = fsmSecond;
 
