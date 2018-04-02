@@ -77,6 +77,30 @@ export class DFATest {
     }
 
     @test
+    public testUnionKleeneDFA() {
+        let source = 'A*|B*';
+        let dfa = DFA.convert(source).getFsm();
+
+        assert.isTrue(dfa.isAccepted);
+
+        assert.isTrue(
+            dfa
+                .process('A')[0]
+                .process('A')[0]
+                .process('A')[0].isAccepted,
+            source
+        );
+
+        assert.isTrue(
+            dfa
+                .process('B')[0]
+                .process('B')[0]
+                .process('B')[0].isAccepted,
+            source
+        );
+    }
+
+    @test
     public testUnionDFA() {
         let source = 'A|B';
         let dfa = DFA.convert(source);
@@ -143,6 +167,30 @@ export class DFATest {
                 .process('A')[0]
                 .process('A')[0]
                 .process('A')[0].isAccepted,
+            source
+        );
+    }
+
+    @test
+    public testUnionPlusDFA() {
+        let source = 'A+|B+';
+        let dfa = DFA.convert(source).getFsm();
+
+        assert.isFalse(dfa.isAccepted);
+
+        assert.isTrue(
+            dfa
+                .process('A')[0]
+                .process('A')[0]
+                .process('A')[0].isAccepted,
+            source
+        );
+
+        assert.isTrue(
+            dfa
+                .process('B')[0]
+                .process('B')[0]
+                .process('B')[0].isAccepted,
             source
         );
     }
