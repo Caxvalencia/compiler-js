@@ -43,25 +43,29 @@ export class NFAe implements IFiniteStateMachine {
         let beforeChar = null;
         let alphabet = {};
 
-        this.source.forEach((character, idx) => {
+        let iterator = this.source[Symbol.iterator]();
+        let switchFirst = true;
+        let character;
+
+        while ((character = iterator.next().value)) {
             if (character === Operators.ZERO_OR_MANY) {
                 fsm = KleeneFNAe.apply(fsm);
                 beforeFsm = fsm;
 
-                return;
+                continue;
             }
 
             if (character === Operators.ONE_OR_MANY) {
                 fsm = PlusFNAe.apply(fsm);
                 beforeFsm = fsm;
 
-                return;
+                continue;
             }
 
             if (character === Operators.OR) {
                 beforeChar = character;
 
-                return;
+                continue;
             }
 
             if (beforeChar === Operators.OR) {
@@ -74,7 +78,7 @@ export class NFAe implements IFiniteStateMachine {
                 beforeChar = character;
                 alphabet[character] = character;
 
-                return;
+                continue;
             }
 
             fsm = new SimpleFNAe(character);
@@ -88,10 +92,11 @@ export class NFAe implements IFiniteStateMachine {
 
             alphabet[character] = character;
 
-            if (idx === 0) {
+            if (switchFirst) {
                 initialFsm = fsm;
+                switchFirst = false;
             }
-        });
+        }
 
         this.alphabet = Object.getOwnPropertyNames(alphabet);
         this.fsm = initialFsm.init;
