@@ -37,7 +37,7 @@ export class NFAe implements IFiniteStateMachine {
      * @returns {this}
      */
     convert(): this {
-        this.fsm = this.createFsm(this.source);
+        this.fsm = this.createFsm(this.source).init;
 
         return this;
     }
@@ -45,11 +45,11 @@ export class NFAe implements IFiniteStateMachine {
     /**
      * @private
      * @param {string[]} source
-     * @returns {State}
+     * @returns {SimpleFNAe}
      */
-    private createFsm(source: string[]): State {
-        let initialFsm: SimpleFNAe;
-        let fsm: SimpleFNAe;
+    private createFsm(source: string[]): SimpleFNAe {
+        let fsmInit: SimpleFNAe;
+        let fsmEnd: SimpleFNAe;
         let beforeFsm: SimpleFNAe = null;
         let beforeChar = null;
         let alphabet = {};
@@ -60,15 +60,15 @@ export class NFAe implements IFiniteStateMachine {
 
         while ((character = iterator.next().value)) {
             if (character === Operators.ZERO_OR_MANY) {
-                fsm = KleeneFNAe.apply(fsm);
-                beforeFsm = fsm;
+                fsmEnd = KleeneFNAe.apply(fsmEnd);
+                beforeFsm = fsmEnd;
 
                 continue;
             }
 
             if (character === Operators.ONE_OR_MANY) {
-                fsm = PlusFNAe.apply(fsm);
-                beforeFsm = fsm;
+                fsmEnd = PlusFNAe.apply(fsmEnd);
+                beforeFsm = fsmEnd;
 
                 continue;
             }
@@ -80,11 +80,11 @@ export class NFAe implements IFiniteStateMachine {
             }
 
             if (beforeChar === Operators.OR) {
-                initialFsm = UnionFNAe.apply(
-                    initialFsm,
+                fsmInit = UnionFNAe.apply(
+                    fsmInit,
                     new SimpleFNAe(character)
                 );
-                fsm = UnionFNAe.fsmSecond;
+                fsmEnd = UnionFNAe.fsmSecond;
 
                 beforeChar = character;
                 alphabet[character] = character;
@@ -92,26 +92,26 @@ export class NFAe implements IFiniteStateMachine {
                 continue;
             }
 
-            fsm = new SimpleFNAe(character);
+            fsmEnd = new SimpleFNAe(character);
 
             if (beforeFsm !== null) {
-                ConcatFNAe.apply(beforeFsm, fsm);
+                ConcatFNAe.apply(beforeFsm, fsmEnd);
             }
 
-            beforeFsm = fsm;
+            beforeFsm = fsmEnd;
             beforeChar = character;
 
             alphabet[character] = character;
 
             if (switchFirst) {
-                initialFsm = fsm;
+                fsmInit = fsmEnd;
                 switchFirst = false;
             }
         }
 
         this.alphabet = Object.getOwnPropertyNames(alphabet);
 
-        return initialFsm.init;
+        return fsmInit;
     }
 
     getAlphabet(): string[] {
