@@ -34,16 +34,27 @@ export class NFAe implements IFiniteStateMachine {
     }
 
     /**
-     * @return this
+     * @returns {this}
      */
     convert(): this {
+        this.fsm = this.createFsm(this.source);
+
+        return this;
+    }
+
+    /**
+     * @private
+     * @param {string[]} source
+     * @returns {State}
+     */
+    private createFsm(source: string[]): State {
         let initialFsm: SimpleFNAe;
         let fsm: SimpleFNAe;
         let beforeFsm: SimpleFNAe = null;
         let beforeChar = null;
         let alphabet = {};
 
-        let iterator = this.source[Symbol.iterator]();
+        let iterator = source[Symbol.iterator]();
         let switchFirst = true;
         let character;
 
@@ -99,9 +110,8 @@ export class NFAe implements IFiniteStateMachine {
         }
 
         this.alphabet = Object.getOwnPropertyNames(alphabet);
-        this.fsm = initialFsm.init;
 
-        return this;
+        return initialFsm.init;
     }
 
     getAlphabet(): string[] {
