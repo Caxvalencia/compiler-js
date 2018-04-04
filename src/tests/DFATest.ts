@@ -7,47 +7,40 @@ import { DFA } from '../finite-state-machine/dfa';
 export class DFATest {
     @test
     public testSimpleDFA() {
-        let dfa = DFA.convert('A');
+        let dfa = DFA.convert('A').getFsm();
 
-        assert.isTrue(dfa.getFsm().process('A')[0].isAccepted, 'A founded');
-        assert.isFalse(dfa.getFsm().process('B').length > 0, 'Nothing founded');
+        assert.isTrue(dfa.process('A')[0].isAccepted, 'A founded');
+        assert.isFalse(dfa.process('B').length > 0, 'Nothing founded');
     }
 
     @test
     public testConcatDFA() {
-        let dfa = DFA.convert('AB');
+        let dfa = DFA.convert('AB').getFsm();
 
         assert.isTrue(
-            dfa
-                .getFsm()
-                .process('A')[0]
-                .process('B')[0].isAccepted,
+            dfa.process('A')[0].process('B')[0].isAccepted,
             'AB founded'
         );
 
         assert.isFalse(
-            dfa
-                .getFsm()
-                .process('A')[0]
-                .process('A').length > 0,
+            dfa.process('A')[0].process('A').length > 0,
             'AB founded'
         );
     }
 
     @test
     public testKleeneDFA() {
-        let dfa = DFA.convert('A*');
+        let dfa = DFA.convert('A*').getFsm();
 
-        assert.isTrue(dfa.getFsm().isAccepted, 'A* - O ocurrences founded');
+        assert.isTrue(dfa.isAccepted, 'A* - O ocurrences founded');
 
         assert.isTrue(
-            dfa.getFsm().process('A')[0].isAccepted,
+            dfa.process('A')[0].isAccepted,
             'A* - 1 ocurrences founded'
         );
 
         assert.isTrue(
             dfa
-                .getFsm()
                 .process('A')[0]
                 .process('A')[0]
                 .process('A')[0].isAccepted,
@@ -55,7 +48,7 @@ export class DFATest {
         );
 
         assert.isFalse(
-            dfa.getFsm().process('B').length > 0,
+            dfa.process('B').length > 0,
             'A* - O ocurrences founded'
         );
     }
@@ -63,11 +56,12 @@ export class DFATest {
     @test
     public testConcatKleeneDFA() {
         let source = 'A*B*';
-        let dfa = DFA.convert(source);
+        let dfa = DFA.convert(source).getFsm();
+
+        assert.isTrue(dfa.isAccepted);
 
         assert.isTrue(
             dfa
-                .getFsm()
                 .process('A')[0]
                 .process('A')[0]
                 .process('B')[0]
@@ -103,20 +97,20 @@ export class DFATest {
     @test
     public testUnionDFA() {
         let source = 'A|B';
-        let dfa = DFA.convert(source);
+        let dfa = DFA.convert(source).getFsm();
 
         assert.isTrue(
-            dfa.getFsm().process('A')[0].isAccepted,
+            dfa.process('A')[0].isAccepted,
             source + ' - A ocurrence founded'
         );
 
         assert.isTrue(
-            dfa.getFsm().process('B')[0].isAccepted,
+            dfa.process('B')[0].isAccepted,
             source + ' - B ocurrence founded'
         );
 
         assert.isFalse(
-            dfa.getFsm().process('C').length > 0,
+            dfa.process('C').length > 0,
             source + ' - Nothing ocurrence founded'
         );
     }
@@ -149,11 +143,10 @@ export class DFATest {
     @test
     public testConcatPlusDFA() {
         let source = 'A+B+';
-        let dfa = DFA.convert(source);
+        let dfa = DFA.convert(source).getFsm();
 
         assert.isTrue(
             dfa
-                .getFsm()
                 .process('A')[0]
                 .process('A')[0]
                 .process('B')[0]
@@ -163,7 +156,6 @@ export class DFATest {
 
         assert.isFalse(
             dfa
-                .getFsm()
                 .process('A')[0]
                 .process('A')[0]
                 .process('A')[0].isAccepted,
