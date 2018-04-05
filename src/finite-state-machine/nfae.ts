@@ -22,6 +22,7 @@ export class NFAe implements IFiniteStateMachine {
      */
     constructor(source: string) {
         this.source = source.split('');
+        this.alphabet = [];
     }
 
     /**
@@ -54,7 +55,6 @@ export class NFAe implements IFiniteStateMachine {
         let fsmEnd: SimpleFNAe;
         let beforeFsm: SimpleFNAe = null;
         let beforeChar = null;
-        let alphabet = {};
 
         let iterator = source[Symbol.iterator]();
         let switchFirst = true;
@@ -116,7 +116,7 @@ export class NFAe implements IFiniteStateMachine {
                 fsmEnd = UnionFNAe.fsmSecond;
 
                 beforeChar = character;
-                alphabet[character] = character;
+                this.addCharToAlphabet(character);
 
                 continue;
             }
@@ -130,7 +130,7 @@ export class NFAe implements IFiniteStateMachine {
             beforeFsm = fsmEnd;
             beforeChar = character;
 
-            alphabet[character] = character;
+            this.addCharToAlphabet(character);
 
             if (switchFirst) {
                 fsmInit = fsmEnd;
@@ -138,12 +138,16 @@ export class NFAe implements IFiniteStateMachine {
             }
         }
 
-        this.alphabet = Object.getOwnPropertyNames(alphabet);
-
         return {
             fsmInit,
             fsmEnd
         };
+    }
+
+    private addCharToAlphabet(character: string): void {
+        if (this.alphabet.indexOf(character) === -1) {
+            this.alphabet.push(character);
+        }
     }
 
     getAlphabet(): string[] {
