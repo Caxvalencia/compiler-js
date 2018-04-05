@@ -13,12 +13,14 @@ export class NFAeTest {
         let nfaeKleene = NFAe.convert('A*');
         let nfaeUnion = NFAe.convert('A|B');
         let nfaeConcatKleene = NFAe.convert('A*B*');
+        let nfaeGroupKleene = NFAe.convert('(AB)*');
 
         assert.deepEqual(nfaeSimple.getAlphabet(), ['A']);
         assert.deepEqual(nfaeConcat.getAlphabet(), ['A', 'B']);
         assert.deepEqual(nfaeKleene.getAlphabet(), ['A']);
         assert.deepEqual(nfaeUnion.getAlphabet(), ['A', 'B']);
         assert.deepEqual(nfaeConcatKleene.getAlphabet(), ['A', 'B']);
+        assert.deepEqual(nfaeGroupKleene.getAlphabet(), ['A', 'B']);
     }
 
     @test
