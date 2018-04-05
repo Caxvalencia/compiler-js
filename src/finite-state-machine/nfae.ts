@@ -37,7 +37,7 @@ export class NFAe implements IFiniteStateMachine {
      * @returns {this}
      */
     convert(): this {
-        this.fsm = this.createFsm(this.source).init;
+        this.fsm = this.createFsm(this.source).fsmInit.init;
 
         return this;
     }
@@ -47,7 +47,9 @@ export class NFAe implements IFiniteStateMachine {
      * @param {string[]} source
      * @returns {SimpleFNAe}
      */
-    private createFsm(source: string[]): SimpleFNAe {
+    private createFsm(
+        source: string[]
+    ): { fsmEnd: SimpleFNAe; fsmInit: SimpleFNAe } {
         let fsmInit: SimpleFNAe;
         let fsmEnd: SimpleFNAe;
         let beforeFsm: SimpleFNAe = null;
@@ -59,6 +61,36 @@ export class NFAe implements IFiniteStateMachine {
         let character;
 
         while ((character = iterator.next().value)) {
+            if (character === Operators.PARENTHESIS_OPEN) {
+                let subSource = [];
+                let correctlyClosed = false;
+
+                while ((character = iterator.next().value)) {
+                    if (character === Operators.PARENTHESIS_CLOSE) {
+                        correctlyClosed = true;
+                        break;
+                    }
+
+                    subSource.push(character);
+                }
+
+                if (!correctlyClosed) {
+                    throw Error("Sintaxis Error: Not closed parenthesis ')'.");
+                }
+
+                let finiteStateMachines = this.createFsm(subSource);
+                fsmEnd = finiteStateMachines.fsmEnd;
+                fsmEnd.init = finiteStateMachines.fsmInit.init;
+                fsmEnd.end = finiteStateMachines.fsmEnd.end;
+
+                if (switchFirst) {
+                    fsmInit = fsmEnd;
+                    switchFirst = false;
+                }
+
+                continue;
+            }
+
             if (character === Operators.ZERO_OR_MANY) {
                 fsmEnd = KleeneFNAe.apply(fsmEnd);
                 beforeFsm = fsmEnd;
@@ -80,10 +112,7 @@ export class NFAe implements IFiniteStateMachine {
             }
 
             if (beforeChar === Operators.OR) {
-                fsmInit = UnionFNAe.apply(
-                    fsmInit,
-                    new SimpleFNAe(character)
-                );
+                fsmInit = UnionFNAe.apply(fsmInit, new SimpleFNAe(character));
                 fsmEnd = UnionFNAe.fsmSecond;
 
                 beforeChar = character;
@@ -111,7 +140,10 @@ export class NFAe implements IFiniteStateMachine {
 
         this.alphabet = Object.getOwnPropertyNames(alphabet);
 
-        return fsmInit;
+        return {
+            fsmInit,
+            fsmEnd
+        };
     }
 
     getAlphabet(): string[] {
