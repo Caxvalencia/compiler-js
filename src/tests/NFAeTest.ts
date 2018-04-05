@@ -221,4 +221,40 @@ export class NFAeTest {
             source
         );
     }
+
+    @test
+    public testGroupConcatKleeneNFAe() {
+        let source = '(AB)*';
+        let nfae = NFAe.convert(source).getFsm();
+
+        assert.isTrue(
+            nfae.process(Operators.EPSILON)[1].isAccepted,
+            source + ' - O ocurrences founded'
+        );
+
+        assert.isTrue(
+            nfae
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process('B')[0]
+                .process(Operators.EPSILON)[0].isAccepted,
+            source + ' - 1 ocurrences founded'
+        );
+
+        assert.isTrue(
+            nfae
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process('B')[0]
+                .process(Operators.EPSILON)[0]
+                .process(Operators.EPSILON)[0]
+                .process('A')[0]
+                .process(Operators.EPSILON)[0]
+                .process('B')[0]
+                .process(Operators.EPSILON)[0].isAccepted,
+            source + ' - Many "A" ocurrences founded'
+        );
+    }
 }
