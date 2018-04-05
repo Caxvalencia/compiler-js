@@ -186,4 +186,26 @@ export class DFATest {
             source
         );
     }
+
+    @test
+    public testGroupKleene() {
+        let source = '(AB)*';
+        let dfa = DFA.convert(source).getFsm();
+
+        assert.isTrue(dfa.isAccepted, source + ' - O ocurrences founded');
+
+        assert.isTrue(
+            dfa.process('A')[0].process('B')[0].isAccepted,
+            source + ' - 1 ocurrences founded'
+        );
+
+        assert.isTrue(
+            dfa
+                .process('A')[0]
+                .process('B')[0]
+                .process('A')[0]
+                .process('B')[0].isAccepted,
+            source + ' - Many "A" ocurrences founded'
+        );
+    }
 }
