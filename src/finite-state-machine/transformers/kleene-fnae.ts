@@ -1,6 +1,6 @@
 import { Operators } from '../constants/operators';
 import { ISimpleFSM } from '../interfaces/simple-fsm';
-import { State } from '../state';
+import { State, Transition } from '../state';
 import { SimpleFNAe } from './simple-fnae';
 
 export class KleeneFNAe {
@@ -14,9 +14,13 @@ export class KleeneFNAe {
         kleene.init = new State();
         kleene.end = new State(Operators.EPSILON, [fsm.end], false);
 
-        for (let key in fsm.init.getTransitions()) {
-            kleene.init.addTransition(key, [kleene.end]);
-        }
+        kleene.init.setTransitions(
+            KleeneFNAe.searchEnds(
+                fsm.init.getTransitions(),
+                fsm.end,
+                kleene.end
+            )
+        );
 
         fsm.init.setTransitions({
             [Operators.EPSILON]: [kleene.init, fsm.end]
@@ -24,5 +28,29 @@ export class KleeneFNAe {
         fsm.end.setTransitions({ [Operators.EPSILON]: [kleene.init] });
 
         return fsm;
+    }
+
+    static searchEnds(
+        transitions: Transition,
+        endState,
+        nextState: State
+    ): Transition {
+        for (let key in transitions) {
+            if (transitions[key].indexOf(endState) === -1) {
+                transitions[key].forEach((state: State) => {
+                    KleeneFNAe.searchEnds(
+                        state.getTransitions(),
+                        endState,
+                        nextState
+                    );
+                });
+
+                continue;
+            }
+
+            transitions[key] = [nextState];
+        }
+
+        return transitions;
     }
 }
