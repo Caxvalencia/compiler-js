@@ -46,10 +46,12 @@ export class NFAe implements IFiniteStateMachine {
     /**
      * @private
      * @param {string[]} source
-     * @returns {SimpleFNAe}
+     * @param {boolean} [isGroup=false]
+     * @returns {{ fsmEnd: SimpleFNAe; fsmInit: SimpleFNAe }}
      */
     private createFsm(
-        source: string[]
+        source: string[],
+        isGroup: boolean = false
     ): { fsmEnd: SimpleFNAe; fsmInit: SimpleFNAe } {
         let fsmInit: SimpleFNAe;
         let fsmEnd: SimpleFNAe;
@@ -78,7 +80,7 @@ export class NFAe implements IFiniteStateMachine {
                     throw Error("Sintaxis Error: Not closed parenthesis ')'.");
                 }
 
-                let finiteStateMachines = this.createFsm(subSource);
+                let finiteStateMachines = this.createFsm(subSource, true);
                 fsmEnd = finiteStateMachines.fsmEnd;
                 fsmEnd.init = finiteStateMachines.fsmInit.init;
                 fsmEnd.end = finiteStateMachines.fsmEnd.end;
@@ -112,8 +114,16 @@ export class NFAe implements IFiniteStateMachine {
             }
 
             if (beforeChar === Operators.OR) {
-                fsmInit = UnionFNAe.apply(fsmInit, new SimpleFNAe(character));
+                fsmInit = UnionFNAe.apply(
+                    fsmInit,
+                    new SimpleFNAe(character),
+                    isGroup
+                );
                 fsmEnd = UnionFNAe.fsmSecond;
+
+                if (isGroup) {
+                    fsmEnd = fsmInit;
+                }
 
                 beforeChar = character;
                 this.addCharToAlphabet(character);
