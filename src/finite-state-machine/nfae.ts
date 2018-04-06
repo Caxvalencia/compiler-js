@@ -83,7 +83,6 @@ export class NFAe implements IFiniteStateMachine {
                 let finiteStateMachines = this.createFsm(subSource, true);
                 fsmEnd = finiteStateMachines.fsmEnd;
                 fsmEnd.init = finiteStateMachines.fsmInit.init;
-                fsmEnd.end = finiteStateMachines.fsmEnd.end;
 
                 if (switchFirst) {
                     fsmInit = fsmEnd;
