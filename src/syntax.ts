@@ -1,4 +1,4 @@
-import { Stack } from './Stack';
+import { Stack } from './stack';
 
 const SYMBOL_EXTEND = "_G'";
 const SYMBOL_LOCKED = '$';

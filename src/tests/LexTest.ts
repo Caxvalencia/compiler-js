@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 
-import { Lex } from '../Lex';
+import { Lex } from '../lex';
 
 @suite
 export class LexTest {

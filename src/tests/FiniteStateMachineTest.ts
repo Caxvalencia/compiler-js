@@ -3,7 +3,7 @@ import { suite, test } from 'mocha-typescript';
 
 import { FiniteStateMachine } from '../finite-state-machine/finite-state-machine';
 import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
-import { RegularExpresion } from '../RegularExpresion';
+import { RegularExpresion } from '../regular-expresion';
 
 @suite('FiniteStateMachineTest')
 export class FiniteStateMachineTest {
