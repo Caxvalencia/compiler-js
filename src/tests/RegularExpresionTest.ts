@@ -184,9 +184,17 @@ export class RegularExpresionTest {
 
         assert.sameMembers(dfaMapped.accepts, [1, 2, 3], regExp.source);
 
-        // regExp = new RegularExpresion('(a|b)*');
-        // dfaMapped = MapDFA.apply(regExp.toDFA());
+        // =============================================================
 
-        // console.log(dfaMapped);
+        regExp = new RegularExpresion('(A|B)*');
+        dfaMapped = MapDFA.apply(regExp.toDFA());
+
+        assert.equal(
+            JSON.stringify(dfaMapped.states),
+            JSON.stringify({ '0-A': 1, '1-A': 1, '1-B': 1, '0-B': 1 }),
+            regExp.source
+        );
+
+        assert.sameMembers(dfaMapped.accepts, [0, 1], regExp.source);
     }
 }
