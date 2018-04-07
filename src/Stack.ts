@@ -12,16 +12,25 @@ export class Stack {
         this.top = stateInit;
     }
 
-    public push(stateTarget) {
+    /**
+     * @param stateTarget
+     */
+    public push(stateTarget: number) {
         this._stack.push(stateTarget);
         this.setTop();
     }
 
-    public goto(stateTarget) {
+    /**
+     * @param {number} stateTarget
+     */
+    public goto(stateTarget: number) {
         this.push(stateTarget);
     }
 
-    public reduce(cant) {
+    /**
+     * @param {number} cant
+     */
+    public reduce(cant: number) {
         for (let idx = 0; idx < cant; idx++) {
             this._stack.pop();
         }
@@ -29,12 +38,17 @@ export class Stack {
         this.setTop();
     }
 
+    /**
+     * @returns {number[]}
+     */
     public getStack() {
         return this._stack;
     }
 
+    /**
+     * @private
+     */
     private setTop() {
-        const len = this._stack.length - 1;
-        this.top = this._stack[len];
+        this.top = this._stack[this._stack.length - 1];
     }
 }
