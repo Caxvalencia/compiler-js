@@ -1,6 +1,7 @@
 import { Operators } from '../constants/operators';
+import { Helpers } from '../helpers';
 import { ISimpleFSM } from '../interfaces/simple-fsm';
-import { State, Transition } from '../state';
+import { State } from '../state';
 import { SimpleFNAe } from './simple-fnae';
 
 export class UnionFNAe {
@@ -28,7 +29,7 @@ export class UnionFNAe {
 
         if (isGroup) {
             fsmFirst.init.setTransitions(
-                UnionFNAe.replaceEnd(
+                Helpers.replaceEnd(
                     fsmFirst.init.getTransitions(),
                     fsmFirst.end,
                     union.end
@@ -36,7 +37,7 @@ export class UnionFNAe {
             );
 
             fsmSecond.init.setTransitions(
-                UnionFNAe.replaceEnd(
+                Helpers.replaceEnd(
                     fsmSecond.init.getTransitions(),
                     fsmSecond.end,
                     union.end
@@ -45,29 +46,5 @@ export class UnionFNAe {
         }
 
         return union;
-    }
-
-    static replaceEnd(
-        transitions: Transition,
-        endState,
-        nextState: State
-    ): Transition {
-        for (let key in transitions) {
-            if (transitions[key].indexOf(endState) === -1) {
-                transitions[key].forEach((state: State) => {
-                    UnionFNAe.replaceEnd(
-                        state.getTransitions(),
-                        endState,
-                        nextState
-                    );
-                });
-
-                continue;
-            }
-
-            transitions[key] = [nextState];
-        }
-
-        return transitions;
     }
 }
