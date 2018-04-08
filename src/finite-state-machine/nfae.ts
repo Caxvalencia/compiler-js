@@ -64,23 +64,7 @@ export class NFAe implements IFiniteStateMachine {
 
         while ((character = iterator.next().value)) {
             if (character === Operators.PARENTHESIS_OPEN) {
-                let subSource = [];
-                let correctlyClosed = false;
-
-                while ((character = iterator.next().value)) {
-                    if (character === Operators.PARENTHESIS_CLOSE) {
-                        correctlyClosed = true;
-                        break;
-                    }
-
-                    subSource.push(character);
-                }
-
-                if (!correctlyClosed) {
-                    throw Error("Sintaxis Error: Not closed parenthesis ')'.");
-                }
-
-                let finiteStateMachines = this.createFsm(subSource, true);
+                let finiteStateMachines = this.groupFsm(iterator);
                 fsmEnd = finiteStateMachines.fsmEnd;
                 fsmEnd.init = finiteStateMachines.fsmInit.init;
 
@@ -151,6 +135,27 @@ export class NFAe implements IFiniteStateMachine {
             fsmInit,
             fsmEnd
         };
+    }
+
+    private groupFsm(iteratorChars) {
+        let subSource = [];
+        let correctlyClosed = false;
+        let character;
+
+        while ((character = iteratorChars.next().value)) {
+            if (character === Operators.PARENTHESIS_CLOSE) {
+                correctlyClosed = true;
+                break;
+            }
+
+            subSource.push(character);
+        }
+
+        if (!correctlyClosed) {
+            throw Error("Sintaxis Error: Not closed parenthesis ')'.");
+        }
+
+        return this.createFsm(subSource, true);
     }
 
     private addCharToAlphabet(character: string): void {
