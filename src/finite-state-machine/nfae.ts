@@ -56,7 +56,6 @@ export class NFAe implements IFiniteStateMachine {
         let fsmInit: SimpleFNAe;
         let fsmEnd: SimpleFNAe;
         let beforeFsm: SimpleFNAe = null;
-        let beforeChar = null;
 
         let iterator = source[Symbol.iterator]();
         let switchFirst = true;
@@ -91,12 +90,8 @@ export class NFAe implements IFiniteStateMachine {
             }
 
             if (character === Operators.OR) {
-                beforeChar = character;
+                character = iterator.next().value;
 
-                continue;
-            }
-
-            if (beforeChar === Operators.OR) {
                 fsmInit = UnionFNAe.apply(
                     fsmInit,
                     new SimpleFNAe(character),
@@ -108,7 +103,6 @@ export class NFAe implements IFiniteStateMachine {
                     fsmEnd = fsmInit;
                 }
 
-                beforeChar = character;
                 this.addCharToAlphabet(character);
 
                 continue;
@@ -121,7 +115,6 @@ export class NFAe implements IFiniteStateMachine {
             }
 
             beforeFsm = fsmEnd;
-            beforeChar = character;
 
             this.addCharToAlphabet(character);
 
