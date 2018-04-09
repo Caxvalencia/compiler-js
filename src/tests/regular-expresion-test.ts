@@ -2,7 +2,6 @@ import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 
 import { Operators } from '../finite-state-machine/constants/operators';
-import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
 import { RegularExpresion } from '../regular-expresion';
 
 @suite()
@@ -130,71 +129,5 @@ export class RegularExpresionTest {
                 .process('B')[0].isAccepted,
             regExp.source + ': n-ocurrences founded'
         );
-    }
-
-    @test
-    public testDFAtoMapping() {
-        let regExp = new RegularExpresion('A*');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
-
-        assert.equal(
-            JSON.stringify(dfaMapped.states),
-            JSON.stringify({ '0-A': 1, '1-A': 1 }),
-            regExp.source
-        );
-
-        assert.deepEqual(dfaMapped.accepts, [0, 1], regExp.source);
-
-        // =============================================================
-
-        regExp = new RegularExpresion('A|B');
-        dfaMapped = MapDFA.apply(regExp.toDFA());
-
-        assert.equal(
-            JSON.stringify(dfaMapped.states),
-            JSON.stringify({ '0-A': 1, '0-B': 2 }),
-            regExp.source
-        );
-
-        assert.deepEqual(dfaMapped.accepts, [1, 2], regExp.source);
-
-        // =============================================================
-
-        regExp = new RegularExpresion('A*|B*');
-        dfaMapped = MapDFA.apply(regExp.toDFA());
-
-        assert.equal(
-            JSON.stringify(dfaMapped.states),
-            JSON.stringify({ '0-A': 1, '1-A': 1, '0-B': 2, '2-B': 2 }),
-            regExp.source
-        );
-
-        assert.sameMembers(dfaMapped.accepts, [0, 1, 2], regExp.source);
-
-        // =============================================================
-
-        regExp = new RegularExpresion('A|B|C');
-        dfaMapped = MapDFA.apply(regExp.toDFA());
-
-        assert.equal(
-            JSON.stringify(dfaMapped.states),
-            JSON.stringify({ '0-A': 1, '0-B': 2, '0-C': 3 }),
-            regExp.source
-        );
-
-        assert.sameMembers(dfaMapped.accepts, [1, 2, 3], regExp.source);
-
-        // =============================================================
-
-        regExp = new RegularExpresion('(A|B)*');
-        dfaMapped = MapDFA.apply(regExp.toDFA());
-
-        assert.equal(
-            JSON.stringify(dfaMapped.states),
-            JSON.stringify({ '0-A': 1, '1-A': 1, '1-B': 1, '0-B': 1 }),
-            regExp.source
-        );
-
-        assert.sameMembers(dfaMapped.accepts, [0, 1], regExp.source);
     }
 }

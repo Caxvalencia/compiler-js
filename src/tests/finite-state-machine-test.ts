@@ -5,7 +5,7 @@ import { FiniteStateMachine } from '../finite-state-machine/finite-state-machine
 import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
 import { RegularExpresion } from '../regular-expresion';
 
-@suite('FiniteStateMachineTest')
+@suite
 export class FiniteStateMachineTest {
     @test
     public testIsOk() {
