@@ -4,7 +4,7 @@
   "description": "A compiler tool written with JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && mocha build/tests/*-test.js",
+    "test": "tsc && mocha build/tests/*.test.js",
     "watch": "mocha-typescript-watch"
   },
   "keywords": [],
