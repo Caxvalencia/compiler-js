@@ -4,7 +4,7 @@
   "description": "A compiler tool written with JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && mocha build/tests/*.test.js",
+    "test": "tsc && nyc mocha build/tests/*.test.js",
     "watch": "mocha-typescript-watch"
   },
   "keywords": [],
@@ -19,6 +19,7 @@
     "eslint": "^4.19.0",
     "mocha": "^3.3.0",
     "mocha-typescript": "^1.1.2",
+    "nyc": "^11.6.0",
     "sinon": "^2.2.0",
     "source-map-support": "^0.4.15",
     "tslint": "^5.9.1",
