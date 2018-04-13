@@ -84,10 +84,6 @@ export class DFA implements IFiniteStateMachine {
      * @return State
      */
     private findNext(states: State[]): State {
-        if (states.length === 0) {
-            return;
-        }
-
         let newStateId = states
             .map(state => state.id)
             .sort()
