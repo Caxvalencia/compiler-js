@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 
 import { FiniteStateMachine } from '../finite-state-machine/finite-state-machine';
@@ -8,7 +8,7 @@ import { RegularExpresion } from '../regular-expresion';
 @suite
 export class FiniteStateMachineTest {
     @test
-    public testIsOk() {
+    public testSimpleWithStateDefined() {
         let states = {
             '1-a': 2,
             '2-a': 2,
@@ -17,11 +17,11 @@ export class FiniteStateMachineTest {
 
         let fsm = new FiniteStateMachine(states, [3]);
 
-        expect(fsm.run('aaaaaaab'), 'Accepted');
+        assert.isTrue(fsm.run('aaaaaaab', 1), 'Accepted');
     }
 
     @test
-    public testMappedDFAWithFiniteStateMachine() {
+    public testMappedDFA() {
         let regExp = new RegularExpresion('A|B|C');
         let dfaMapped = MapDFA.apply(regExp.toDFA());
 
@@ -31,5 +31,6 @@ export class FiniteStateMachineTest {
         assert.isTrue(fsm.run('B'));
         assert.isTrue(fsm.run('C'));
         assert.isFalse(fsm.run('D'));
+        assert.isFalse(fsm.run(''));
     }
 }
