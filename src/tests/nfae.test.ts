@@ -259,4 +259,12 @@ export class NFAeTest {
             source + ' - Many "A" ocurrences founded'
         );
     }
+
+    @test
+    public testGroupNFAeThrowErrorSintaxis() {
+        assert.throw(() => {
+            let source = '(AB';
+            NFAe.convert(source).getFsm();    
+        });
+    }
 }
