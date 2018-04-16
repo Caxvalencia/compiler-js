@@ -130,4 +130,19 @@ export class RegularExpresionTest {
             regExp.source + ': n-ocurrences founded'
         );
     }
+
+    @test
+    public testMatch() {
+        let regExp = new RegularExpresion('A*B*');
+
+        assert.isFalse(
+            regExp.match('AAABBBBBA'),
+            regExp.source
+        );
+        
+        assert.isTrue(
+            regExp.match('AAABBBBB'),
+            regExp.source
+        );
+    }
 }
