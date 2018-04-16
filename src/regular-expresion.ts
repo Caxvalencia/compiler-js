@@ -1,6 +1,8 @@
 import { DFA } from './finite-state-machine/dfa';
 import { NFAe } from './finite-state-machine/nfae';
 import { State } from './finite-state-machine/state';
+import { MapDFA } from './finite-state-machine/transformers/map-dfa';
+import { FiniteStateMachine } from './finite-state-machine/finite-state-machine';
 
 /**
  * @export
@@ -37,5 +39,13 @@ export class RegularExpresion {
         this.alphabet = dfa.getAlphabet();
 
         return dfa.getFsm();
+    }
+
+    public match(text: string) {
+        let dfa = this.toDFA();
+        let mapped = MapDFA.apply(dfa);
+        let fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
+
+        return fsm.run(text);
     }
 }
