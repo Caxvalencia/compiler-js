@@ -17,16 +17,25 @@ export class FiniteStateMachine {
      */
     run(string: string, stateInitial: number = 0): boolean {
         if (string === '') {
-            return this.accepts.indexOf(stateInitial) !== -1;
+            return this.isAcceptedState(stateInitial);
         }
 
         let character = string[0];
         let currentState = this.states[stateInitial + SEPARATOR + character];
 
         if (currentState === undefined) {
-            return false;
+            return this.isAcceptedState(stateInitial);
         }
 
         return this.run(string.substr(1), currentState);
+    }
+
+    /**
+     * @private
+     * @param {number} state 
+     * @returns {boolean} 
+     */
+    private isAcceptedState(state: number): boolean {
+        return this.accepts.indexOf(state) !== -1;
     }
 }
