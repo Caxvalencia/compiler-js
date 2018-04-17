@@ -15,7 +15,7 @@ export class State {
     constructor(
         transition: string = null,
         nextStates: Array<State> = [],
-        isAccepted = false
+        isAccepted: boolean = false
     ) {
         this.isAccepted = isAccepted;
         this.transitions = {};

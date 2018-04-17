@@ -15,7 +15,7 @@ export class FiniteStateMachine {
      * @param {number} [stateInitial=0]
      * @returns {boolean}
      */
-    run(string: string, stateInitial: number = 0) {
+    run(string: string, stateInitial: number = 0): boolean {
         if (string === '') {
             return this.accepts.indexOf(stateInitial) !== -1;
         }

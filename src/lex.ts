@@ -10,8 +10,8 @@ export class Lex {
     /**
      * Constructor
      */
-    public constructor(lexico, config) {
-        this.lexico = lexico;
+    public constructor(lexicon, config) {
+        this.lexico = lexicon;
         this.symbolTable = [];
         this.tokens = [];
         this.inSymbolTable = [];
@@ -26,9 +26,9 @@ export class Lex {
     }
 
     /**
-     * Public methods
+     * @param {any} source
      */
-    public analyze(source) {
+    public analyze(source: any) {
         let lines = 1;
         let tokenName = null;
         let finder = null;
@@ -88,7 +88,10 @@ export class Lex {
 
     private getTokenId(codeSource) {
         for (let tokenName in this.lexico) {
-            if (!this.lexico[tokenName].test(codeSource)) continue;
+            if (!this.lexico[tokenName].test(codeSource)) {
+                continue;
+            }
+
             return tokenName;
         }
 
