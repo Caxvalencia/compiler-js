@@ -2,18 +2,18 @@ import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 
 import { Operators } from '../finite-state-machine/constants/operators';
-import { NFAe } from '../finite-state-machine/nfae';
+import { NonDeterministic } from '../finite-state-machine/non-deterministic';
 
 @suite()
-export class NFAeTest {
+export class NonDeterministicTest {
     @test
     public testGetAlphabet() {
-        let nfaeSimple = NFAe.convert('A');
-        let nfaeConcat = NFAe.convert('AB');
-        let nfaeKleene = NFAe.convert('A*');
-        let nfaeUnion = NFAe.convert('A|B');
-        let nfaeConcatKleene = NFAe.convert('A*B*');
-        let nfaeGroupKleene = NFAe.convert('(AB)*');
+        let nfaeSimple = NonDeterministic.convert('A');
+        let nfaeConcat = NonDeterministic.convert('AB');
+        let nfaeKleene = NonDeterministic.convert('A*');
+        let nfaeUnion = NonDeterministic.convert('A|B');
+        let nfaeConcatKleene = NonDeterministic.convert('A*B*');
+        let nfaeGroupKleene = NonDeterministic.convert('(AB)*');
 
         assert.deepEqual(nfaeSimple.getAlphabet(), ['A']);
         assert.deepEqual(nfaeConcat.getAlphabet(), ['A', 'B']);
@@ -24,8 +24,8 @@ export class NFAeTest {
     }
 
     @test
-    public testSimpleNFAe() {
-        let nfae = NFAe.convert('A');
+    public testSimpleNonDeterministic() {
+        let nfae = NonDeterministic.convert('A');
 
         assert.isTrue(nfae.getFsm().process('A')[0].isAccepted, 'A founded');
         assert.isFalse(
@@ -35,8 +35,8 @@ export class NFAeTest {
     }
 
     @test
-    public testConcatNFAe() {
-        let nfae = NFAe.convert('AB');
+    public testConcatNonDeterministic() {
+        let nfae = NonDeterministic.convert('AB');
 
         assert.isTrue(
             nfae
@@ -58,8 +58,8 @@ export class NFAeTest {
     }
 
     @test
-    public testKleeneNFAe() {
-        let nfae = NFAe.convert('A*');
+    public testKleeneNonDeterministic() {
+        let nfae = NonDeterministic.convert('A*');
 
         assert.isTrue(
             nfae.getFsm().process(Operators.EPSILON)[1].isAccepted,
@@ -94,9 +94,9 @@ export class NFAeTest {
     }
 
     @test
-    public testConcatKleeneNFAe() {
+    public testConcatKleeneNonDeterministic() {
         let source = 'A*B*';
-        let nfae = NFAe.convert(source);
+        let nfae = NonDeterministic.convert(source);
 
         assert.isTrue(
             nfae
@@ -113,9 +113,9 @@ export class NFAeTest {
     }
 
     @test
-    public testUnionNFAe() {
+    public testUnionNonDeterministic() {
         let source = 'A|B';
-        let nfae = NFAe.convert(source);
+        let nfae = NonDeterministic.convert(source);
 
         assert.isTrue(
             nfae
@@ -143,9 +143,9 @@ export class NFAeTest {
     }
 
     @test
-    public testPlusNFAe() {
+    public testPlusNonDeterministic() {
         let source = 'A+';
-        let nfae = NFAe.convert(source);
+        let nfae = NonDeterministic.convert(source);
         let fsm = nfae.getFsm();
 
         assert.isFalse(
@@ -185,9 +185,9 @@ export class NFAeTest {
     }
 
     @test
-    public testConcatPlusNFAe() {
+    public testConcatPlusNonDeterministic() {
         let source = 'A+B+';
-        let nfae = NFAe.convert(source);
+        let nfae = NonDeterministic.convert(source);
 
         assert.isTrue(
             nfae
@@ -225,9 +225,9 @@ export class NFAeTest {
     }
 
     @test
-    public testGroupConcatKleeneNFAe() {
+    public testGroupConcatKleeneNonDeterministic() {
         let source = '(AB)*';
-        let nfae = NFAe.convert(source).getFsm();
+        let nfae = NonDeterministic.convert(source).getFsm();
 
         assert.isTrue(
             nfae.process(Operators.EPSILON)[1].isAccepted,
@@ -261,10 +261,10 @@ export class NFAeTest {
     }
 
     @test
-    public testGroupNFAeThrowErrorSintaxis() {
+    public testGroupNonDeterministicThrowErrorSintaxis() {
         assert.throw(() => {
             let source = '(AB';
-            NFAe.convert(source).getFsm();    
+            NonDeterministic.convert(source).getFsm();    
         });
     }
 }
