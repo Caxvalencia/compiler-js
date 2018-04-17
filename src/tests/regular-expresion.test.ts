@@ -135,14 +135,19 @@ export class RegularExpresionTest {
     public testMatch() {
         let regExp = new RegularExpresion('A*B*');
 
-        assert.isFalse(
-            regExp.match('AAABBBBBA'),
-            regExp.source
-        );
-        
-        assert.isTrue(
-            regExp.match('AAABBBBB'),
-            regExp.source
-        );
+        assert.isTrue(regExp.match(''), regExp.source);
+        assert.isTrue(regExp.match('A'), regExp.source);
+        assert.isTrue(regExp.match('B'), regExp.source);
+        assert.isTrue(regExp.match('AAAB'), regExp.source);
+        assert.isTrue(regExp.match('AAABBBAA'), regExp.source);
+
+        regExp = new RegularExpresion('A+B*');
+
+        assert.isFalse(regExp.match(''), regExp.source);
+        assert.isTrue(regExp.match('A'), regExp.source);
+        assert.isFalse(regExp.match('B'), regExp.source);
+        assert.isTrue(regExp.match('AAAA'), regExp.source);
+        assert.isTrue(regExp.match('AAAAB'), regExp.source);
+        assert.isTrue(regExp.match('AAAABBBB'), regExp.source);
     }
 }
