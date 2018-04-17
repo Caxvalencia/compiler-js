@@ -11,22 +11,22 @@ export class FiniteStateMachine {
     }
 
     /**
-     * @param {string} string 
-     * @param {number} [currentState=0] 
+     * @param {string} string
+     * @param {number} [stateInitial=0]
      * @returns {boolean}
      */
-    run(string: string, currentState: number = 0) {
+    run(string: string, stateInitial: number = 0) {
         if (string === '') {
-            return this.accepts.indexOf(currentState) !== -1;
+            return this.accepts.indexOf(stateInitial) !== -1;
         }
 
         let character = string[0];
-        let state = this.states[currentState + SEPARATOR + character];
+        let currentState = this.states[stateInitial + SEPARATOR + character];
 
-        if (state === undefined) {
+        if (currentState === undefined) {
             return false;
         }
 
-        return this.run(string.substr(1), state);
+        return this.run(string.substr(1), currentState);
     }
 }
