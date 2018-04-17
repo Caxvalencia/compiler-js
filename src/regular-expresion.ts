@@ -1,5 +1,5 @@
-import { DFA } from './finite-state-machine/dfa';
-import { NFAe } from './finite-state-machine/nfae';
+import { Deterministic } from './finite-state-machine/deterministic';
+import { NonDeterministic } from './finite-state-machine/non-deterministic';
 import { State } from './finite-state-machine/state';
 import { MapDFA } from './finite-state-machine/transformers/map-dfa';
 import { FiniteStateMachine } from './finite-state-machine/finite-state-machine';
@@ -24,7 +24,7 @@ export class RegularExpresion {
      * @return State
      */
     public toNFAe(): State {
-        let nfae = NFAe.convert(this.source);
+        let nfae = NonDeterministic.convert(this.source);
         this.alphabet = nfae.getAlphabet();
 
         return nfae.getFsm();
@@ -35,7 +35,7 @@ export class RegularExpresion {
      * @return {State}
      */
     public toDFA() {
-        let dfa = DFA.convert(this.source);
+        let dfa = Deterministic.convert(this.source);
         this.alphabet = dfa.getAlphabet();
 
         return dfa.getFsm();

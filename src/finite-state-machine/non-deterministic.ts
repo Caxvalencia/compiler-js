@@ -11,7 +11,7 @@ import { UnionFNAe } from './transformers/union-fnae';
  * @export
  * @class NFAe
  */
-export class NFAe implements IFiniteStateMachine {
+export class NonDeterministic implements IFiniteStateMachine {
     private alphabet: string[];
     private source: string[];
     private fsm: State;
@@ -28,10 +28,10 @@ export class NFAe implements IFiniteStateMachine {
     /**
      * @static
      * @param {string} source
-     * @returns {NFAe}
+     * @returns {NonDeterministic}
      */
-    static convert(source: string): NFAe {
-        return new NFAe(source).convert();
+    static convert(source: string): NonDeterministic {
+        return new NonDeterministic(source).convert();
     }
 
     /**

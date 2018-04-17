@@ -1,5 +1,5 @@
 import { Operators } from './constants/operators';
-import { NFAe } from './nfae';
+import { NonDeterministic } from './non-deterministic';
 import { State } from './state';
 import { IFiniteStateMachine } from './interfaces/finite-state-machine';
 
@@ -7,7 +7,7 @@ import { IFiniteStateMachine } from './interfaces/finite-state-machine';
  * @export
  * @class DFA
  */
-export class DFA implements IFiniteStateMachine {
+export class Deterministic implements IFiniteStateMachine {
     private alphabet: string[];
     private nfae: State;
     private fsm: State;
@@ -18,7 +18,7 @@ export class DFA implements IFiniteStateMachine {
      * @param  {State} nfae
      * @param  {string[]} alphabet
      */
-    constructor(nfae: NFAe) {
+    constructor(nfae: NonDeterministic) {
         this.stack = {};
         this.nfae = nfae.getFsm();
         this.alphabet = nfae.getAlphabet();
@@ -27,18 +27,18 @@ export class DFA implements IFiniteStateMachine {
     /**
      * @static
      * @param {string} expresion
-     * @returns {DFA}
+     * @returns {Deterministic}
      */
-    static convert(expresion: string): DFA {
-        let nfae = NFAe.convert(expresion);
+    static convert(expresion: string): Deterministic {
+        let nfae = NonDeterministic.convert(expresion);
 
-        return new DFA(nfae).convert();
+        return new Deterministic(nfae).convert();
     }
 
     /**
-     * @returns {DFA}
+     * @returns {Deterministic}
      */
-    convert(): DFA {
+    convert(): Deterministic {
         this.indexer()(this.nfae);
         this.fsm = this.findNext(this.closureEpsilon(this.nfae));
         this.indexer()(this.fsm);
