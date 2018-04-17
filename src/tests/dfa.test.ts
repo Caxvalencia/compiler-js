@@ -1,21 +1,21 @@
 import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 
-import { DFA } from '../finite-state-machine/dfa';
+import { Deterministic } from '../finite-state-machine/deterministic';
 
 @suite()
-export class DFATest {
+export class DeterministicTest {
     @test
-    public testSimpleDFA() {
-        let dfa = DFA.convert('A').getFsm();
+    public testSimpleDeterministic() {
+        let dfa = Deterministic.convert('A').getFsm();
 
         assert.isTrue(dfa.process('A')[0].isAccepted, 'A founded');
         assert.isFalse(dfa.process('B').length > 0, 'Nothing founded');
     }
 
     @test
-    public testConcatDFA() {
-        let dfa = DFA.convert('AB').getFsm();
+    public testConcatDeterministic() {
+        let dfa = Deterministic.convert('AB').getFsm();
 
         assert.isTrue(
             dfa.process('A')[0].process('B')[0].isAccepted,
@@ -29,8 +29,8 @@ export class DFATest {
     }
 
     @test
-    public testKleeneDFA() {
-        let dfa = DFA.convert('A*').getFsm();
+    public testKleeneDeterministic() {
+        let dfa = Deterministic.convert('A*').getFsm();
 
         assert.isTrue(dfa.isAccepted, 'A* - O ocurrences founded');
 
@@ -54,9 +54,9 @@ export class DFATest {
     }
 
     @test
-    public testConcatKleeneDFA() {
+    public testConcatKleeneDeterministic() {
         let source = 'A*B*';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isTrue(dfa.isAccepted);
 
@@ -71,9 +71,9 @@ export class DFATest {
     }
 
     @test
-    public testUnionKleeneDFA() {
+    public testUnionKleeneDeterministic() {
         let source = 'A*|B*';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isTrue(dfa.isAccepted);
 
@@ -95,9 +95,9 @@ export class DFATest {
     }
 
     @test
-    public testUnionDFA() {
+    public testUnionDeterministic() {
         let source = 'A|B';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isTrue(
             dfa.process('A')[0].isAccepted,
@@ -116,9 +116,9 @@ export class DFATest {
     }
 
     @test
-    public testPlusDFA() {
+    public testPlusDeterministic() {
         let source = 'A+';
-        let dfa = DFA.convert(source);
+        let dfa = Deterministic.convert(source);
         let fsm = dfa.getFsm();
 
         assert.isFalse(
@@ -141,9 +141,9 @@ export class DFATest {
     }
 
     @test
-    public testConcatPlusDFA() {
+    public testConcatPlusDeterministic() {
         let source = 'A+B+';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isTrue(
             dfa
@@ -164,9 +164,9 @@ export class DFATest {
     }
 
     @test
-    public testUnionPlusDFA() {
+    public testUnionPlusDeterministic() {
         let source = 'A+|B+';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isFalse(dfa.isAccepted);
 
@@ -190,7 +190,7 @@ export class DFATest {
     @test
     public testGroupKleene() {
         let source = '(AB)*';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isTrue(dfa.isAccepted, source + ' - O ocurrences founded');
 
@@ -212,7 +212,7 @@ export class DFATest {
     @test
     public testGroupUnionKleene() {
         let source = '(A|B)*';
-        let dfa = DFA.convert(source).getFsm();
+        let dfa = Deterministic.convert(source).getFsm();
 
         assert.isTrue(dfa.isAccepted, source + ' - O ocurrences founded');
 
