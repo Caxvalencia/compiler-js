@@ -38,13 +38,12 @@ export class Syntax {
     public analyze() {
         this.stack = new Stack();
 
-        var token = '',
-            nextToken = '',
-            i,
-            isAccept = false,
-            errorMessage = '';
+        let token = '';
+        let nextToken = '';
+        let isAccept = false;
+        let errorMessage = '';
 
-        for (i = 0; i < this.tokens.length; i++) {
+        for (let i = 0; i < this.tokens.length; i++) {
             // [ TOKEN_ID, VALUE ]
             token = this.tokens[i];
             nextToken = this.tokens[i + 1] || [];

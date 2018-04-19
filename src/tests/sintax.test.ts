@@ -7,10 +7,7 @@ import { Lex } from '../lex';
 export class SintaxTest {
     @test
     public testAnalize() {
-        /**
-         * Analizador Lexico
-         */
-        var lexico = {
+        const lexico = {
             // DELIMITERS
             '(': /\(/,
             ')': /\)/,
@@ -28,7 +25,7 @@ export class SintaxTest {
             NUMBER: /\-?[0-9]*\.?[0-9]+/
         };
 
-        var grammar = {
+        const grammar = {
             E: ['E + T', 'E - T', 'T'],
 
             T: ['T * F', 'T / F', 'F'],
@@ -36,10 +33,10 @@ export class SintaxTest {
             F: ['NUMBER', '( E )', '{ E }']
         };
 
-        var lexer = new Lex(lexico, {
+        const lexer = new Lex(lexico, {
             addSymbolTable: ['NUMBER', '+', '*', '(', ')', '-']
         });
-        var syntax = new Syntax(grammar, lexer);
+        const syntax = new Syntax(grammar, lexer);
 
         lexer.analyze('5 + 5 * (5+5)');
 

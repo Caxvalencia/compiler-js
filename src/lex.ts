@@ -26,9 +26,9 @@ export class Lex {
     }
 
     /**
-     * @param {any} source
+     * @param {string} source 
      */
-    public analyze(source: any) {
+    public analyze(source: string) {
         let lines = 1;
         let tokenName = null;
         let finder = null;
