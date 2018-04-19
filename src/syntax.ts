@@ -1,4 +1,5 @@
 import { Stack } from './stack';
+import { Lex } from './lex';
 
 const SYMBOL_EXTEND = "_G'";
 const SYMBOL_LOCKED = '$';
@@ -20,7 +21,7 @@ export class Syntax {
     /**
      * Constructor
      */
-    public constructor(grammar, lex) {
+    public constructor(grammar, lex: Lex) {
         this.grammar = grammar;
 
         this.symbolTable = [];
@@ -378,7 +379,7 @@ export class Syntax {
         return this;
     }
 
-    public setLex(lex) {
+    public setLex(lex: Lex) {
         this.terminals = [SYMBOL_LOCKED];
         this.terminalActives = [SYMBOL_LOCKED];
 
