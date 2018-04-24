@@ -9,23 +9,23 @@ import { RegularExpresion } from '../regular-expresion';
 export class FiniteStateMachineTest {
     @test
     public testSimpleWithStateDefined() {
-        let states = {
+        const states = {
             '1-a': 2,
             '2-a': 2,
             '2-b': 3
         };
 
-        let fsm = new FiniteStateMachine(states, [3]);
+        const fsm = new FiniteStateMachine(states, [3]);
 
         assert.isTrue(fsm.run('aaaaaaab', 1), 'Accepted');
     }
 
     @test
     public testMappedDFA() {
-        let regExp = new RegularExpresion('A|B|C');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        const regExp = new RegularExpresion('A|B|C');
+        const dfaMapped = MapDFA.apply(regExp.toDFA());
 
-        let fsm = new FiniteStateMachine(dfaMapped.states, dfaMapped.accepts);
+        const fsm = new FiniteStateMachine(dfaMapped.states, dfaMapped.accepts);
 
         assert.isTrue(fsm.run('A'));
         assert.isTrue(fsm.run('B'));

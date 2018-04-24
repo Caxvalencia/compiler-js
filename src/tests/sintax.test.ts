@@ -27,9 +27,7 @@ export class SintaxTest {
 
         const grammar = {
             E: ['E + T', 'E - T', 'T'],
-
             T: ['T * F', 'T / F', 'F'],
-
             F: ['NUMBER', '( E )', '{ E }']
         };
 
