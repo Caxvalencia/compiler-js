@@ -14,7 +14,7 @@ export class RegularExpresion {
 
     /**
      * Creates an instance of RegularExpresion.
-     * @param  {string} regExp
+     * @param {string} regExp
      */
     constructor(regExp: string) {
         this.source = regExp;
@@ -34,13 +34,17 @@ export class RegularExpresion {
      * Convert to Deterministic Finite Automata (DFA)
      * @return {State}
      */
-    public toDFA() {
+    public toDFA(): State {
         let dfa = Deterministic.convert(this.source);
         this.alphabet = dfa.getAlphabet();
 
         return dfa.getFsm();
     }
 
+    /**
+     * @param {string} text 
+     * @returns  
+     */
     public match(text: string) {
         let dfa = this.toDFA();
         let mapped = MapDFA.apply(dfa);

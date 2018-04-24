@@ -41,7 +41,7 @@ export class Stack {
     /**
      * @returns {number[]}
      */
-    public getStack() {
+    public getStack(): number[] {
         return this._stack;
     }
 
