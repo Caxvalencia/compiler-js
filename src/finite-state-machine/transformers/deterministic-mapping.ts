@@ -4,9 +4,9 @@ export const SEPARATOR: string = '-';
 
 /**
  * @export
- * @class MapDFA
+ * @class DeterministicMapping
  */
-export class MapDFA {
+export class DeterministicMapping {
     states: { [key: string]: number };
     accepts: any[];
 
@@ -22,18 +22,18 @@ export class MapDFA {
     /**
      * @static
      * @param  {State} dfa Deterministic Finite Automata
-     * @return {MapDFA}
+     * @return {DeterministicMapping}
      */
-    static apply(dfa: State) {
-        return new MapDFA().apply(dfa);
+    static apply(dfa: State): DeterministicMapping {
+        return new DeterministicMapping().apply(dfa);
     }
 
     /**
      * @private
      * @param  {State} dfa Deterministic Finite Automata
-     * @return {MapDFA}
+     * @return {DeterministicMapping}
      */
-    private apply(dfa: State): MapDFA {
+    private apply(dfa: State): DeterministicMapping {
         if (dfa.isAccepted && this.accepts.indexOf(dfa.id) === -1) {
             this.accepts.push(dfa.id);
         }

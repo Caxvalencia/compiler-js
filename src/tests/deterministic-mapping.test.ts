@@ -1,15 +1,15 @@
 import { assert } from 'chai';
 import { suite, test } from 'mocha-typescript';
 
-import { MapDFA } from '../finite-state-machine/transformers/map-dfa';
+import { DeterministicMapping } from '../finite-state-machine/transformers/deterministic-mapping';
 import { RegularExpresion } from '../regular-expresion';
 
 @suite
-export class MapDFATest {
+export class DeterministicMappingTest {
     @test
     public testSimple() {
         let regExp = new RegularExpresion('A');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),
@@ -23,7 +23,7 @@ export class MapDFATest {
     @test
     public testPlus() {
         let regExp = new RegularExpresion('A+');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),
@@ -37,7 +37,7 @@ export class MapDFATest {
     @test
     public testKleene() {
         let regExp = new RegularExpresion('A*');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),
@@ -51,7 +51,7 @@ export class MapDFATest {
     @test
     public testUnionTwo() {
         let regExp = new RegularExpresion('A|B');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),
@@ -65,7 +65,7 @@ export class MapDFATest {
     @test
     public testUnionThree() {
         let regExp = new RegularExpresion('A|B|C');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),
@@ -79,7 +79,7 @@ export class MapDFATest {
     @test
     public testUnionOfKleene() {
         let regExp = new RegularExpresion('A*|B*');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),
@@ -93,7 +93,7 @@ export class MapDFATest {
     @test
     public testGroupUnionKleene() {
         let regExp = new RegularExpresion('(A|B)*');
-        let dfaMapped = MapDFA.apply(regExp.toDFA());
+        let dfaMapped = DeterministicMapping.apply(regExp.toDFA());
 
         assert.equal(
             JSON.stringify(dfaMapped.states),

@@ -1,7 +1,7 @@
 import { Deterministic } from './finite-state-machine/deterministic';
 import { NonDeterministic } from './finite-state-machine/non-deterministic';
 import { State } from './finite-state-machine/state';
-import { MapDFA } from './finite-state-machine/transformers/map-dfa';
+import { DeterministicMapping } from './finite-state-machine/transformers/deterministic-mapping';
 import { FiniteStateMachine } from './finite-state-machine/finite-state-machine';
 
 /**
@@ -47,7 +47,7 @@ export class RegularExpresion {
      */
     public match(text: string) {
         let dfa = this.toDFA();
-        let mapped = MapDFA.apply(dfa);
+        let mapped = DeterministicMapping.apply(dfa);
         let fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
 
         return fsm.run(text);

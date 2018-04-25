@@ -1,4 +1,4 @@
-import { SEPARATOR } from './transformers/map-dfa';
+import { SEPARATOR } from './transformers/deterministic-mapping';
 
 export class FiniteStateMachine {
     states: any;
