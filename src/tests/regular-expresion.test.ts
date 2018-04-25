@@ -9,7 +9,7 @@ export class RegularExpresionTest {
     @test
     public testSimpleNFAe() {
         let regExp = new RegularExpresion('A');
-        let nfae = regExp.toNFAe();
+        let nfae = regExp.toNonDeterministic();
 
         assert.isTrue(nfae.process('A')[0].isAccepted, 'A founded');
     }
@@ -17,7 +17,7 @@ export class RegularExpresionTest {
     @test
     public testConcatNFAe() {
         let regExp = new RegularExpresion('AB');
-        let nfae = regExp.toNFAe();
+        let nfae = regExp.toNonDeterministic();
 
         assert.isTrue(
             nfae
@@ -31,7 +31,7 @@ export class RegularExpresionTest {
     @test
     public testKleeneNFAe() {
         let regExp = new RegularExpresion('A*');
-        let nfae = regExp.toNFAe();
+        let nfae = regExp.toNonDeterministic();
 
         assert.isTrue(
             nfae.process(Operators.EPSILON)[1].isAccepted,
@@ -61,7 +61,7 @@ export class RegularExpresionTest {
     @test
     public testUnionNFAe() {
         let regExp = new RegularExpresion('A|B');
-        let nfae = regExp.toNFAe();
+        let nfae = regExp.toNonDeterministic();
 
         assert.isTrue(
             nfae.process(Operators.EPSILON)[0].process('A')[0].isAccepted,
@@ -77,7 +77,7 @@ export class RegularExpresionTest {
     @test
     public testConcatKleeneNFAe() {
         let regExp = new RegularExpresion('A*B*');
-        let nfae = regExp.toNFAe();
+        let nfae = regExp.toNonDeterministic();
 
         assert.isTrue(
             nfae

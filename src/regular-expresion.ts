@@ -23,7 +23,7 @@ export class RegularExpresion {
     /**
      * @return State
      */
-    public toNFAe(): State {
+    public toNonDeterministic(): State {
         let nfae = NonDeterministic.convert(this.source);
         this.alphabet = nfae.getAlphabet();
 
