@@ -8,12 +8,12 @@ import { NonDeterministic } from '../finite-state-machine/non-deterministic';
 export class NonDeterministicTest {
     @test
     public testGetAlphabet() {
-        let nfaeSimple = NonDeterministic.convert('A');
-        let nfaeConcat = NonDeterministic.convert('AB');
-        let nfaeKleene = NonDeterministic.convert('A*');
-        let nfaeUnion = NonDeterministic.convert('A|B');
-        let nfaeConcatKleene = NonDeterministic.convert('A*B*');
-        let nfaeGroupKleene = NonDeterministic.convert('(AB)*');
+        const nfaeSimple = NonDeterministic.convert('A');
+        const nfaeConcat = NonDeterministic.convert('AB');
+        const nfaeKleene = NonDeterministic.convert('A*');
+        const nfaeUnion = NonDeterministic.convert('A|B');
+        const nfaeConcatKleene = NonDeterministic.convert('A*B*');
+        const nfaeGroupKleene = NonDeterministic.convert('(AB)*');
 
         assert.deepEqual(nfaeSimple.getAlphabet(), ['A']);
         assert.deepEqual(nfaeConcat.getAlphabet(), ['A', 'B']);
@@ -25,22 +25,18 @@ export class NonDeterministicTest {
 
     @test
     public testSimpleNonDeterministic() {
-        let nfae = NonDeterministic.convert('A');
+        const nfae = NonDeterministic.convert('A').getFsm();
 
-        assert.isTrue(nfae.getFsm().process('A')[0].isAccepted, 'A founded');
-        assert.isFalse(
-            nfae.getFsm().process('B').length > 0,
-            'Nothing founded'
-        );
+        assert.isTrue(nfae.process('A')[0].isAccepted, 'A founded');
+        assert.isFalse(nfae.process('B').length > 0, 'Nothing founded');
     }
 
     @test
     public testConcatNonDeterministic() {
-        let nfae = NonDeterministic.convert('AB');
+        const nfae = NonDeterministic.convert('AB').getFsm();
 
         assert.isTrue(
             nfae
-                .getFsm()
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
                 .process('B')[0].isAccepted,
@@ -49,26 +45,24 @@ export class NonDeterministicTest {
 
         assert.isFalse(
             nfae
-                .getFsm()
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
                 .process('A').length > 0,
-            'AB founded'
+            'AA founded'
         );
     }
 
     @test
     public testKleeneNonDeterministic() {
-        let nfae = NonDeterministic.convert('A*');
+        const nfae = NonDeterministic.convert('A*').getFsm();
 
         assert.isTrue(
-            nfae.getFsm().process(Operators.EPSILON)[1].isAccepted,
+            nfae.process(Operators.EPSILON)[1].isAccepted,
             'A* - O ocurrences founded'
         );
 
         assert.isTrue(
             nfae
-                .getFsm()
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0].isAccepted,
@@ -77,7 +71,6 @@ export class NonDeterministicTest {
 
         assert.isTrue(
             nfae
-                .getFsm()
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
@@ -88,15 +81,15 @@ export class NonDeterministicTest {
         );
 
         assert.isFalse(
-            nfae.getFsm().process('B').length > 0,
+            nfae.process('B').length > 0,
             'A* - O ocurrences founded'
         );
     }
 
     @test
     public testConcatKleeneNonDeterministic() {
-        let source = 'A*B*';
-        let nfae = NonDeterministic.convert(source);
+        const source = 'A*B*';
+        const nfae = NonDeterministic.convert(source);
 
         assert.isTrue(
             nfae
@@ -114,12 +107,12 @@ export class NonDeterministicTest {
 
     @test
     public testUnionNonDeterministic() {
-        let source = 'A|B';
-        let nfae = NonDeterministic.convert(source);
+        const source = 'A|B';
+        const nfae = NonDeterministic.convert(source).getFsm();
 
         assert.isTrue(
             nfae
-                .getFsm()
+                
                 .process(Operators.EPSILON)[0]
                 .process('A')[0].isAccepted,
             source + ' - A ocurrence founded'
@@ -127,7 +120,6 @@ export class NonDeterministicTest {
 
         assert.isTrue(
             nfae
-                .getFsm()
                 .process(Operators.EPSILON)[1]
                 .process('B')[0].isAccepted,
             source + ' - B ocurrence founded'
@@ -135,7 +127,6 @@ export class NonDeterministicTest {
 
         assert.isFalse(
             nfae
-                .getFsm()
                 .process(Operators.EPSILON)[1]
                 .process('C').length > 0,
             source + ' - Nothing ocurrence founded'
@@ -144,9 +135,9 @@ export class NonDeterministicTest {
 
     @test
     public testPlusNonDeterministic() {
-        let source = 'A+';
-        let nfae = NonDeterministic.convert(source);
-        let fsm = nfae.getFsm();
+        const source = 'A+';
+        const nfae = NonDeterministic.convert(source);
+        const fsm = nfae.getFsm();
 
         assert.isFalse(
             fsm.isAccepted,
@@ -186,12 +177,11 @@ export class NonDeterministicTest {
 
     @test
     public testConcatPlusNonDeterministic() {
-        let source = 'A+B+';
-        let nfae = NonDeterministic.convert(source);
+        const source = 'A+B+';
+        const nfae = NonDeterministic.convert(source).getFsm();
 
         assert.isTrue(
             nfae
-                .getFsm()
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
@@ -210,7 +200,6 @@ export class NonDeterministicTest {
 
         assert.isFalse(
             nfae
-                .getFsm()
                 .process(Operators.EPSILON)[0]
                 .process('A')[0]
                 .process(Operators.EPSILON)[0]
@@ -226,8 +215,8 @@ export class NonDeterministicTest {
 
     @test
     public testGroupConcatKleeneNonDeterministic() {
-        let source = '(AB)*';
-        let nfae = NonDeterministic.convert(source).getFsm();
+        const source = '(AB)*';
+        const nfae = NonDeterministic.convert(source).getFsm();
 
         assert.isTrue(
             nfae.process(Operators.EPSILON)[1].isAccepted,
@@ -263,8 +252,8 @@ export class NonDeterministicTest {
     @test
     public testGroupNonDeterministicThrowErrorSintaxis() {
         assert.throw(() => {
-            let source = '(AB';
-            NonDeterministic.convert(source).getFsm();    
+            const source = '(AB';
+            NonDeterministic.convert(source).getFsm();
         });
     }
 }
