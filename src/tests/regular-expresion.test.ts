@@ -95,7 +95,7 @@ export class RegularExpresionTest {
     @test
     public testKleeneDFA() {
         let regExp = new RegularExpresion('A*');
-        let dfa = regExp.toDFA();
+        let dfa = regExp.toDeterministic();
 
         assert.isTrue(dfa.isAccepted, regExp.source + ': 0 ocurrences founded');
 
@@ -116,7 +116,7 @@ export class RegularExpresionTest {
     @test
     public testConcatKleeneDFA() {
         let regExp = new RegularExpresion('A*B*');
-        let dfa = regExp.toDFA();
+        let dfa = regExp.toDeterministic();
 
         assert.isTrue(dfa.isAccepted, regExp.source + ': 0 ocurrences founded');
 

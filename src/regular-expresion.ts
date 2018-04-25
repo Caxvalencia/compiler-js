@@ -34,7 +34,7 @@ export class RegularExpresion {
      * Convert to Deterministic Finite Automata (DFA)
      * @return {State}
      */
-    public toDFA(): State {
+    public toDeterministic(): State {
         let dfa = Deterministic.convert(this.source);
         this.alphabet = dfa.getAlphabet();
 
@@ -43,12 +43,12 @@ export class RegularExpresion {
 
     /**
      * @param {string} text 
-     * @returns  
+     * @returns {boolean} 
      */
-    public match(text: string) {
-        let dfa = this.toDFA();
-        let mapped = DeterministicMapping.apply(dfa);
-        let fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
+    public match(text: string): boolean {
+        const dfa = this.toDeterministic();
+        const mapped = DeterministicMapping.apply(dfa);
+        const fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
 
         return fsm.run(text);
     }

@@ -23,7 +23,7 @@ export class FiniteStateMachineTest {
     @test
     public testDeterministicMapping() {
         const regExp = new RegularExpresion('A|B|C');
-        const dfaMapped = DeterministicMapping.apply(regExp.toDFA());
+        const dfaMapped = DeterministicMapping.apply(regExp.toDeterministic());
 
         const fsm = new FiniteStateMachine(dfaMapped.states, dfaMapped.accepts);
 
