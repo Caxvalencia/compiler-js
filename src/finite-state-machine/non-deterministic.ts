@@ -17,8 +17,8 @@ export class NonDeterministic implements IFiniteStateMachine {
     private fsm: State;
 
     /**
-     * Creates an instance of NFAe.
-     * @param  {string} source
+     * Creates an instance of NonDeterministic.
+     * @param {string} source
      */
     constructor(source: string) {
         this.source = source.split('');
@@ -103,7 +103,7 @@ export class NonDeterministic implements IFiniteStateMachine {
                     fsmEnd = fsmInit;
                 }
 
-                this.addCharToAlphabet(character);
+                this.addAlphabet(character);
 
                 continue;
             }
@@ -116,7 +116,7 @@ export class NonDeterministic implements IFiniteStateMachine {
 
             beforeFsm = fsmEnd;
 
-            this.addCharToAlphabet(character);
+            this.addAlphabet(character);
 
             if (switchFirst) {
                 fsmInit = fsmEnd;
@@ -130,7 +130,12 @@ export class NonDeterministic implements IFiniteStateMachine {
         };
     }
 
-    private groupFsm(iteratorChars) {
+    /**
+     * @private
+     * @param {IterableIterator<string>} iteratorChars
+     * @returns
+     */
+    private groupFsm(iteratorChars: IterableIterator<string>) {
         let subSource = [];
         let correctlyClosed = false;
         let character;
@@ -151,7 +156,11 @@ export class NonDeterministic implements IFiniteStateMachine {
         return this.createFsm(subSource, true);
     }
 
-    private addCharToAlphabet(character: string): void {
+    /**
+     * @private
+     * @param {string} character
+     */
+    private addAlphabet(character: string): void {
         if (this.alphabet.indexOf(character) === -1) {
             this.alphabet.push(character);
         }
