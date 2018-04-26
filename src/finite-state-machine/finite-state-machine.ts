@@ -20,6 +20,8 @@ export class FiniteStateMachine {
      * @returns {boolean}
      */
     process(input: string, stateInitial: number = 0): boolean {
+        this.column = 0;
+
         return this.run(input, stateInitial);
     }
 
@@ -28,7 +30,7 @@ export class FiniteStateMachine {
      * @param {number} [stateInitial=0]
      * @returns {boolean}
      */
-    run(input: string, stateInitial: number = 0): boolean {
+    private run(input: string, stateInitial: number = 0): boolean {
         if (input === '') {
             return this.isAcceptedState(stateInitial);
         }

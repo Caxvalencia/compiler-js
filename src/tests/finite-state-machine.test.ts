@@ -22,17 +22,51 @@ export class FiniteStateMachineTest {
 
     @test
     public testDeterministicMapping() {
-        const regExp = new RegularExpresion('A|B|C');
-        const dfaMapped = DeterministicMapping.apply(regExp.toDeterministic());
-        const fsm = new FiniteStateMachine(dfaMapped.states, dfaMapped.accepts);
+        const fsm = this.getFSM('A|B|C');
 
         assert.isTrue(fsm.process('A'));
-        assert.equal(1, fsm.column);
-
         assert.isTrue(fsm.process('B'));
         assert.isTrue(fsm.process('C'));
         assert.isTrue(fsm.process('AD'));
         assert.isFalse(fsm.process('D'));
         assert.isFalse(fsm.process(''));
+    }
+
+    @test
+    public testColumnProperty() {
+        let fsm = this.getFSM('A|B|C|D*');
+
+        fsm.process('A');
+        assert.equal(1, fsm.column);
+
+        fsm.process('B');
+        assert.equal(1, fsm.column);
+
+        fsm.process('C');
+        assert.equal(1, fsm.column);
+
+        fsm.process('AD');
+        assert.equal(1, fsm.column);
+
+        fsm.process('E');
+        assert.equal(0, fsm.column);
+
+        fsm.process('');
+        assert.equal(0, fsm.column);
+
+        fsm.process('DDDDB');
+        assert.equal(4, fsm.column);
+    }
+
+    /**
+     * @private
+     * @param {string} pattern
+     * @returns
+     */
+    private getFSM(pattern: string) {
+        const regExp = new RegularExpresion(pattern);
+        const dfaMapped = DeterministicMapping.apply(regExp.toDeterministic());
+
+        return new FiniteStateMachine(dfaMapped.states, dfaMapped.accepts);
     }
 }
