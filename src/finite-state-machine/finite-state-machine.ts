@@ -19,11 +19,20 @@ export class FiniteStateMachine {
      * @param {number} [stateInitial=0]
      * @returns {boolean}
      */
+    process(input: string, stateInitial: number = 0): boolean {
+        return this.run(input, stateInitial);
+    }
+
+    /**
+     * @param {string} input
+     * @param {number} [stateInitial=0]
+     * @returns {boolean}
+     */
     run(input: string, stateInitial: number = 0): boolean {
         if (input === '') {
             return this.isAcceptedState(stateInitial);
         }
-        
+
         const character = input[0];
         const currentState = this.states[stateInitial + SEPARATOR + character];
 
@@ -32,14 +41,14 @@ export class FiniteStateMachine {
         }
 
         this.column++;
-                
+
         return this.run(input.substr(1), currentState);
     }
 
     /**
      * @private
-     * @param {number} state 
-     * @returns {boolean} 
+     * @param {number} state
+     * @returns {boolean}
      */
     private isAcceptedState(state: number): boolean {
         return this.accepts.indexOf(state) !== -1;

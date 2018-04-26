@@ -17,21 +17,22 @@ export class FiniteStateMachineTest {
 
         const fsm = new FiniteStateMachine(states, [3]);
 
-        assert.isTrue(fsm.run('aaaaaaab', 1), 'Accepted');
+        assert.isTrue(fsm.process('aaaaaaab', 1), 'Accepted');
     }
 
     @test
     public testDeterministicMapping() {
         const regExp = new RegularExpresion('A|B|C');
         const dfaMapped = DeterministicMapping.apply(regExp.toDeterministic());
-
         const fsm = new FiniteStateMachine(dfaMapped.states, dfaMapped.accepts);
 
-        assert.isTrue(fsm.run('A'));
-        assert.isTrue(fsm.run('B'));
-        assert.isTrue(fsm.run('C'));
-        assert.isTrue(fsm.run('AD'));
-        assert.isFalse(fsm.run('D'));
-        assert.isFalse(fsm.run(''));
+        assert.isTrue(fsm.process('A'));
+        assert.equal(1, fsm.column);
+
+        assert.isTrue(fsm.process('B'));
+        assert.isTrue(fsm.process('C'));
+        assert.isTrue(fsm.process('AD'));
+        assert.isFalse(fsm.process('D'));
+        assert.isFalse(fsm.process(''));
     }
 }

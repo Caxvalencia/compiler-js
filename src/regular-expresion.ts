@@ -50,6 +50,6 @@ export class RegularExpresion {
         const mapped = DeterministicMapping.apply(dfa);
         const fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
 
-        return fsm.run(text);
+        return fsm.process(text);
     }
 }
