@@ -5,29 +5,35 @@ export class FiniteStateMachine {
     accepts: Array<number>;
     isAccepted: boolean;
 
+    column: number;
+    row: number;
+
     constructor(states, accepts: Array<number>) {
         this.states = states;
         this.accepts = accepts;
+        this.column = 0;
     }
 
     /**
-     * @param {string} string
+     * @param {string} input
      * @param {number} [stateInitial=0]
      * @returns {boolean}
      */
-    run(string: string, stateInitial: number = 0): boolean {
-        if (string === '') {
+    run(input: string, stateInitial: number = 0): boolean {
+        if (input === '') {
             return this.isAcceptedState(stateInitial);
         }
-
-        let character = string[0];
-        let currentState = this.states[stateInitial + SEPARATOR + character];
+        
+        const character = input[0];
+        const currentState = this.states[stateInitial + SEPARATOR + character];
 
         if (currentState === undefined) {
             return this.isAcceptedState(stateInitial);
         }
 
-        return this.run(string.substr(1), currentState);
+        this.column++;
+                
+        return this.run(input.substr(1), currentState);
     }
 
     /**
