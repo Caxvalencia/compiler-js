@@ -20,9 +20,10 @@ export class FiniteStateMachine {
      * @returns {boolean}
      */
     process(input: string, stateInitial: number = 0): boolean {
+        this.indexStart = null;
         this.indexEnd = 0;
 
-        return this.run(input, stateInitial);
+        return this.run(input.split(''), stateInitial);
     }
 
     /**
@@ -30,21 +31,26 @@ export class FiniteStateMachine {
      * @param {number} [stateInitial=0]
      * @returns {boolean}
      */
-    private run(input: string, stateInitial: number = 0): boolean {
-        if (input === '') {
+    private run(input: string[], stateInitial: number = 0): boolean {
+        const character = input[this.indexEnd];
+
+        if (input[this.indexEnd] === '') {
             return this.isAcceptedState(stateInitial);
         }
 
-        const character = input[0];
         const currentState = this.states[stateInitial + SEPARATOR + character];
 
         if (currentState === undefined) {
             return this.isAcceptedState(stateInitial);
         }
 
+        if (this.indexStart === null) {
+            this.indexStart = this.indexEnd;
+        }
+
         this.indexEnd++;
 
-        return this.run(input.substr(1), currentState);
+        return this.run(input, currentState);
     }
 
     /**
