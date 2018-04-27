@@ -5,13 +5,13 @@ export class FiniteStateMachine {
     accepts: Array<number>;
     isAccepted: boolean;
 
-    column: number;
-    row: number;
+    private indexStart: number;
+    private indexEnd: number;
 
     constructor(states, accepts: Array<number>) {
         this.states = states;
         this.accepts = accepts;
-        this.column = 0;
+        this.indexEnd = 0;
     }
 
     /**
@@ -20,7 +20,7 @@ export class FiniteStateMachine {
      * @returns {boolean}
      */
     process(input: string, stateInitial: number = 0): boolean {
-        this.column = 0;
+        this.indexEnd = 0;
 
         return this.run(input, stateInitial);
     }
@@ -42,7 +42,7 @@ export class FiniteStateMachine {
             return this.isAcceptedState(stateInitial);
         }
 
-        this.column++;
+        this.indexEnd++;
 
         return this.run(input.substr(1), currentState);
     }
@@ -54,5 +54,13 @@ export class FiniteStateMachine {
      */
     private isAcceptedState(state: number): boolean {
         return this.accepts.indexOf(state) !== -1;
+    }
+
+    public start() {
+        return this.indexStart;
+    }
+
+    public end() {
+        return this.indexEnd;
     }
 }

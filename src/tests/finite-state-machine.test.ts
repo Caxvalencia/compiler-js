@@ -33,29 +33,29 @@ export class FiniteStateMachineTest {
     }
 
     @test
-    public testColumnProperty() {
+    public testIndexEndProperty() {
         let fsm = this.getFSM('A|B|C|D*');
 
         fsm.process('A');
-        assert.equal(1, fsm.column);
+        assert.equal(1, fsm.end());
 
         fsm.process('B');
-        assert.equal(1, fsm.column);
+        assert.equal(1, fsm.end());
 
         fsm.process('C');
-        assert.equal(1, fsm.column);
+        assert.equal(1, fsm.end());
 
         fsm.process('AD');
-        assert.equal(1, fsm.column);
+        assert.equal(1, fsm.end());
 
         fsm.process('E');
-        assert.equal(0, fsm.column);
+        assert.equal(0, fsm.end());
 
         fsm.process('');
-        assert.equal(0, fsm.column);
+        assert.equal(0, fsm.end());
 
         fsm.process('DDDDB');
-        assert.equal(4, fsm.column);
+        assert.equal(4, fsm.end());
     }
 
     /**
