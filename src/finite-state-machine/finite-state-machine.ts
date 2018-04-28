@@ -44,9 +44,10 @@ export class FiniteStateMachine {
 
         if (currentState === undefined) {
             this.indexEnd = this.index;
-            this.index++;
-
+            
             if (this.indexStart === null) {
+                this.index++;
+
                 return this.run(input, stateInitial);
             }
 

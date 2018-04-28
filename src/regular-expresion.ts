@@ -60,7 +60,7 @@ export class RegularExpresion {
 
         return <Matched>{
             isValid: fsm.process(text),
-            finded: text.substr(fsm.start(), fsm.end()),
+            finded: text.substring(fsm.start(), fsm.end()),
             start: fsm.start(),
             end: fsm.end(),
             input: text
