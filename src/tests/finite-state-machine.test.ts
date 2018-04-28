@@ -65,8 +65,8 @@ export class FiniteStateMachineTest {
         assert.equal(4, fsm.end());
 
         fsm.process('EEDDDDB');
-        // assert.equal(2, fsm.start());
-        assert.equal(4, fsm.end());
+        assert.equal(2, fsm.start());
+        assert.equal(6, fsm.end());
     }
 
     /**
