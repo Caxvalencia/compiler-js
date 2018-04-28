@@ -46,7 +46,11 @@ export class FiniteStateMachine {
             this.indexEnd = this.index;
             this.index++;
 
-            return this.run(input, stateInitial);
+            if (this.indexStart === null) {
+                return this.run(input, stateInitial);
+            }
+
+            return this.isAcceptedState(stateInitial);
         }
 
         if (this.indexStart === null) {
