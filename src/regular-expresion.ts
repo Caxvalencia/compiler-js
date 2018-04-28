@@ -4,6 +4,14 @@ import { State } from './finite-state-machine/state';
 import { DeterministicMapping } from './finite-state-machine/transformers/deterministic-mapping';
 import { FiniteStateMachine } from './finite-state-machine/finite-state-machine';
 
+export interface Matched {
+    isValid: boolean;
+    finded: string;
+    start: number;
+    end: number;
+    input: string;
+}
+
 /**
  * @export
  * @class RegularExpresion
@@ -43,14 +51,14 @@ export class RegularExpresion {
 
     /**
      * @param {string} text
-     * @returns
+     * @returns {Matched}
      */
-    public match(text: string) {
+    public match(text: string): Matched {
         const dfa = this.toDeterministic();
         const mapped = DeterministicMapping.apply(dfa);
         const fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
 
-        return {
+        return <Matched>{
             isValid: fsm.process(text),
             finded: text.substr(fsm.start(), fsm.end()),
             start: fsm.start(),
