@@ -42,14 +42,20 @@ export class RegularExpresion {
     }
 
     /**
-     * @param {string} text 
-     * @returns {boolean} 
+     * @param {string} text
+     * @returns
      */
-    public match(text: string): boolean {
+    public match(text: string) {
         const dfa = this.toDeterministic();
         const mapped = DeterministicMapping.apply(dfa);
         const fsm = new FiniteStateMachine(mapped.states, mapped.accepts);
 
-        return fsm.process(text);
+        return {
+            isValid: fsm.process(text),
+            finded: text.substr(fsm.start(), fsm.end()),
+            start: fsm.start(),
+            end: fsm.end(),
+            input: text
+        };
     }
 }

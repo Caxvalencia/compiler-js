@@ -135,19 +135,19 @@ export class RegularExpresionTest {
     public testMatch() {
         let regExp = new RegularExpresion('A*B*');
 
-        assert.isTrue(regExp.match(''), regExp.source);
-        assert.isTrue(regExp.match('A'), regExp.source);
-        assert.isTrue(regExp.match('B'), regExp.source);
-        assert.isTrue(regExp.match('AAAB'), regExp.source);
-        assert.isTrue(regExp.match('AAABBBAA'), regExp.source);
+        assert.isTrue(regExp.match('').isValid, regExp.source);
+        assert.isTrue(regExp.match('A').isValid, regExp.source);
+        assert.isTrue(regExp.match('B').isValid, regExp.source);
+        assert.isTrue(regExp.match('AAAB').isValid, regExp.source);
+        assert.isTrue(regExp.match('AAABBBAA').isValid, regExp.source);
 
         regExp = new RegularExpresion('A+B*');
 
-        assert.isFalse(regExp.match(''), regExp.source);
-        assert.isTrue(regExp.match('A'), regExp.source);
-        assert.isFalse(regExp.match('B'), regExp.source);
-        assert.isTrue(regExp.match('AAAA'), regExp.source);
-        assert.isTrue(regExp.match('AAAAB'), regExp.source);
-        assert.isTrue(regExp.match('AAAABBBB'), regExp.source);
+        assert.isFalse(regExp.match('').isValid, regExp.source);
+        assert.isTrue(regExp.match('A').isValid, regExp.source);
+        assert.isFalse(regExp.match('B').isValid, regExp.source);
+        assert.isTrue(regExp.match('AAAA').isValid, regExp.source);
+        assert.isTrue(regExp.match('AAAAB').isValid, regExp.source);
+        assert.isTrue(regExp.match('AAAABBBB').isValid, regExp.source);
     }
 }
