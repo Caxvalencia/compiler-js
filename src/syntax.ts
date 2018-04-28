@@ -387,7 +387,7 @@ export class Syntax {
 
         var prod = null;
 
-        for (let tokenName in lex.lexico) {
+        for (let tokenName in lex.lexicon) {
             this.terminals.push(tokenName);
 
             // Add only terminals used

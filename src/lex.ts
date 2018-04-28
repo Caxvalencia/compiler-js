@@ -1,5 +1,5 @@
 export class Lex {
-    lexico: any;
+    lexicon: any;
     symbolTable: any[];
     tokens: any[];
     inSymbolTable: any[];
@@ -11,7 +11,7 @@ export class Lex {
      * Constructor
      */
     public constructor(lexicon, config) {
-        this.lexico = lexicon;
+        this.lexicon = lexicon;
         this.symbolTable = [];
         this.tokens = [];
         this.inSymbolTable = [];
@@ -22,7 +22,7 @@ export class Lex {
             this.counterLines = config.counterLines || [];
         }
 
-        this.concatLexico();
+        this.concatLexicon();
     }
 
     /**
@@ -73,11 +73,11 @@ export class Lex {
     /**
      * Private methods
      */
-    private concatLexico() {
+    private concatLexicon() {
         let expr = [];
 
-        for (let tokenName in this.lexico) {
-            expr.push(this.lexico[tokenName].source);
+        for (let tokenName in this.lexicon) {
+            expr.push(this.lexicon[tokenName].source);
         }
 
         this.regExp = new RegExp(
@@ -87,8 +87,8 @@ export class Lex {
     }
 
     private getTokenId(codeSource) {
-        for (let tokenName in this.lexico) {
-            if (!this.lexico[tokenName].test(codeSource)) {
+        for (let tokenName in this.lexicon) {
+            if (!this.lexicon[tokenName].test(codeSource)) {
                 continue;
             }
 
