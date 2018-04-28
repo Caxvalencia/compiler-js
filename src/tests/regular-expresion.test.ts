@@ -132,22 +132,82 @@ export class RegularExpresionTest {
     }
 
     @test
-    public testMatch() {
+    public testSimpleMatch() {
         let regExp = new RegularExpresion('A*B*');
 
-        assert.isTrue(regExp.match('').isValid, regExp.source);
-        assert.isTrue(regExp.match('A').isValid, regExp.source);
-        assert.isTrue(regExp.match('B').isValid, regExp.source);
-        assert.isTrue(regExp.match('AAAB').isValid, regExp.source);
-        assert.isTrue(regExp.match('AAABBBAA').isValid, regExp.source);
+        let matched = regExp.match('');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === '');
+        assert.isNull(matched.start);
+        assert.isTrue(matched.end === 0);
 
+        matched = regExp.match('A');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'A');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 1);
+
+        matched = regExp.match('B');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'B');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 1);
+
+        matched = regExp.match('AAAB');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'AAAB');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 4);
+
+        matched = regExp.match('AAABBBAA');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'AAABBB');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 6);
+
+        matched = regExp.match('XXAAABBBAA');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'AAABBB');
+        assert.isTrue(matched.start === 2);
+        assert.isTrue(matched.end === 8);
+
+        // ===================== WITH PLUS TEST =====================
         regExp = new RegularExpresion('A+B*');
 
-        assert.isFalse(regExp.match('').isValid, regExp.source);
-        assert.isTrue(regExp.match('A').isValid, regExp.source);
-        assert.isFalse(regExp.match('B').isValid, regExp.source);
-        assert.isTrue(regExp.match('AAAA').isValid, regExp.source);
-        assert.isTrue(regExp.match('AAAAB').isValid, regExp.source);
-        assert.isTrue(regExp.match('AAAABBBB').isValid, regExp.source);
+        matched = regExp.match('');
+        assert.isFalse(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === '');
+        assert.isTrue(matched.start === null);
+        assert.isTrue(matched.end === 0);
+
+        matched = regExp.match('A');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'A');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 1);
+
+        matched = regExp.match('B');
+        assert.isFalse(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === '');
+        assert.isTrue(matched.start === null);
+        assert.isTrue(matched.end === 0);
+
+        matched = regExp.match('AAAA');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'AAAA');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 4);
+
+        matched = regExp.match('AAAAB');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'AAAAB');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 5);
+
+        matched = regExp.match('AAABBBAA');
+        assert.isTrue(matched.isValid, regExp.source);
+        assert.isTrue(matched.finded === 'AAABBB');
+        assert.isTrue(matched.start === 0);
+        assert.isTrue(matched.end === 6);
     }
 }
