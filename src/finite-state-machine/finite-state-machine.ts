@@ -7,11 +7,12 @@ export class FiniteStateMachine {
 
     private indexStart: number;
     private indexEnd: number;
+    private index: number;
 
     constructor(states, accepts: Array<number>) {
         this.states = states;
         this.accepts = accepts;
-        this.indexEnd = 0;
+        this.index = 0;
     }
 
     /**
@@ -22,6 +23,7 @@ export class FiniteStateMachine {
     process(input: string, stateInitial: number = 0): boolean {
         this.indexStart = null;
         this.indexEnd = 0;
+        this.index = 0;
 
         return this.run(input.split(''), stateInitial);
     }
@@ -32,23 +34,27 @@ export class FiniteStateMachine {
      * @returns {boolean}
      */
     private run(input: string[], stateInitial: number = 0): boolean {
-        const character = input[this.indexEnd];
+        const character = input[this.index];
 
-        if (input[this.indexEnd] === '') {
+        if (character === undefined) {
             return this.isAcceptedState(stateInitial);
         }
 
         const currentState = this.states[stateInitial + SEPARATOR + character];
 
         if (currentState === undefined) {
-            return this.isAcceptedState(stateInitial);
+            this.indexEnd = this.index;
+            this.index++;
+
+            return this.run(input, stateInitial);
         }
 
         if (this.indexStart === null) {
-            this.indexStart = this.indexEnd;
+            this.indexStart = this.index;
         }
 
-        this.indexEnd++;
+        this.index++;
+        this.indexEnd = this.index;
 
         return this.run(input, currentState);
     }
