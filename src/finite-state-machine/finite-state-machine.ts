@@ -30,28 +30,28 @@ export class FiniteStateMachine {
 
     /**
      * @param {string} input
-     * @param {number} [stateInitial=0]
+     * @param {number} [currentState=0]
      * @returns {boolean}
      */
-    private run(input: string[], stateInitial: number = 0): boolean {
+    private run(input: string[], currentState: number = 0): boolean {
         const character = input[this.index];
 
         if (character === undefined) {
-            return this.isAcceptedState(stateInitial);
+            return this.isAcceptedState(currentState);
         }
 
-        const currentState = this.states[stateInitial + SEPARATOR + character];
+        const nextState = this.states[currentState + SEPARATOR + character];
 
-        if (currentState === undefined) {
+        if (nextState === undefined) {
             this.indexEnd = this.index;
             
             if (this.indexStart === null) {
                 this.index++;
 
-                return this.run(input, stateInitial);
+                return this.run(input, currentState);
             }
 
-            return this.isAcceptedState(stateInitial);
+            return this.isAcceptedState(currentState);
         }
 
         if (this.indexStart === null) {
@@ -61,7 +61,7 @@ export class FiniteStateMachine {
         this.index++;
         this.indexEnd = this.index;
 
-        return this.run(input, currentState);
+        return this.run(input, nextState);
     }
 
     /**
