@@ -121,4 +121,11 @@ export class Lex {
     private canAddSymbolTable(tokenName) {
         return this.inSymbolTable.indexOf(tokenName) !== -1;
     }
+
+    /**
+     * @returns {*}
+     */
+    getTokenRules(): any {
+        return this.lexicon;
+    }
 }
