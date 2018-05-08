@@ -8,9 +8,11 @@ export class Lex {
     regExp: RegExp;
 
     /**
-     * Constructor
+     * Creates an instance of Lex.
+     * @param {any} lexicon
+     * @param {any} config
      */
-    public constructor(lexicon, config) {
+    public constructor(lexicon: any, config: any) {
         this.lexicon = lexicon;
         this.symbolTable = [];
         this.tokens = [];
@@ -26,7 +28,7 @@ export class Lex {
     }
 
     /**
-     * @param {string} source 
+     * @param {string} source
      */
     public analyze(source: string) {
         let lines = 1;
@@ -70,9 +72,6 @@ export class Lex {
         }
     }
 
-    /**
-     * Private methods
-     */
     private concatLexicon() {
         let expr = [];
 
@@ -86,7 +85,12 @@ export class Lex {
         );
     }
 
-    private getTokenId(codeSource) {
+    /**
+     * @private
+     * @param {string} codeSource
+     * @returns
+     */
+    private getTokenId(codeSource: string) {
         for (let tokenName in this.lexicon) {
             if (!this.lexicon[tokenName].test(codeSource)) {
                 continue;
@@ -98,6 +102,11 @@ export class Lex {
         return false;
     }
 
+    /**
+     * @private
+     * @param {any} tokenName
+     * @returns {boolean}
+     */
     private canAddSymbolTable(tokenName) {
         return this.inSymbolTable.indexOf(tokenName) !== -1;
     }
