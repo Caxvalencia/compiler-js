@@ -12,7 +12,7 @@ export class Lex {
      * @param {any} lexicon
      * @param {any} config
      */
-    public constructor(lexicon: any, config: any) {
+    constructor(lexicon: any = {}, config?: any) {
         this.lexicon = lexicon;
         this.symbolTable = [];
         this.tokens = [];
@@ -30,7 +30,7 @@ export class Lex {
     /**
      * @param {string} source
      */
-    public analyze(source: string) {
+    analyze(source: string) {
         let lines = 1;
         let tokenName = null;
         let finder = null;
@@ -70,6 +70,17 @@ export class Lex {
 
             this.tokens.push([tokenName, finder[0]]);
         }
+    }
+
+    /**
+     * @param {string} tokenName
+     * @param {string} rule
+     * @returns {this}
+     */
+    addTokenRule(tokenName: string, rule: string): this {
+        this.lexicon[tokenName] = rule;
+
+        return this;
     }
 
     private concatLexicon() {
