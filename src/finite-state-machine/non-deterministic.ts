@@ -62,6 +62,10 @@ export class NonDeterministic implements IFiniteStateMachine {
         let character;
 
         while ((character = iterator.next().value)) {
+
+            // Unecape of characters
+            // brackets support
+
             if (character === Operators.PARENTHESIS_OPEN) {
                 let finiteStateMachines = this.groupFsm(iterator);
                 fsmEnd = finiteStateMachines.fsmEnd;

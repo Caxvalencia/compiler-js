@@ -12,20 +12,26 @@ export interface Matched {
     input: string;
 }
 
+declare type Flags = 'g' | 'u';
+
 /**
  * @export
  * @class RegularExpresion
  */
 export class RegularExpresion {
     public source: string;
+
     public alphabet: string[];
+
+    public flags: string[];
 
     /**
      * Creates an instance of RegularExpresion.
      * @param {string} regExp
      */
-    constructor(regExp: string) {
+    constructor(regExp: string, flags?: Flags) {
         this.source = regExp;
+        this.setFlags(flags);
     }
 
     /**
@@ -65,5 +71,11 @@ export class RegularExpresion {
             end: fsm.end(),
             input: text
         };
+    }
+
+    setFlags(flags: Flags) {
+        if (flags) {
+            this.flags = flags.toLocaleLowerCase().split('');
+        }
     }
 }
