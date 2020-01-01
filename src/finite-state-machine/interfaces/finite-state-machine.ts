@@ -1,18 +1,18 @@
 import { State } from '../state';
 
 export interface IFiniteStateMachine {
-    /**
-     * @returns {IFiniteStateMachine}
-     */
-    convert(): any;
+  /**
+   * @returns {IFiniteStateMachine}
+   */
+  convert(): any;
 
-    /**
-     * @returns {string[]}
-     */
-    getAlphabet(): string[];
+  /**
+   * @returns {string[]}
+   */
+  getAlphabet(): string[];
 
-    /**
-     * @returns {State}
-     */
-    getFsm(): State;
+  /**
+   * @returns {State}
+   */
+  getFsm(): State;
 }

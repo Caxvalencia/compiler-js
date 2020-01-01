@@ -7,88 +7,88 @@ declare let console;
 
 @suite
 export class LexTest {
-    @test
-    public testAnalize() {
-        let lexico = {
-            // DELIMITERS
-            '(': /\(/,
-            ')': /\)/,
-            '{': /\{/,
-            '}': /\}/,
-            '[': /\[/,
-            ']': /\]/,
+  @test
+  public testAnalize() {
+    let lexico = {
+      // DELIMITERS
+      '(': /\(/,
+      ')': /\)/,
+      '{': /\{/,
+      '}': /\}/,
+      '[': /\[/,
+      ']': /\]/,
 
-            // OPERATORS
-            '+': /\+/,
-            '-': /\-/,
-            '*': /\*/,
-            '/': /\//,
+      // OPERATORS
+      '+': /\+/,
+      '-': /\-/,
+      '*': /\*/,
+      '/': /\//,
 
-            NUMBER: /\-?[0-9]*\.?[0-9]+/
-        };
+      NUMBER: /\-?[0-9]*\.?[0-9]+/
+    };
 
-        let lexer = new Lex(lexico, {
-            addSymbolTable: ['NUMBER', '+', '*', '(', ')', '-']
-        });
+    let lexer = new Lex(lexico, {
+      addSymbolTable: ['NUMBER', '+', '*', '(', ')', '-']
+    });
 
-        lexer.analyze('12+1-(5*3)');
-        let lexema = lexer.symbolTable[0];
+    lexer.analyze('12+1-(5*3)');
+    let lexema = lexer.symbolTable[0];
 
-        assert.isTrue(lexer.symbolTable.length === 9);
-        assert.isTrue(lexer.tokens.length === 9);
+    assert.isTrue(lexer.symbolTable.length === 9);
+    assert.isTrue(lexer.tokens.length === 9);
 
-        assert.equal(lexema.lex, '12');
-        assert.equal(lexema.type, 'NUMBER');
-    }
+    assert.equal(lexema.lex, '12');
+    assert.equal(lexema.type, 'NUMBER');
+  }
 
-    @test
-    public testAddTokenRule() {
-        const lexer = new Lex();
+  @test
+  public testAddTokenRule() {
+    const lexer = new Lex();
 
-        lexer.addTokenRule('SPACE', '\\s+');
-        lexer.addTokenRule('COMMENT_ONELINE', '//[^\r\n]*');
-        lexer.addTokenRule('COMMENT_MULTILINE', '/[*].*?[*]/');
-        lexer.addTokenRule('NUMBER', '\\d*.?\\d+');
-        lexer.addTokenRule('DELIMITER', '[(){}[];,]');
-        lexer.addTokenRule('OPERATOR', '[.=+-/*%]');
-        lexer.addTokenRule('COMPARATOR', '>|<|==|>=|<=|!');
+    lexer.addTokenRule('SPACE', '\\s+');
+    lexer.addTokenRule('COMMENT_ONELINE', '//[^\r\n]*');
+    lexer.addTokenRule('COMMENT_MULTILINE', '/[*].*?[*]/');
+    lexer.addTokenRule('NUMBER', '\\d*.?\\d+');
+    lexer.addTokenRule('DELIMITER', '[(){}[];,]');
+    lexer.addTokenRule('OPERATOR', '[.=+-/*%]');
+    lexer.addTokenRule('COMPARATOR', '>|<|==|>=|<=|!');
 
-        assert.deepEqual({
-            SPACE: '\\s+',
-            COMMENT_ONELINE: '//[^\r\n]*',
-            COMMENT_MULTILINE: '/[*].*?[*]/',
-            NUMBER: '\\d*.?\\d+',
-            DELIMITER: '[(){}[];,]',
-            OPERATOR: '[.=+-/*%]',
-            COMPARATOR: '>|<|==|>=|<=|!'
-        }, lexer.getTokenRules());
-    }
+    assert.deepEqual({
+      SPACE: '\\s+',
+      COMMENT_ONELINE: '//[^\r\n]*',
+      COMMENT_MULTILINE: '/[*].*?[*]/',
+      NUMBER: '\\d*.?\\d+',
+      DELIMITER: '[(){}[];,]',
+      OPERATOR: '[.=+-/*%]',
+      COMPARATOR: '>|<|==|>=|<=|!'
+    }, lexer.getTokenRules());
+  }
 
-    @test
-    public testAnalize2() {
-        const lexico = {
-            VAR: /\bvar\b/,
-            FUNCTION: /\bfunction\b/,
-            IF: /\bif\b/,
-            RETURN: /\breturn\b/,
+  @test
+  public testAnalize2() {
+    const lexico = {
+      VAR: /\bvar\b/,
+      FUNCTION: /\bfunction\b/,
+      IF: /\bif\b/,
+      RETURN: /\breturn\b/,
 
-            '=': /=/,
-            '(': /\(/,
-            ')': /\)/,
-            '{': /\{/,
-            '}': /\}/,
+      '=': /=/,
+      '(': /\(/,
+      ')': /\)/,
+      '{': /\{/,
+      '}': /\}/,
 
-            '<=': /<=/,
-            '>=': />=/,
-            '<': /</,
-            '>': />/,
+      '<=': /<=/,
+      '>=': />=/,
+      '<': /</,
+      '>': />/,
 
-            // 'ID_FUNC': /\bfunction\b\s+([\$\_a-zA-Z]\w*)/,
-            ID: /\b[\$\__a-zA-Z][\w]*\b/,
-            NEW_LINE: /[\n\r]/
-        };
+      // 'ID_FUNC': /\bfunction\b\s+([\$\_a-zA-Z]\w*)/,
+      ID: /\b[\$\__a-zA-Z][\w]*\b/,
+      NEW_LINE: /[\n\r]/
+    };
 
-        const codeSource = `
+    const codeSource = `
             var abc = 123
 
             function test( $a, _b, c ) {
@@ -99,14 +99,14 @@ export class LexTest {
             }
         `;
 
-        const lexer = new Lex(lexico, {
-            addSymbolTable: ['ID'],
-            counterLines: ['NEW_LINE']
-        });
+    const lexer = new Lex(lexico, {
+      addSymbolTable: ['ID'],
+      counterLines: ['NEW_LINE']
+    });
 
-        lexer.analyze(codeSource);
+    lexer.analyze(codeSource);
 
-        console.log(lexer.symbolTable);
-        console.log(lexer.tokens);
-    }
+    console.log(lexer.symbolTable);
+    console.log(lexer.tokens);
+  }
 }
