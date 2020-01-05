@@ -9,7 +9,7 @@
         "sourceMap": true,
         "outDir": "build",
         "rootDir": "src",
-        "lib": ["es6"],
+        "lib": ["es6", "dom"],
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true
     },

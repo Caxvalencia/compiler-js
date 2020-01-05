@@ -1,5 +1,5 @@
 export const Operators = {
-  EPSILON: '#',
+  EPSILON: '#E',
   ZERO_OR_MANY: '*',
   ONE_OR_MANY: '+',
   OR: '|',
