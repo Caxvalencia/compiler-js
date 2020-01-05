@@ -2,13 +2,15 @@ import { State } from '../state';
 
 export const SEPARATOR: string = '-';
 
+export declare type StateMapped = { [key: string]: string };
+
 /**
  * @export
  * @class DeterministicMapping
  */
 export class DeterministicMapping {
-  states: { [key: string]: number };
-  accepts: any[];
+  states: StateMapped;
+  accepts: Array<string>;
 
   /**
    * Creates an instance of MapDFA.
@@ -47,7 +49,7 @@ export class DeterministicMapping {
         continue;
       }
 
-      this.states[id] = <number>transitions[key][0].id;
+      this.states[id] = transitions[key][0].id;
       this.apply(transitions[key][0]);
     }
 

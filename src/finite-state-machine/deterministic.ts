@@ -10,7 +10,7 @@ import { IFiniteStateMachine } from './interfaces/finite-state-machine';
 export class Deterministic implements IFiniteStateMachine {
   private alphabet: string[];
   private nfae: State;
-  private fsm: State;
+  private dfa: State;
   private stack: Object;
 
   /**
@@ -37,8 +37,8 @@ export class Deterministic implements IFiniteStateMachine {
 
   convert(): Deterministic {
     this.indexer()(this.nfae);
-    this.fsm = this.findNext(this.closureEpsilon(this.nfae));
-    this.indexer()(this.fsm);
+    this.dfa = this.findNext(this.closureEpsilon(this.nfae));
+    this.indexer()(this.dfa);
 
     return this;
   }
@@ -48,23 +48,24 @@ export class Deterministic implements IFiniteStateMachine {
   }
 
   getFsm(): State {
-    return this.fsm;
+    return this.dfa;
   }
 
   private indexer(index: number = 0) {
-    return function indexer(state: State) {
+    return function _indexer(state: State) {
       if (
         state === null ||
-        (state.id !== undefined && typeof state.id === 'number')
+        (state.id !== undefined && state.id.indexOf(',') === -1)
       ) {
         return;
       }
 
       const transitions = state.getTransitions();
-      state.id = index++;
+      state.id = index.toString();
+      index++;
 
       for (let transition in transitions) {
-        transitions[transition].forEach(indexer);
+        transitions[transition].forEach(_indexer);
       }
     };
   }
@@ -79,7 +80,7 @@ export class Deterministic implements IFiniteStateMachine {
     let newStateId = states
       .map(state => state.id)
       .sort()
-      .join(',');
+      .join(',') + ',';
 
     if (this.stack[newStateId] !== undefined) {
       return this.stack[newStateId];
@@ -111,8 +112,9 @@ export class Deterministic implements IFiniteStateMachine {
 
       if (nextStates.length > 0) {
         nextStates.sort(
-          (current, next) => <any>current.id - <any>next.id
+          (current, next) => parseInt(current.id) - parseInt(next.id)
         );
+
         newState.addTransition(symbol, [this.findNext(nextStates)]);
       }
 
@@ -130,15 +132,15 @@ export class Deterministic implements IFiniteStateMachine {
   private closureEpsilon(state: State): Array<State> {
     let closures = [state];
 
-    const closureEpsilon = (nextState: State) => {
+    const _closureEpsilon = (nextState: State) => {
       if (closures.indexOf(nextState) === -1) {
         closures.push(nextState);
       }
 
-      nextState.process(Operators.EPSILON).forEach(closureEpsilon);
+      nextState.process(Operators.EPSILON).forEach(_closureEpsilon);
     };
 
-    state.process(Operators.EPSILON).forEach(closureEpsilon);
+    state.process(Operators.EPSILON).forEach(_closureEpsilon);
 
     return closures;
   }

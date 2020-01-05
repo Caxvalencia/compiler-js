@@ -1,7 +1,7 @@
 export type Transition = { [key: string]: Array<State> };
 
 export class State {
-  id: number | string;
+  id: string;
   isAccepted: boolean;
 
   private transitions: Transition;

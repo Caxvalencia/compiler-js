@@ -10,14 +10,14 @@ export class FiniteStateMachineTest {
   @test
   public testSimpleWithStateDefined() {
     const states = {
-      '1-a': 2,
-      '2-a': 2,
-      '2-b': 3
+      '1-a': '2',
+      '2-a': '2',
+      '2-b': '3'
     };
 
-    const fsm = new FiniteStateMachine(states, [3]);
+    const fsm = new FiniteStateMachine(states, ['3']);
 
-    assert.isTrue(fsm.process('aaaaaaab', 1), 'Accepted');
+    assert.isTrue(fsm.process('aaaaaaab', '1'), 'Accepted');
   }
 
   @test
