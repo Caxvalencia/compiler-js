@@ -24,4 +24,20 @@ export class Helpers {
 
     return transitions;
   }
+
+  static makeIterator(data: Array<any>) {
+    return {
+      index: -1,
+      next() {
+        this.index++;
+
+        return { value: data[this.index] };
+      },
+      before() {
+        this.index--;
+
+        return { value: data[this.index] };
+      }
+    };
+  }
 }
