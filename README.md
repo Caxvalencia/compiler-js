@@ -4,6 +4,11 @@
 
 A compiler engine written with JavaScript
 
+## Documentation
+
+Project architecture, processes, classes, and development workflow are documented in
+[docs/README.md](docs/README.md).
+
 ## Install
 
 Install the node packages via:
