@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from '@testdeck/mocha';
 
 import { Deterministic } from '../finite-state-machine/deterministic';
 
@@ -17,15 +17,9 @@ export class DeterministicTest {
   public testConcatDeterministic() {
     let dfa = Deterministic.convert('AB').getFsm();
 
-    assert.isTrue(
-      dfa.process('A')[0].process('B')[0].isAccepted,
-      'AB founded'
-    );
+    assert.isTrue(dfa.process('A')[0].process('B')[0].isAccepted, 'AB founded');
 
-    assert.isFalse(
-      dfa.process('A')[0].process('A').length > 0,
-      'AB founded'
-    );
+    assert.isFalse(dfa.process('A')[0].process('A').length > 0, 'AB founded');
   }
 
   @test
@@ -34,23 +28,14 @@ export class DeterministicTest {
 
     assert.isTrue(dfa.isAccepted, 'A* - O ocurrences founded');
 
-    assert.isTrue(
-      dfa.process('A')[0].isAccepted,
-      'A* - 1 ocurrences founded'
-    );
+    assert.isTrue(dfa.process('A')[0].isAccepted, 'A* - 1 ocurrences founded');
 
     assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('A')[0].isAccepted,
+      dfa.process('A')[0].process('A')[0].process('A')[0].isAccepted,
       "A* - Many 'A' ocurrences founded"
     );
 
-    assert.isFalse(
-      dfa.process('B').length > 0,
-      'A* - O ocurrences founded'
-    );
+    assert.isFalse(dfa.process('B').length > 0, 'A* - O ocurrences founded');
   }
 
   @test
@@ -61,11 +46,7 @@ export class DeterministicTest {
     assert.isTrue(dfa.isAccepted);
 
     assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('B')[0]
-        .process('B')[0].isAccepted,
+      dfa.process('A')[0].process('A')[0].process('B')[0].process('B')[0].isAccepted,
       source
     );
   }
@@ -77,21 +58,9 @@ export class DeterministicTest {
 
     assert.isTrue(dfa.isAccepted);
 
-    assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('A')[0].isAccepted,
-      source
-    );
+    assert.isTrue(dfa.process('A')[0].process('A')[0].process('A')[0].isAccepted, source);
 
-    assert.isTrue(
-      dfa
-        .process('B')[0]
-        .process('B')[0]
-        .process('B')[0].isAccepted,
-      source
-    );
+    assert.isTrue(dfa.process('B')[0].process('B')[0].process('B')[0].isAccepted, source);
   }
 
   @test
@@ -99,20 +68,11 @@ export class DeterministicTest {
     let source = 'A|B';
     let dfa = Deterministic.convert(source).getFsm();
 
-    assert.isTrue(
-      dfa.process('A')[0].isAccepted,
-      source + ' - A ocurrence founded'
-    );
+    assert.isTrue(dfa.process('A')[0].isAccepted, source + ' - A ocurrence founded');
 
-    assert.isTrue(
-      dfa.process('B')[0].isAccepted,
-      source + ' - B ocurrence founded'
-    );
+    assert.isTrue(dfa.process('B')[0].isAccepted, source + ' - B ocurrence founded');
 
-    assert.isFalse(
-      dfa.process('C').length > 0,
-      source + ' - Nothing ocurrence founded'
-    );
+    assert.isFalse(dfa.process('C').length > 0, source + ' - Nothing ocurrence founded');
   }
 
   @test
@@ -121,21 +81,12 @@ export class DeterministicTest {
     let dfa = Deterministic.convert(source);
     let fsm = dfa.getFsm();
 
-    assert.isFalse(
-      fsm.isAccepted,
-      'Validate initial state like not accepted'
-    );
+    assert.isFalse(fsm.isAccepted, 'Validate initial state like not accepted');
+
+    assert.isTrue(fsm.process('A')[0].isAccepted, source + ' - 1 ocurrences founded');
 
     assert.isTrue(
-      fsm.process('A')[0].isAccepted,
-      source + ' - 1 ocurrences founded'
-    );
-
-    assert.isTrue(
-      fsm
-        .process('A')[0]
-        .process('A')[0]
-        .process('A')[0].isAccepted,
+      fsm.process('A')[0].process('A')[0].process('A')[0].isAccepted,
       source + ' - Many ocurrences founded'
     );
   }
@@ -146,21 +97,11 @@ export class DeterministicTest {
     let dfa = Deterministic.convert(source).getFsm();
 
     assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('B')[0]
-        .process('B')[0].isAccepted,
+      dfa.process('A')[0].process('A')[0].process('B')[0].process('B')[0].isAccepted,
       source
     );
 
-    assert.isFalse(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('A')[0].isAccepted,
-      source
-    );
+    assert.isFalse(dfa.process('A')[0].process('A')[0].process('A')[0].isAccepted, source);
   }
 
   @test
@@ -170,21 +111,9 @@ export class DeterministicTest {
 
     assert.isFalse(dfa.isAccepted);
 
-    assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('A')[0].isAccepted,
-      source
-    );
+    assert.isTrue(dfa.process('A')[0].process('A')[0].process('A')[0].isAccepted, source);
 
-    assert.isTrue(
-      dfa
-        .process('B')[0]
-        .process('B')[0]
-        .process('B')[0].isAccepted,
-      source
-    );
+    assert.isTrue(dfa.process('B')[0].process('B')[0].process('B')[0].isAccepted, source);
   }
 
   @test
@@ -200,11 +129,7 @@ export class DeterministicTest {
     );
 
     assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('B')[0]
-        .process('A')[0]
-        .process('B')[0].isAccepted,
+      dfa.process('A')[0].process('B')[0].process('A')[0].process('B')[0].isAccepted,
       source + ' - Many "A" ocurrences founded'
     );
   }

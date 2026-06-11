@@ -12,7 +12,7 @@ export class ConcatFNAe {
     const endTransition = fsmFirst.end.getTransition(Operators.EPSILON);
     endTransition.push(fsmSecond.init);
 
-    fsmFirst.end.addTransition(Operators.EPSILON, endTransition)
+    fsmFirst.end.addTransition(Operators.EPSILON, endTransition);
 
     return fsmSecond;
   }

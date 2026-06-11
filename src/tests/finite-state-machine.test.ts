@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from '@testdeck/mocha';
 
 import { FiniteStateMachine } from '../finite-state-machine/finite-state-machine';
 import { DeterministicMapping } from '../finite-state-machine/transformers/deterministic-mapping';

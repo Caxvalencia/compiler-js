@@ -61,8 +61,8 @@ export class State {
   }
 
   /**
-   * @param {Transition} transitions 
-   * @returns {this} 
+   * @param {Transition} transitions
+   * @returns {this}
    */
   setTransitions(transitions: Transition): this {
     this.transitions = transitions;
@@ -71,7 +71,7 @@ export class State {
   }
 
   /**
-   * @returns {Transition} 
+   * @returns {Transition}
    */
   getTransitions(): Transition {
     return this.transitions;

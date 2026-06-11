@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from '@testdeck/mocha';
 
 import { DeterministicMapping } from '../finite-state-machine/transformers/deterministic-mapping';
 import { RegularExpresion } from '../regular-expresion';
@@ -11,11 +11,7 @@ export class DeterministicMappingTest {
     let regExp = new RegularExpresion('A');
     let dfaMapped = DeterministicMapping.apply(regExp.toDeterministic());
 
-    assert.equal(
-      JSON.stringify(dfaMapped.states),
-      JSON.stringify({ '0-A': '1' }),
-      regExp.source
-    );
+    assert.equal(JSON.stringify(dfaMapped.states), JSON.stringify({ '0-A': '1' }), regExp.source);
 
     assert.deepEqual(dfaMapped.accepts, ['1'], regExp.source);
   }

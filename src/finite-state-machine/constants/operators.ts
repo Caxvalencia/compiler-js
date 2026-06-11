@@ -4,5 +4,5 @@ export const Operators = {
   ONE_OR_MANY: '+',
   OR: '|',
   PARENTHESIS_OPEN: '(',
-  PARENTHESIS_CLOSE: ')',
+  PARENTHESIS_CLOSE: ')'
 };

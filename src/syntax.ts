@@ -54,13 +54,7 @@ export class Syntax {
         isAccept = this.eval(SYMBOL_LOCKED, nextToken[0]);
       } catch (ex) {
         let data = this.symbolTable[token[1]];
-        errorMessage +=
-          ex +
-          ' at line(' +
-          data.line +
-          '), column(' +
-          data.column +
-          ')\n';
+        errorMessage += ex + ' at line(' + data.line + '), column(' + data.column + ')\n';
         break;
       }
     }
@@ -76,12 +70,7 @@ export class Syntax {
     let nextState = this.parsingTable[this.stack.top][token];
 
     // LOG OF EVAL
-    console.log(
-      token + '=>',
-      this.stack.getStack(),
-      nextState,
-      'next: ' + nextToken
-    );
+    console.log(token + '=>', this.stack.getStack(), nextState, 'next: ' + nextToken);
 
     if (nextState === undefined) {
       if (token === SYMBOL_LOCKED) return false;
@@ -102,8 +91,7 @@ export class Syntax {
       case 'G':
         this.stack.goto(parseInt(nextState[1]));
 
-        if (this.parsingTable[this.stack.top][nextToken] !== undefined)
-          return false;
+        if (this.parsingTable[this.stack.top][nextToken] !== undefined) return false;
 
         return this.eval(SYMBOL_LOCKED, nextToken);
 
@@ -126,9 +114,7 @@ export class Syntax {
 
       if (grammarExtended[SYMBOL_EXTEND] === undefined) {
         grammarExtended[SYMBOL_EXTEND] = [[prod, SYMBOL_LOCKED]];
-        grammarExtended[
-          SYMBOL_EXTEND
-        ][0].nonTerminalParent = SYMBOL_EXTEND;
+        grammarExtended[SYMBOL_EXTEND][0].nonTerminalParent = SYMBOL_EXTEND;
       }
 
       grammarExtended[prod] = this.grammar[prod];
@@ -173,10 +159,7 @@ export class Syntax {
       this.addProductionToState(state, production);
 
       // if is a NonTerminal, generate productions
-      if (
-        production[0] !== nonTerminal &&
-        !this.isTerminal(production[0])
-      ) {
+      if (production[0] !== nonTerminal && !this.isTerminal(production[0])) {
         this.searchProductions(production[0], state);
       }
     }
@@ -192,8 +175,7 @@ export class Syntax {
       findNextState = null;
 
     // Calculate total states for prevent loops
-    var totalStates =
-      this.terminalActives.length + this.states[0].data.length - 1;
+    var totalStates = this.terminalActives.length + this.states[0].data.length - 1;
 
     for (let state = 0; state < totalStates; state++) {
       currentState = this.getState(state);
@@ -203,22 +185,14 @@ export class Syntax {
         ruleData = currentState.data[rule];
 
         // Validate if state is closed
-        if (
-          ruleData.current === SYMBOL_LOCKED ||
-          ruleData.current === undefined
-        )
-          continue;
+        if (ruleData.current === SYMBOL_LOCKED || ruleData.current === undefined) continue;
 
         existState = currentState[ruleData.current];
 
         // Validate if exist the transition/through from a state 'A' to state 'B'
         if (existState) {
           if (!this.existsInState(existState, ruleData)) {
-            this.addProductionToState(
-              existState,
-              ruleData.production,
-              ruleData.lock + 1
-            );
+            this.addProductionToState(existState, ruleData.production, ruleData.lock + 1);
           }
         } else {
           findNextState = this.searchNextStateByRule(ruleData);
@@ -227,16 +201,10 @@ export class Syntax {
           if (findNextState !== -1) {
             currentState[ruleData.current] = findNextState;
           } else {
-            stateAux = this.createState(
-              ruleData.production,
-              ruleData.lock + 1
-            );
-            currentState[ruleData.current] = this.getState(
-              stateAux
-            );
+            stateAux = this.createState(ruleData.production, ruleData.lock + 1);
+            currentState[ruleData.current] = this.getState(stateAux);
 
-            if (!this.isTerminal(ruleData.next))
-              this.searchProductions(ruleData.next, stateAux);
+            if (!this.isTerminal(ruleData.next)) this.searchProductions(ruleData.next, stateAux);
           }
         }
       }
@@ -255,10 +223,7 @@ export class Syntax {
       state = this.getState(stateIdx);
       symbolReduced = state.data[0].production.nonTerminalParent;
 
-      if (
-        state.data[0].current === SYMBOL_LOCKED &&
-        symbolReduced === SYMBOL_EXTEND
-      )
+      if (state.data[0].current === SYMBOL_LOCKED && symbolReduced === SYMBOL_EXTEND)
         this.parsingTable[stateIdx][SYMBOL_LOCKED] = ['A'];
       else if (state.data[0].current === SYMBOL_LOCKED)
         // Accept
@@ -274,10 +239,7 @@ export class Syntax {
         if (['data', 'index'].indexOf(prop) !== -1) continue;
 
         if (!this.isTerminal(prop)) {
-          this.parsingTable[stateIdx][prop] = [
-            'G',
-            state[prop].index
-          ];
+          this.parsingTable[stateIdx][prop] = ['G', state[prop].index];
           continue;
         }
 
@@ -348,8 +310,7 @@ export class Syntax {
   }
 
   public createStateData(production, lock) {
-    var current =
-      production[lock] === undefined ? SYMBOL_LOCKED : production[lock];
+    var current = production[lock] === undefined ? SYMBOL_LOCKED : production[lock];
 
     var next =
       production[lock + 1] === undefined && current !== SYMBOL_LOCKED
@@ -393,8 +354,7 @@ export class Syntax {
       // Add only terminals used
       for (prod in this.grammar) {
         for (let i = 0; i < this.grammar[prod].length; i++) {
-          if (this.grammar[prod][i].indexOf(tokenName) === -1)
-            continue;
+          if (this.grammar[prod][i].indexOf(tokenName) === -1) continue;
 
           this.terminalActives.push(tokenName);
           break;

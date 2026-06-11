@@ -12,36 +12,21 @@ export class UnionFNAe {
    * @param fsmFirst
    * @param fsmSecond
    */
-  static apply(
-    fsmFirst: ISimpleFSM,
-    fsmSecond?: ISimpleFSM,
-    isGroup = false
-  ) {
+  static apply(fsmFirst: ISimpleFSM, fsmSecond?: ISimpleFSM, isGroup = false) {
     UnionFNAe.fsmFirst = fsmFirst;
     UnionFNAe.fsmSecond = fsmSecond;
 
     let union = new SimpleFNAe();
 
-    union.init = new State(Operators.EPSILON, [
-      fsmFirst.init,
-      fsmSecond.init
-    ]);
+    union.init = new State(Operators.EPSILON, [fsmFirst.init, fsmSecond.init]);
 
     if (isGroup) {
       fsmFirst.init.setTransitions(
-        Helpers.replaceEnd(
-          fsmFirst.init.getTransitions(),
-          fsmFirst.end,
-          union.end
-        )
+        Helpers.replaceEnd(fsmFirst.init.getTransitions(), fsmFirst.end, union.end)
       );
 
       fsmSecond.init.setTransitions(
-        Helpers.replaceEnd(
-          fsmSecond.init.getTransitions(),
-          fsmSecond.end,
-          union.end
-        )
+        Helpers.replaceEnd(fsmSecond.init.getTransitions(), fsmSecond.end, union.end)
       );
     }
 

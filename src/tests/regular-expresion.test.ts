@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from '@testdeck/mocha';
 
 import { Operators } from '../finite-state-machine/constants/operators';
 import { RegularExpresion } from '../regular-expresion';
@@ -20,10 +20,7 @@ export class RegularExpresionTest {
     let nfae = regExp.toNonDeterministic();
 
     assert.isTrue(
-      nfae
-        .process('A')[0]
-        .process(Operators.EPSILON)[0]
-        .process('B')[0].isAccepted,
+      nfae.process('A')[0].process(Operators.EPSILON)[0].process('B')[0].isAccepted,
       'AB founded'
     );
   }
@@ -33,16 +30,10 @@ export class RegularExpresionTest {
     let regExp = new RegularExpresion('A*');
     let nfae = regExp.toNonDeterministic();
 
-    assert.isTrue(
-      nfae.process(Operators.EPSILON)[1].isAccepted,
-      'A* - O ocurrences founded'
-    );
+    assert.isTrue(nfae.process(Operators.EPSILON)[1].isAccepted, 'A* - O ocurrences founded');
 
     assert.isTrue(
-      nfae
-        .process(Operators.EPSILON)[0]
-        .process('A')[0]
-        .process(Operators.EPSILON)[0].isAccepted,
+      nfae.process(Operators.EPSILON)[0].process('A')[0].process(Operators.EPSILON)[0].isAccepted,
       'A* - 1 ocurrences founded'
     );
 
@@ -100,17 +91,11 @@ export class RegularExpresionTest {
     assert.isTrue(dfa.isAccepted, regExp.source + ': 0 ocurrences founded');
 
     assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('A')[0].isAccepted,
+      dfa.process('A')[0].process('A')[0].process('A')[0].isAccepted,
       regExp.source + ': n-ocurrences founded'
     );
 
-    assert.isUndefined(
-      dfa.process('B')[0],
-      regExp.source + ': not ocurrences founded'
-    );
+    assert.isUndefined(dfa.process('B')[0], regExp.source + ': not ocurrences founded');
   }
 
   @test
@@ -121,12 +106,8 @@ export class RegularExpresionTest {
     assert.isTrue(dfa.isAccepted, regExp.source + ': 0 ocurrences founded');
 
     assert.isTrue(
-      dfa
-        .process('A')[0]
-        .process('A')[0]
-        .process('B')[0]
-        .process('B')[0]
-        .process('B')[0].isAccepted,
+      dfa.process('A')[0].process('A')[0].process('B')[0].process('B')[0].process('B')[0]
+        .isAccepted,
       regExp.source + ': n-ocurrences founded'
     );
   }

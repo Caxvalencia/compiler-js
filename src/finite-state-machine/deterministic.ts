@@ -53,10 +53,7 @@ export class Deterministic implements IFiniteStateMachine {
 
   private indexer(index: number = 0) {
     return function _indexer(state: State) {
-      if (
-        state === null ||
-        (state.id !== undefined && state.id.indexOf(',') === -1)
-      ) {
+      if (state === null || (state.id !== undefined && state.id.indexOf(',') === -1)) {
         return;
       }
 
@@ -77,10 +74,11 @@ export class Deterministic implements IFiniteStateMachine {
    * @return State
    */
   private findNext(states: State[]): State {
-    let newStateId = states
-      .map(state => state.id)
-      .sort()
-      .join(',') + ',';
+    let newStateId =
+      states
+        .map((state) => state.id)
+        .sort()
+        .join(',') + ',';
 
     if (this.stack[newStateId] !== undefined) {
       return this.stack[newStateId];
@@ -99,26 +97,22 @@ export class Deterministic implements IFiniteStateMachine {
       let nextStates: State[] = [];
 
       states.forEach((state: State) => {
-        state.process(symbol).forEach(nextState => {
+        state.process(symbol).forEach((nextState) => {
           let closureNextState = this.closureEpsilon(nextState);
 
           nextStates = nextStates.concat(
-            closureNextState.filter(
-              state => nextStates.indexOf(state) === -1
-            )
+            closureNextState.filter((state) => nextStates.indexOf(state) === -1)
           );
         });
       });
 
       if (nextStates.length > 0) {
-        nextStates.sort(
-          (current, next) => parseInt(current.id) - parseInt(next.id)
-        );
+        nextStates.sort((current, next) => parseInt(current.id) - parseInt(next.id));
 
         newState.addTransition(symbol, [this.findNext(nextStates)]);
       }
 
-      newState.isAccepted = states.some(state => state.isAccepted);
+      newState.isAccepted = states.some((state) => state.isAccepted);
     }
 
     return newState;

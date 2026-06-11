@@ -1,5 +1,6 @@
 import { assert } from 'chai';
-import { suite, test } from 'mocha-typescript';
+
+import { suite, test } from '@testdeck/mocha';
 
 import { Lex } from '../lex';
 
@@ -53,15 +54,18 @@ export class LexTest {
     lexer.addTokenRule('OPERATOR', '[.=+-/*%]');
     lexer.addTokenRule('COMPARATOR', '>|<|==|>=|<=|!');
 
-    assert.deepEqual({
-      SPACE: '\\s+',
-      COMMENT_ONELINE: '//[^\r\n]*',
-      COMMENT_MULTILINE: '/[*].*?[*]/',
-      NUMBER: '\\d*.?\\d+',
-      DELIMITER: '[(){}[];,]',
-      OPERATOR: '[.=+-/*%]',
-      COMPARATOR: '>|<|==|>=|<=|!'
-    }, lexer.getTokenRules());
+    assert.deepEqual(
+      {
+        SPACE: '\\s+',
+        COMMENT_ONELINE: '//[^\r\n]*',
+        COMMENT_MULTILINE: '/[*].*?[*]/',
+        NUMBER: '\\d*.?\\d+',
+        DELIMITER: '[(){}[];,]',
+        OPERATOR: '[.=+-/*%]',
+        COMPARATOR: '>|<|==|>=|<=|!'
+      },
+      lexer.getTokenRules()
+    );
   }
 
   @test

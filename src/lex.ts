@@ -38,10 +38,7 @@ export class Lex {
     this.tokens = [];
     this.symbolTable = [];
 
-    while (
-      (finder = this.regExp.exec(source)) !== null &&
-      finder[0] !== null
-    ) {
+    while ((finder = this.regExp.exec(source)) !== null && finder[0] !== null) {
       tokenName = this.getTokenId(finder[0]);
 
       if (tokenName === 'NEW_LINE') {
@@ -90,10 +87,7 @@ export class Lex {
       expr.push(this.lexicon[tokenName].source);
     }
 
-    this.regExp = new RegExp(
-      '(' + expr.join(')|(') + ')|([^' + expr.join(']|[^') + '])',
-      'g'
-    );
+    this.regExp = new RegExp('(' + expr.join(')|(') + ')|([^' + expr.join(']|[^') + '])', 'g');
   }
 
   /**

@@ -62,7 +62,6 @@ export class NonDeterministic implements IFiniteStateMachine {
     let character;
 
     while ((character = iterator.next().value)) {
-
       // Unecape of characters
       // brackets support
 
@@ -96,11 +95,7 @@ export class NonDeterministic implements IFiniteStateMachine {
       if (character === Operators.OR) {
         character = iterator.next().value;
 
-        fsmInit = UnionFNAe.apply(
-          fsmInit,
-          new SimpleFNAe(character),
-          isGroup
-        );
+        fsmInit = UnionFNAe.apply(fsmInit, new SimpleFNAe(character), isGroup);
         fsmEnd = UnionFNAe.fsmSecond;
 
         if (isGroup) {

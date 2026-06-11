@@ -8,11 +8,11 @@ A compiler engine written with JavaScript
 
 Install the node packages via:
 
-> npm install
+> pnpm install
 
 ### Running test
 
-> npm test
+> pnpm test
 
 ## Finite State Machine (FSM)
 
@@ -25,9 +25,9 @@ FiniteStateMachine(states, accepts: Array<number>)
 // Set of states to describe the language regular
 // a+b
 const states = {
-    '1-a': 2,
-    '2-a': 2,
-    '2-b': 3
+  '1-a': 2,
+  '2-a': 2,
+  '2-b': 3
 };
 
 const acceptationStates = [3];

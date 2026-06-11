@@ -1,17 +1,19 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": false,
-        "noImplicitThis": true,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true,
-        "sourceMap": true,
-        "outDir": "build",
-        "rootDir": "src",
-        "lib": ["es6", "dom"],
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true
-    },
-    "exclude": ["node_modules"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "sourceMap": true,
+    "outDir": "build",
+    "rootDir": "src",
+    "lib": ["es6", "dom"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "exclude": ["node_modules"]
 }

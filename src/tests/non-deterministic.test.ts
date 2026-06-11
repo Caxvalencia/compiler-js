@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from '@testdeck/mocha';
 
 import { Operators } from '../finite-state-machine/constants/operators';
 import { NonDeterministic } from '../finite-state-machine/non-deterministic';
@@ -36,18 +36,12 @@ export class NonDeterministicTest {
     const nfae = NonDeterministic.convert('AB').getFsm();
 
     assert.isTrue(
-      nfae
-        .process('A')[0]
-        .process(Operators.EPSILON)[0]
-        .process('B')[0].isAccepted,
+      nfae.process('A')[0].process(Operators.EPSILON)[0].process('B')[0].isAccepted,
       'AB founded'
     );
 
     assert.isFalse(
-      nfae
-        .process('A')[0]
-        .process(Operators.EPSILON)[0]
-        .process('A').length > 0,
+      nfae.process('A')[0].process(Operators.EPSILON)[0].process('A').length > 0,
       'AA founded'
     );
   }
@@ -56,16 +50,10 @@ export class NonDeterministicTest {
   public testKleeneNonDeterministic() {
     const nfae = NonDeterministic.convert('A*').getFsm();
 
-    assert.isTrue(
-      nfae.process(Operators.EPSILON)[1].isAccepted,
-      'A* - O ocurrences founded'
-    );
+    assert.isTrue(nfae.process(Operators.EPSILON)[1].isAccepted, 'A* - O ocurrences founded');
 
     assert.isTrue(
-      nfae
-        .process(Operators.EPSILON)[0]
-        .process('A')[0]
-        .process(Operators.EPSILON)[0].isAccepted,
+      nfae.process(Operators.EPSILON)[0].process('A')[0].process(Operators.EPSILON)[0].isAccepted,
       'A* - 1 ocurrences founded'
     );
 
@@ -80,10 +68,7 @@ export class NonDeterministicTest {
       "A* - Many 'A' ocurrences founded"
     );
 
-    assert.isFalse(
-      nfae.process('B').length > 0,
-      'A* - O ocurrences founded'
-    );
+    assert.isFalse(nfae.process('B').length > 0, 'A* - O ocurrences founded');
   }
 
   @test
@@ -111,24 +96,17 @@ export class NonDeterministicTest {
     const nfae = NonDeterministic.convert(source).getFsm();
 
     assert.isTrue(
-      nfae
-
-        .process(Operators.EPSILON)[0]
-        .process('A')[0].isAccepted,
+      nfae.process(Operators.EPSILON)[0].process('A')[0].isAccepted,
       source + ' - A ocurrence founded'
     );
 
     assert.isTrue(
-      nfae
-        .process(Operators.EPSILON)[1]
-        .process('B')[0].isAccepted,
+      nfae.process(Operators.EPSILON)[1].process('B')[0].isAccepted,
       source + ' - B ocurrence founded'
     );
 
     assert.isFalse(
-      nfae
-        .process(Operators.EPSILON)[1]
-        .process('C').length > 0,
+      nfae.process(Operators.EPSILON)[1].process('C').length > 0,
       source + ' - Nothing ocurrence founded'
     );
   }
@@ -139,10 +117,7 @@ export class NonDeterministicTest {
     const nfae = NonDeterministic.convert(source);
     const fsm = nfae.getFsm();
 
-    assert.isFalse(
-      fsm.isAccepted,
-      'Validate initial state like not accepted'
-    );
+    assert.isFalse(fsm.isAccepted, 'Validate initial state like not accepted');
 
     assert.equal(
       1,
@@ -156,10 +131,7 @@ export class NonDeterministicTest {
     );
 
     assert.isTrue(
-      fsm
-        .process(Operators.EPSILON)[0]
-        .process('A')[0]
-        .process(Operators.EPSILON)[0].isAccepted,
+      fsm.process(Operators.EPSILON)[0].process('A')[0].process(Operators.EPSILON)[0].isAccepted,
       source + ' - 1 ocurrences founded'
     );
 
