@@ -18,7 +18,7 @@ El repositorio utiliza `pnpm-lock.yaml`. Evita generar lockfiles de npm o Yarn.
 | Comando             | Descripción                                              |
 | ------------------- | -------------------------------------------------------- |
 | `pnpm build`        | Compila TypeScript en `build/`.                          |
-| `pnpm test`         | Compila, ejecuta las pruebas y genera cobertura con NYC. |
+| `pnpm test`         | Compila, ejecuta las pruebas y genera cobertura con c8.  |
 | `pnpm watch`        | Observa cambios de TypeScript y vuelve a ejecutar Mocha. |
 | `pnpm format`       | Formatea el repositorio con Prettier.                    |
 | `pnpm format:check` | Verifica el formato sin modificar archivos.              |
@@ -74,11 +74,10 @@ El proyecto compila desde `src/` hacia `build/` con:
 
 Estas rutas se generan durante build, pruebas o cobertura:
 
-| Ruta           | Origen                         |
-| -------------- | ------------------------------ |
-| `build/`       | `pnpm build` y `pnpm test`     |
-| `coverage/`    | Reporte de cobertura de NYC    |
-| `.nyc_output/` | Datos intermedios de cobertura |
+| Ruta        | Origen                     |
+| ----------- | -------------------------- |
+| `build/`    | `pnpm build` y `pnpm test` |
+| `coverage/` | Reporte de cobertura de c8 |
 
 ## Convenciones del código actual
 

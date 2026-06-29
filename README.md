@@ -13,8 +13,8 @@
     <a href="https://mochajs.org/" target="_blank" rel="noopener noreferrer">
       <img src="https://img.shields.io/badge/Mocha-v11.7.6-brown?style=flat-square&logo=mocha" alt="Mocha" />
     </a>
-    <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">
-      <img src="https://img.shields.io/badge/NYC-v18.0.0-brightgreen?style=flat-square" alt="NYC coverage" />
+    <a href="https://github.com/bcoe/c8" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/c8-v11.0.0-brightgreen?style=flat-square" alt="c8 coverage" />
     </a>
     <a href="./package.json" target="_blank" rel="noopener noreferrer">
       <img src="https://img.shields.io/badge/License-MIT-black?style=flat-square" alt="MIT License" />
@@ -40,7 +40,7 @@ herramientas de compilación más grandes.
 - Ejecución de autómatas sobre texto con posición de coincidencia.
 - Lexer configurable con tokens y tabla de símbolos.
 - Parser basado en gramática y tabla de acciones.
-- Pruebas unitarias con Mocha, Chai, TypeScript y NYC.
+- Pruebas unitarias con Mocha, Chai, TypeScript y c8.
 
 ## Instalación
 
@@ -50,13 +50,13 @@ pnpm install
 
 ## Scripts
 
-| Comando             | Descripción                                          |
-| ------------------- | ---------------------------------------------------- |
-| `pnpm build`        | Compila TypeScript en `build/`.                      |
-| `pnpm test`         | Compila, ejecuta pruebas y genera cobertura con NYC. |
-| `pnpm watch`        | Observa cambios y vuelve a ejecutar las pruebas.     |
-| `pnpm format`       | Formatea el repositorio con Prettier.                |
-| `pnpm format:check` | Verifica formato sin modificar archivos.             |
+| Comando             | Descripción                                         |
+| ------------------- | --------------------------------------------------- |
+| `pnpm build`        | Compila TypeScript en `build/`.                     |
+| `pnpm test`         | Compila, ejecuta pruebas y genera cobertura con c8. |
+| `pnpm watch`        | Observa cambios y vuelve a ejecutar las pruebas.    |
+| `pnpm format`       | Formatea el repositorio con Prettier.               |
+| `pnpm format:check` | Verifica formato sin modificar archivos.            |
 
 ## Uso rápido
 

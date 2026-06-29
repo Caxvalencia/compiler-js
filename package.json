@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "tsc && nyc mocha build/tests/*.test.js",
+    "test": "tsc && c8 mocha build/tests/*.test.js",
     "watch": "concurrently \"tsc --watch\" \"mocha --watch build/tests/*.test.js\"",
     "build": "tsc"
   },
@@ -25,11 +25,11 @@
     "@testdeck/mocha": "0.3.3",
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
+    "c8": "11.0.0",
     "chai": "^6.2.2",
     "concurrently": "10.0.3",
     "eslint": "^10.4.1",
     "mocha": "^11.7.6",
-    "nyc": "^18.0.0",
     "prettier": "3.8.3",
     "typescript": "^6.0.3"
   }

@@ -79,5 +79,3 @@ $RECYCLE.BIN/
 *.lnk
 
 build
-
-.nyc_output
