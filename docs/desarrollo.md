@@ -3,7 +3,7 @@
 ## Requisitos
 
 - Node.js compatible con TypeScript 6.
-- pnpm 10.33.0, indicado en `package.json`.
+- pnpm `10.33.0`, indicado en `package.json`.
 
 ## Instalación
 
@@ -11,8 +11,7 @@
 pnpm install
 ```
 
-El repositorio utiliza exclusivamente `pnpm-lock.yaml`. No se deben generar lockfiles de npm o
-Yarn.
+El repositorio utiliza `pnpm-lock.yaml`. Evita generar lockfiles de npm o Yarn.
 
 ## Scripts
 
@@ -24,14 +23,14 @@ Yarn.
 | `pnpm format`       | Formatea el repositorio con Prettier.                    |
 | `pnpm format:check` | Verifica el formato sin modificar archivos.              |
 
-## Flujo recomendado para cambios
+## Flujo recomendado
 
 1. Instalar dependencias con `pnpm install`.
-2. Modificar las clases dentro de `src/`.
+2. Modificar clases dentro de `src/`.
 3. Agregar o actualizar pruebas en `src/tests/`.
 4. Ejecutar `pnpm format`.
 5. Ejecutar `pnpm test`.
-6. Ejecutar `pnpm format:check` antes de integrar el cambio.
+6. Ejecutar `pnpm format:check`.
 
 ## Pruebas
 
@@ -50,19 +49,54 @@ export class ExampleTest {
 }
 ```
 
-La suite cubre:
+La suite actual cubre:
 
-- creación de AFN-e;
+- construcción de AFN-e;
 - conversión a AFD;
 - mapeo de estados deterministas;
-- ejecución y localización de coincidencias;
+- ejecución de máquinas de estados;
+- localización de coincidencias en `RegularExpresion.match()`;
 - análisis léxico;
-- análisis sintáctico.
+- análisis sintáctico básico para expresiones aritméticas.
+
+## Configuración TypeScript
+
+El proyecto compila desde `src/` hacia `build/` con:
+
+- `module: commonjs`;
+- `target: es6`;
+- `rootDir: src`;
+- `outDir: build`;
+- `strict: false`;
+- `experimentalDecorators: true`, necesario para las pruebas con `@testdeck/mocha`.
 
 ## Salidas generadas
 
-- `build/`: JavaScript compilado y mapas de fuente.
-- `coverage/`: reporte de cobertura.
-- `.nyc_output/`: datos intermedios de NYC.
+Estas rutas se generan durante build, pruebas o cobertura:
 
-Estas rutas están ignoradas por Git y Prettier.
+| Ruta           | Origen                         |
+| -------------- | ------------------------------ |
+| `build/`       | `pnpm build` y `pnpm test`     |
+| `coverage/`    | Reporte de cobertura de NYC    |
+| `.nyc_output/` | Datos intermedios de cobertura |
+
+## Convenciones del código actual
+
+- Las clases principales viven en archivos individuales dentro de `src/`.
+- No hay un punto de entrada público que reexporte toda la API.
+- Los tests importan directamente desde `src/`.
+- Las reglas del lexer deben definirse como `RegExp` cuando se usa `analyze()`.
+- Las producciones de gramática de `Syntax` separan símbolos con espacios.
+- El código mantiene algunos nombres históricos, por ejemplo `RegularExpresion`, `SintaxTest` y
+  `finded`.
+
+## Antes de integrar cambios
+
+Ejecuta:
+
+```bash
+pnpm test
+pnpm format:check
+```
+
+`pnpm test` compila antes de correr Mocha, así que también valida errores de TypeScript.

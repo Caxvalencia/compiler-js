@@ -1,0 +1,62 @@
+<svg width="760" height="260" viewBox="0 0 760 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">compiler-js logo</title>
+  <desc id="desc">Minimal compiler-js project image showing source code transformed into tokens, automata, and parser output.</desc>
+  <defs>
+    <linearGradient id="bg" x1="80" y1="36" x2="680" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="flow" x1="164" y1="124" x2="596" y2="124" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset=".5" stop-color="#22C55E"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="70" y="36" width="620" height="188" rx="26" fill="url(#bg)"/>
+  <rect x="71.5" y="37.5" width="617" height="185" rx="24.5" stroke="#263244" stroke-width="3"/>
+
+  <text x="380" y="78" text-anchor="middle" fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="34" font-weight="800">compiler-js</text>
+  <text x="380" y="105" text-anchor="middle" fill="#94A3B8" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="700">regular expressions | lexer | syntax analyzer</text>
+
+  <path d="M170 142H590" stroke="url(#flow)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M574 128L590 142L574 156" stroke="#F97316" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g>
+    <rect x="128" y="122" width="86" height="64" rx="14" fill="#0B1020" stroke="#38BDF8" stroke-width="3"/>
+    <path d="M157 145L143 154L157 163" stroke="#7DD3FC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M185 145L199 154L185 163" stroke="#7DD3FC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M169 166L177 142" stroke="#38BDF8" stroke-width="5" stroke-linecap="round"/>
+    <text x="171" y="205" text-anchor="middle" fill="#CBD5E1" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="700">source</text>
+  </g>
+
+  <g>
+    <rect x="278" y="122" width="86" height="64" rx="14" fill="#0B1020" stroke="#22C55E" stroke-width="3"/>
+    <rect x="296" y="140" width="50" height="8" rx="4" fill="#86EFAC"/>
+    <rect x="296" y="154" width="34" height="8" rx="4" fill="#86EFAC" opacity=".75"/>
+    <rect x="296" y="168" width="42" height="8" rx="4" fill="#86EFAC" opacity=".5"/>
+    <text x="321" y="205" text-anchor="middle" fill="#CBD5E1" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="700">tokens</text>
+  </g>
+
+  <g>
+    <rect x="428" y="122" width="86" height="64" rx="14" fill="#0B1020" stroke="#A78BFA" stroke-width="3"/>
+    <circle cx="456" cy="154" r="8" fill="#0B1020" stroke="#C4B5FD" stroke-width="4"/>
+    <circle cx="486" cy="140" r="8" fill="#0B1020" stroke="#C4B5FD" stroke-width="4"/>
+    <circle cx="486" cy="168" r="8" fill="#0B1020" stroke="#C4B5FD" stroke-width="4"/>
+    <path d="M464 151L478 143" stroke="#A78BFA" stroke-width="4" stroke-linecap="round"/>
+    <path d="M464 157L478 165" stroke="#A78BFA" stroke-width="4" stroke-linecap="round"/>
+    <text x="471" y="205" text-anchor="middle" fill="#CBD5E1" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="700">automata</text>
+  </g>
+
+  <g>
+    <rect x="578" y="122" width="54" height="64" rx="14" fill="#0B1020" stroke="#F97316" stroke-width="3"/>
+    <path d="M605 138V170" stroke="#FDBA74" stroke-width="4" stroke-linecap="round"/>
+    <path d="M605 150H592" stroke="#FDBA74" stroke-width="4" stroke-linecap="round"/>
+    <path d="M605 160H618" stroke="#FDBA74" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="605" cy="138" r="4" fill="#FDBA74"/>
+    <circle cx="592" cy="150" r="4" fill="#FDBA74"/>
+    <circle cx="618" cy="160" r="4" fill="#FDBA74"/>
+    <circle cx="605" cy="170" r="4" fill="#FDBA74"/>
+    <text x="605" y="205" text-anchor="middle" fill="#CBD5E1" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="700">parser</text>
+  </g>
+</svg>
